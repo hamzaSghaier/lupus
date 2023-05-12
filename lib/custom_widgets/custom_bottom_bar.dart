@@ -1,8 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/screens/bilan.dart';
-import 'package:hospital_app/screens/dashboard.dart';
+import 'package:hospital_app/screens/bilan/bilan_screen.dart';
 import 'package:hospital_app/screens/medicaments.dart';
 import 'package:hospital_app/screens/symptoms.dart';
 
@@ -37,10 +36,10 @@ class CustomBottomBar extends StatelessWidget {
 
         if (bottomNavigationBarController.selectedIndex.value == 1) {
           Get.to(MedicamentsScreen());
-        }else   if (bottomNavigationBarController.selectedIndex.value == 0) {
-          Get.to( SymptomsScreen());
-        }else   if (bottomNavigationBarController.selectedIndex.value == 2) {
-          Get.to( Bilan());
+        } else if (bottomNavigationBarController.selectedIndex.value == 0) {
+          Get.to(SymptomsScreen());
+        } else if (bottomNavigationBarController.selectedIndex.value == 2) {
+          Get.to(const BilanScreen());
         }
       },
       backgroundColor: const Color.fromARGB(255, 207, 16, 144),

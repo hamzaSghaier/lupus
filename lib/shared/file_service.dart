@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:hospital_app/screens/bilan/models/bilan_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
@@ -67,7 +68,7 @@ class FileService {
   static Future<File> writeFile(String fileName, String content) async {
     final file = await _localFile(fileName);
     // Write the file.
-    return file.writeAsString(content);
+    return file.writeAsString("$content\n", mode: FileMode.append);
   }
 
   static Future<String> readFile(String fileName) async {
@@ -93,6 +94,24 @@ class FileService {
       Map<String, dynamic> jsoncontents = json.decode(contents);
 
       return jsoncontents;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file $fileName | $e');
+    }
+  }
+
+  static Future<List<BilanModel>> getBilans(String fileName) async {
+    try {
+      final file = await _localFile(fileName);
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<BilanModel> listBilans = [];
+      contents.split("\n").forEach((element) {
+        listBilans.add(BilanModel.fromJson(jsonDecode(element)));
+      });
+
+      return listBilans;
     } catch (e) {
       // If encountering an error, return 0
       throw Exception('Failed to get json, file $fileName | $e');
