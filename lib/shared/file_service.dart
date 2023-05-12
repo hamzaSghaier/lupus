@@ -11,6 +11,7 @@ class FileService {
   //  Get local folder
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
+    print(directory);
     //Directory appDocDir = await getApplicationDocumentsDirectory();
     return directory.path;
   }
@@ -39,12 +40,10 @@ class FileService {
           return file;
         } else {
           client.close();
-          throw Exception(
-              'Failed to Download Video . Network connection failed . filename : $filename');
+          throw Exception('Failed to Download Video . Network connection failed . filename : $filename');
         }
       } catch (e) {
-        throw Exception(
-            'Failed to Download Video . Network connection failed . filename : $filename');
+        throw Exception('Failed to Download Video . Network connection failed . filename : $filename');
       }
     }
   }
@@ -68,7 +67,8 @@ class FileService {
   static Future<File> writeFile(String fileName, String content) async {
     final file = await _localFile(fileName);
     // Write the file.
-    return file.writeAsString("$content\n", mode: FileMode.append);
+    return file.writeAsString(content + '\n', mode: FileMode.append);
+
   }
 
   static Future<String> readFile(String fileName) async {
@@ -89,6 +89,10 @@ class FileService {
 
       // Read the file
       String contents = await file.readAsString();
+
+
+
+
 
       //Convert to json
       Map<String, dynamic> jsoncontents = json.decode(contents);

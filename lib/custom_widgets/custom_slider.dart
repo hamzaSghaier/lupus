@@ -17,7 +17,6 @@ class _CustomSliderState extends State<CustomSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(widget.sliderName),
         Slider(
           value: widget.sliderValue,
           onChanged: (value) {

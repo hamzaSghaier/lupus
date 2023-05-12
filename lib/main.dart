@@ -61,6 +61,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       body: const SafeArea(child: BilanScreen()),
+
     );
   }
 }
