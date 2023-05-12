@@ -1,9 +1,9 @@
 class Symptome {
-  int fatigue;
-  int arthralgies;
-  int autonomie;
-  int humeur;
-  int sommeil;
+  SymptomeData fatigue;
+  SymptomeData arthralgies;
+  SymptomeData autonomie;
+  SymptomeData humeur;
+  SymptomeData sommeil;
 
   Symptome({
     required this.fatigue,
@@ -28,4 +28,24 @@ class Symptome {
         'humeur': humeur,
         'sommeil': sommeil,
       };
+}
+class SymptomeData {
+  int value;
+  DateTime date;
+
+  SymptomeData({required this.value, required this.date});
+
+  factory SymptomeData.fromJson(Map<String, dynamic> json) {
+    return SymptomeData(
+      value: json['value'],
+      date: DateTime.parse(json['date']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'value': value,
+      'date': date.toIso8601String(),
+    };
+  }
 }

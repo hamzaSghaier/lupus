@@ -1,0 +1,78 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		
+		{
+			"name": "Flutter",
+			"type": "dart",
+			"request": "launch",
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "sdk gphone arm64 (mobile)",
+			"request": "launch",
+			"type": "dart",
+			"deviceId": "emulator-5554",
+	
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "Hamza Iphone X",
+			"request": "launch",
+			"type": "dart",
+			"deviceId": "e472eba60730b811ae65e01cc619748f1a96c693",
+			"program": "lib/main.dart"
+		},	
+		{
+			"name": "SM G935F (mobile)",
+			"request": "launch",
+			"type": "dart",
+			"deviceId": "9885b64f4636443437",
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "iPhone SE (2nd generation) (mobile)",
+			"request": "launch",
+			"type": "dart",
+			"deviceId": "64F5DC7C-7332-435F-9B71-BFBAFF4FCEC8",
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "iPhone 12 Pro (mobile)",
+			"request": "launch",
+			"type": "dart",
+			"deviceId": "68440F2B-A91E-4F7A-A01C-0E128EA0EC83",
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "iPhone 13 Pro (mobile)",
+			"request": "launch",
+			"type": "dart",
+			"deviceId": "C8F906DE-AC5D-4177-8150-96F2B3F7B30A",
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "iPad Pro (11-inch) (2nd generation) (mobile)",
+			"request": "launch",
+			"type": "dart",
+			"deviceId": "A259B5BB-3FD2-46EA-A031-D42CAAB60011",
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "Flutter",
+			"program": "lib/main.dart",
+			"request": "launch",
+			"type": "dart"
+		}
+	],
+	"compounds": [
+		{
+			"name": "All Devices",
+			"configurations": [
+				"iPhone SE (2nd generation) (mobile)",
+				"iPhone 12 Pro (mobile)",
+				"iPad Pro (11-inch) (2nd generation) (mobile)"
+			]
+		}
+	]
+}

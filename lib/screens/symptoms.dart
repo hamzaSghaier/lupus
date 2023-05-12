@@ -1,8 +1,12 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:hospital_app/custom_widgets/custom_slider.dart';
+import 'package:hospital_app/entity/symptome.dart';
+import 'package:hospital_app/shared/file_service.dart';
 import 'package:reviews_slider/reviews_slider.dart';
+
 class SymptomsController extends GetxController {
   var fatigue = 0.0.obs;
   var arthralgies = 0.0.obs;
@@ -10,6 +14,7 @@ class SymptomsController extends GetxController {
   var humeur = 0.0.obs;
   var activitePhysique = 0.0.obs;
 }
+
 class SymptomsScreen extends StatefulWidget {
   SymptomsScreen({super.key});
 
@@ -26,19 +31,22 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
     "Activité physique (nombre de pas)"
   ];
 
-  final SymptomsController symptomsController = Get.put(SymptomsController());
-  late int selectedValue1 = 1;
-  late int selectedValue2 = 2;
+  // late int selectedValue1 = 1;
+  late int _selectedValueHumeur = 0;
+  late int _selectedAutonomieValue = 0;
+  late int _selectedSomeilValue = 1;
+  late double _selectedFatigueValue = 0;
+  late double _selectedArthralgieValue = 0;
 
-  void onChange1(int value) {
-    setState(() {
-      selectedValue1 = value;
-    });
-  }
+  // void onChange1(int value) {
+  //   setState(() {
+  //     selectedValue1 = value;
+  //   });
+  // }
 
   void onChange2(int value) {
     setState(() {
-      selectedValue2 = value;
+      _selectedValueHumeur = value;
     });
   }
 
@@ -71,10 +79,27 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                   titleFr: 'La fatigue',
                 ),
                 const SizedBox(height: 20),
-                CustomSlider(
-                  sliderName: symptoms[0],
-                  sliderValue: symptomsController.fatigue.value,
-                ),
+                Column(
+      children: [
+        Slider(
+          value:_selectedFatigueValue,
+          onChanged: (value) {
+            setState(() {
+              _selectedFatigueValue = value;
+            });
+          },
+          min: 0,
+          max: 5,
+          divisions: 5,
+          label: _selectedFatigueValue.round().toString(),
+        ),
+        const SizedBox(height: 20),
+      ],
+    ),
+                // CustomSlider(
+                //   sliderName: symptoms[0],
+                //   sliderValue: _selectedFatigueValue,
+                // ),
               ],
             ),
             const SizedBox(height: 20),
@@ -82,10 +107,27 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
               titleAr: 'ألم مفصلي',
               titleFr: 'Les arthralgies',
             ),
-            CustomSlider(
-              sliderName: symptoms[1],
-              sliderValue: symptomsController.arthralgies.value,
-            ),
+                        Column(
+      children: [
+        Slider(
+          value:_selectedArthralgieValue,
+          onChanged: (value) {
+            setState(() {
+              _selectedArthralgieValue = value;
+            });
+          },
+          min: 0,
+          max: 5,
+          divisions: 5,
+          label: _selectedArthralgieValue.round().toString(),
+        ),
+        const SizedBox(height: 20),
+      ],
+    ),
+            // CustomSlider(
+            //   sliderName: symptoms[1],
+            //   sliderValue: _selectedArthralgieValue,
+            // ),
             const SizedBox(height: 20),
             const TitleOfSlider(
               titleAr: 'نشاط يومي',
@@ -97,6 +139,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
               onPressed: (int index) {
                 setState(() {
                   // The button that is tapped is set to true, and the others to false.
+                  _selectedAutonomieValue = index;
                   for (int i = 0; i < _selectedAutonomie.length; i++) {
                     _selectedAutonomie[i] = i == index;
                   }
@@ -127,7 +170,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                 ),
                 circleDiameter: 60,
                 onChange: onChange2,
-                initialValue: 1,
+                initialValue: 0,
                 options: ['terrible', 'Malo', 'Bien', 'Vale', 'Genial']),
             const SizedBox(height: 20),
             const TitleOfSlider(
@@ -140,6 +183,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
               onPressed: (int index) {
                 setState(() {
                   // The button that is tapped is set to true, and the others to false.
+                  _selectedSomeilValue = index;
                   for (int i = 0; i < _selectedSommeil.length; i++) {
                     _selectedSommeil[i] = i == index;
                   }
@@ -158,35 +202,63 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
               children: sommeil,
             ),
             Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 15),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pink,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)))),
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(
-                                Icons.save_sharp,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "Enregistrer  قم بتسجيل ",
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
-                        ),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pink, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
+                onPressed: () async {
+                  DateTime now = DateTime.now();
+
+                  var fatigue = SymptomeData(value: _selectedFatigueValue.round(), date: now);
+                    await FileService.writeFile("fatigue.txt", fatigue.toJson().toString());
+                  var arthralgies = SymptomeData(value: _selectedArthralgieValue.round(), date: now);
+                   await FileService.writeFile("arthralgies.txt", arthralgies.toJson().toString());
+                  var autonomie = SymptomeData(value: _selectedAutonomieValue, date: now);
+                   await FileService.writeFile("autonomie.txt", autonomie.toJson().toString());
+                  var humeur = SymptomeData(value: _selectedValueHumeur, date: now);
+                   await FileService.writeFile("humeur.txt", humeur.toJson().toString());
+                  var sommeil = SymptomeData(value: _selectedSomeilValue, date: now);
+                   await FileService.writeFile("sommeil.txt", sommeil.toJson().toString());
+                                     var symptome = new Symptome(fatigue: fatigue, arthralgies: arthralgies, autonomie: autonomie, humeur: humeur, sommeil: sommeil); 
+
+  // ignore: use_build_context_synchronously
+  AwesomeDialog(
+                      context: context,
+                      animType: AnimType.leftSlide,
+                      headerAnimationLoop: false,
+                      dialogType: DialogType.success,
+                      showCloseIcon: true,
+                      title: ' ',
+                      desc:
+                          'Les données ont été enregistrées avec succès \n تم تسجيل المعطيات بنجاح',
+                      btnOkOnPress: () {
+                        debugPrint('OnClcik');
+                      },
+                      btnOkIcon: Icons.check_circle,
+                      onDismissCallback: (type) {
+                        debugPrint('Dialog Dissmiss from callback $type');
+                      },
+                    ).show();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Icon(
+                        Icons.save_sharp,
+                        color: Colors.white,
                       ),
                     ),
-                                const SizedBox(height: 40),
-
+                    Text(
+                      "Enregistrer  قم بتسجيل ",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 50),
           ],
         ),
       ),
