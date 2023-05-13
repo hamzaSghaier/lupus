@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hospital_app/screens/bilan/bilan_screen.dart';
 import 'package:hospital_app/screens/dashboard.dart';
+import 'package:hospital_app/screens/info_lupus.dart';
 import 'package:hospital_app/screens/medicaments.dart';
+import 'package:hospital_app/screens/statistics/statistics_screen.dart';
 import 'package:hospital_app/screens/symptoms.dart';
 
 import '../controllers/bottom_navigation_bar_controller.dart';
@@ -19,16 +21,18 @@ class CustomBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConvexAppBar(
-      style: TabStyle.fixed,
+      style: TabStyle.reactCircle,
+      activeColor: Color.fromRGBO(255, 180, 252, 0.6),
       items: const [
         TabItem(
-          icon: Icons.menu,
+          icon: Icon(Icons.info_outline,size: 20,color: Colors.white,),
+          
         ),
         TabItem(
-          icon: Icons.dashboard,
+          icon: Icon(Icons.dashboard,size: 20,color: Colors.white,),
         ),
         TabItem(
-          icon: Icons.bar_chart_outlined,
+          icon: Icon(Icons.bar_chart_outlined,size:20,color: Colors.white,),
         ),
       ],
       initialActiveIndex: bottomNavigationBarController.selectedIndex.value,
@@ -38,9 +42,9 @@ class CustomBottomBar extends StatelessWidget {
         if (bottomNavigationBarController.selectedIndex.value == 1) {
           Get.to(const DashboardScreen());
         } else if (bottomNavigationBarController.selectedIndex.value == 0) {
-          Get.to(SymptomsScreen());
+          Get.to(const InfoLupusScreen());
         } else if (bottomNavigationBarController.selectedIndex.value == 2) {
-          Get.to(const BilanScreen());
+          Get.to(const Statistics());
         }
       },
       backgroundColor: const Color.fromRGBO(252, 78, 130, 1),

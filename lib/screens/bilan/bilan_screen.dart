@@ -21,7 +21,7 @@ class BilanScreen extends StatefulWidget {
 class _BilanScreenState extends State<BilanScreen> {
   @override
   void initState() {
-    FileService.writeFile(
+   /* FileService.writeFile(
         "mes_bilans.txt",
         BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 1)
             .toJson()
@@ -37,6 +37,7 @@ class _BilanScreenState extends State<BilanScreen> {
         BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 3)
             .toJson()
             .toString());
+            */
     super.initState();
   }
 
@@ -58,7 +59,7 @@ class _BilanScreenState extends State<BilanScreen> {
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
 
-    FileService.getBilans("mes_bilans.txt").then((value) => print(value));
+    //FileService.getBilans("mes_bilans.txt").then((value) => print(value));
 
     print(listBilans.length);
 

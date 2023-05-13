@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_app/constants/colors.dart';
+import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
 import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
@@ -63,6 +64,9 @@ class _StatisticsState extends State<Statistics> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
+            appBar: const CustomAppBar(
+        title: 'Suivi',
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

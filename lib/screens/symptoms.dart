@@ -69,200 +69,206 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
       appBar: const CustomAppBar(
         title: 'Symoptomes',
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const TitleOfSlider(
-                  titleAr: 'درجة التعب',
-                  titleFr: 'La fatigue',
-                ),
-                const SizedBox(height: 20),
-                Column(
-      children: [
-        Slider(
-          value:_selectedFatigueValue,
-          onChanged: (value) {
-            setState(() {
-              _selectedFatigueValue = value;
-            });
-          },
-          min: 0,
-          max: 5,
-          divisions: 5,
-          label: _selectedFatigueValue.round().toString(),
-        ),
-        const SizedBox(height: 20),
-      ],
-    ),
-                // CustomSlider(
-                //   sliderName: symptoms[0],
-                //   sliderValue: _selectedFatigueValue,
-                // ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const TitleOfSlider(
-              titleAr: 'ألم مفصلي',
-              titleFr: 'Les arthralgies',
-            ),
-                        Column(
-      children: [
-        Slider(
-          value:_selectedArthralgieValue,
-          onChanged: (value) {
-            setState(() {
-              _selectedArthralgieValue = value;
-            });
-          },
-          min: 0,
-          max: 5,
-          divisions: 5,
-          label: _selectedArthralgieValue.round().toString(),
-        ),
-        const SizedBox(height: 20),
-      ],
-    ),
-            // CustomSlider(
-            //   sliderName: symptoms[1],
-            //   sliderValue: _selectedArthralgieValue,
-            // ),
-            const SizedBox(height: 20),
-            const TitleOfSlider(
-              titleAr: 'نشاط يومي',
-              titleFr: 'L’autonomie',
-            ),
-            const SizedBox(height: 10),
-            ToggleButtons(
-              direction: vertical ? Axis.vertical : Axis.horizontal,
-              onPressed: (int index) {
-                setState(() {
-                  // The button that is tapped is set to true, and the others to false.
-                  _selectedAutonomieValue = index;
-                  for (int i = 0; i < _selectedAutonomie.length; i++) {
-                    _selectedAutonomie[i] = i == index;
-                  }
-                });
-              },
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              selectedBorderColor: Colors.red[700],
-              selectedColor: Colors.white,
-              fillColor: Colors.red[200],
-              color: Colors.red[400],
-              constraints: const BoxConstraints(
-                minHeight: 60.0,
-                minWidth: 100.0,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const TitleOfSlider(
+                    titleAr: 'درجة التعب',
+                    titleFr: 'La fatigue',
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+        children: [
+          Slider(
+            value:_selectedFatigueValue,
+            onChanged: (value) {
+              setState(() {
+                _selectedFatigueValue = value;
+              });
+            },
+            min: 0,
+            max: 5,
+            divisions: 5,
+            label: _selectedFatigueValue.round().toString(),
+          ),
+          const SizedBox(height: 20),
+        ],
+          ),
+                  // CustomSlider(
+                  //   sliderName: symptoms[0],
+                  //   sliderValue: _selectedFatigueValue,
+                  // ),
+                ],
               ),
-              isSelected: _selectedAutonomie,
-              children: autonomie,
-            ),
-            const SizedBox(height: 20),
-            const TitleOfSlider(
-              titleAr: 'المزاج',
-              titleFr: 'Humeur',
-            ),
-            const SizedBox(height: 10),
-            ReviewSlider(
-                optionStyle: const TextStyle(
-                  color: Colors.pink,
-                  fontWeight: FontWeight.bold,
-                ),
-                circleDiameter: 60,
-                onChange: onChange2,
-                initialValue: 0,
-                options: ['terrible', 'Malo', 'Bien', 'Vale', 'Genial']),
-            const SizedBox(height: 20),
-            const TitleOfSlider(
-              titleAr: '  جودة نومك',
-              titleFr: 'Sommeil',
-            ),
-            const SizedBox(height: 10),
-            ToggleButtons(
-              direction: vertical ? Axis.vertical : Axis.horizontal,
-              onPressed: (int index) {
-                setState(() {
-                  // The button that is tapped is set to true, and the others to false.
-                  _selectedSomeilValue = index;
-                  for (int i = 0; i < _selectedSommeil.length; i++) {
-                    _selectedSommeil[i] = i == index;
-                  }
-                });
-              },
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              selectedBorderColor: Colors.red[700],
-              selectedColor: Colors.white,
-              fillColor: Colors.red[200],
-              color: Colors.red[400],
-              constraints: const BoxConstraints(
-                minHeight: 60.0,
-                minWidth: 100.0,
+              const SizedBox(height: 20),
+              const TitleOfSlider(
+                titleAr: 'ألم مفصلي',
+                titleFr: 'Les arthralgies',
               ),
-              isSelected: _selectedSommeil,
-              children: sommeil,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.pink, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
-                onPressed: () async {
-                  DateTime now = DateTime.now();
-
-                  var fatigue = SymptomeData(value: _selectedFatigueValue.round(), date: now);
-                    await FileService.writeFile("fatigue.txt", fatigue.toJson().toString());
-                  var arthralgies = SymptomeData(value: _selectedArthralgieValue.round(), date: now);
-                   await FileService.writeFile("arthralgies.txt", arthralgies.toJson().toString());
-                  var autonomie = SymptomeData(value: _selectedAutonomieValue, date: now);
-                   await FileService.writeFile("autonomie.txt", autonomie.toJson().toString());
-                  var humeur = SymptomeData(value: _selectedValueHumeur, date: now);
-                   await FileService.writeFile("humeur.txt", humeur.toJson().toString());
-                  var sommeil = SymptomeData(value: _selectedSomeilValue, date: now);
-                   await FileService.writeFile("sommeil.txt", sommeil.toJson().toString());
-                                     var symptome = new Symptome(fatigue: fatigue, arthralgies: arthralgies, autonomie: autonomie, humeur: humeur, sommeil: sommeil); 
-
-  // ignore: use_build_context_synchronously
-  AwesomeDialog(
-                      context: context,
-                      animType: AnimType.leftSlide,
-                      headerAnimationLoop: false,
-                      dialogType: DialogType.success,
-                      showCloseIcon: true,
-                      title: ' ',
-                      desc:
-                          'Les données ont été enregistrées avec succès \n تم تسجيل المعطيات بنجاح',
-                      btnOkOnPress: () {
-                        debugPrint('OnClcik');
-                      },
-                      btnOkIcon: Icons.check_circle,
-                      onDismissCallback: (type) {
-                        debugPrint('Dialog Dissmiss from callback $type');
-                      },
-                    ).show();
+                          Column(
+        children: [
+          Slider(
+            value:_selectedArthralgieValue,
+            onChanged: (value) {
+              setState(() {
+                _selectedArthralgieValue = value;
+              });
+            },
+            min: 0,
+            max: 5,
+            divisions: 5,
+            label: _selectedArthralgieValue.round().toString(),
+          ),
+          const SizedBox(height: 20),
+        ],
+          ),
+              // CustomSlider(
+              //   sliderName: symptoms[1],
+              //   sliderValue: _selectedArthralgieValue,
+              // ),
+                     const SizedBox(height: 20),
+               const TitleOfSlider(
+                titleAr: 'المزاج',
+                titleFr: 'Humeur',
+              ),
+              const SizedBox(height: 10),
+              ReviewSlider(
+                  optionStyle: const TextStyle(
+                    color: Colors.pink,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  circleDiameter: 60,
+                  onChange: onChange2,
+                  initialValue: 0,
+                  options: ['terrible', 'Malo', 'Bien', 'Vale', 'Genial']),
+              const SizedBox(height: 20),
+              const TitleOfSlider(
+                titleAr: 'نشاط يومي',
+                titleFr: 'L’autonomie',
+              ),
+              const SizedBox(height: 10),
+              ToggleButtons(
+                direction: vertical ? Axis.vertical : Axis.horizontal,
+                onPressed: (int index) {
+                  setState(() {
+                    // The button that is tapped is set to true, and the others to false.
+                    _selectedAutonomieValue = index;
+                    for (int i = 0; i < _selectedAutonomie.length; i++) {
+                      _selectedAutonomie[i] = i == index;
+                    }
+                  });
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Icon(
-                        Icons.save_sharp,
-                        color: Colors.white,
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                selectedBorderColor: Colors.red[700],
+                selectedColor: Colors.white,
+                fillColor: Colors.red[200],
+                color: Colors.red[400],
+                constraints: const BoxConstraints(
+                  minHeight: 60.0,
+                  minWidth: 100.0,
+                ),
+                isSelected: _selectedAutonomie,
+                children: autonomie,
+              ),
+       
+             
+              const SizedBox(height: 20),
+              const TitleOfSlider(
+                titleAr: '  جودة نومك',
+                titleFr: 'Sommeil',
+              ),
+              const SizedBox(height: 10),
+              ToggleButtons(
+                direction: vertical ? Axis.vertical : Axis.horizontal,
+                onPressed: (int index) {
+                  setState(() {
+                    // The button that is tapped is set to true, and the others to false.
+                    _selectedSomeilValue = index;
+                    for (int i = 0; i < _selectedSommeil.length; i++) {
+                      _selectedSommeil[i] = i == index;
+                    }
+                  });
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                selectedBorderColor: Colors.red[700],
+                selectedColor: Colors.white,
+                fillColor: Colors.red[200],
+                color: Colors.red[400],
+                constraints: const BoxConstraints(
+                  minHeight: 60.0,
+                  minWidth: 100.0,
+                ),
+                isSelected: _selectedSommeil,
+                children: sommeil,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
+                  onPressed: () async {
+                    DateTime now = DateTime.now();
+      
+                    var fatigue = SymptomeData(value: _selectedFatigueValue.round(), date: now);
+                      await FileService.writeFile("fatigue.txt", fatigue.toJson().toString());
+                    var arthralgies = SymptomeData(value: _selectedArthralgieValue.round(), date: now);
+                     await FileService.writeFile("arthralgies.txt", arthralgies.toJson().toString());
+                    var autonomie = SymptomeData(value: _selectedAutonomieValue, date: now);
+                     await FileService.writeFile("autonomie.txt", autonomie.toJson().toString());
+                    var humeur = SymptomeData(value: _selectedValueHumeur, date: now);
+                     await FileService.writeFile("humeur.txt", humeur.toJson().toString());
+                    var sommeil = SymptomeData(value: _selectedSomeilValue, date: now);
+                     await FileService.writeFile("sommeil.txt", sommeil.toJson().toString());
+                                       var symptome = new Symptome(fatigue: fatigue, arthralgies: arthralgies, autonomie: autonomie, humeur: humeur, sommeil: sommeil); 
+      
+        // ignore: use_build_context_synchronously
+        AwesomeDialog(
+                        context: context,
+                        animType: AnimType.leftSlide,
+                        headerAnimationLoop: false,
+                        dialogType: DialogType.success,
+                        showCloseIcon: true,
+                        title: ' ',
+                        desc:
+                            'Les données ont été enregistrées avec succès \n تم تسجيل المعطيات بنجاح',
+                        btnOkOnPress: () {
+                          debugPrint('OnClcik');
+                        },
+                        btnOkIcon: Icons.check_circle,
+                        onDismissCallback: (type) {
+                          debugPrint('Dialog Dissmiss from callback $type');
+                        },
+                      ).show();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Icon(
+                          Icons.save_sharp,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Enregistrer  قم بتسجيل ",
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
+                      Text(
+                        "Enregistrer  قم بتسجيل ",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 50),
-          ],
+              const SizedBox(height: 50),
+            ],
+          ),
         ),
       ),
     );
@@ -288,11 +294,11 @@ class TitleOfSlider extends StatelessWidget {
         children: [
           Text(
             titleFr,
-            style: TextStyle(color: Color(0xFF6f7478), fontSize: 18),
+            style: TextStyle(color: Colors.black, fontSize: 15,),
           ),
           Text(
             titleAr,
-            style: TextStyle(color: Color(0xFF6f7478), fontSize: 18),
+            style: TextStyle(color: Colors.black, fontSize: 15),
           ),
         ],
       ),

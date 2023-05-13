@@ -46,6 +46,7 @@ dependencies:
   awesome_dialog: ^3.0.2
   flutter_svg:
   syncfusion_flutter_charts: ^21.2.4
+  webview_flutter_plus: ^0.3.0+2
 
 
 
