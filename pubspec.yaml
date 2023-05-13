@@ -45,6 +45,7 @@ dependencies:
   reviews_slider: ^2.0.0
   awesome_dialog: ^3.0.2
   flutter_svg:
+  syncfusion_flutter_charts: ^21.2.4
 
 
 

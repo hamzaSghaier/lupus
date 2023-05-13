@@ -28,7 +28,7 @@ class CustomBottomBar extends StatelessWidget {
           icon: Icons.dashboard,
         ),
         TabItem(
-          icon: Icons.fastfood_sharp,
+          icon: Icons.bar_chart_outlined,
         ),
       ],
       initialActiveIndex: bottomNavigationBarController.selectedIndex.value,

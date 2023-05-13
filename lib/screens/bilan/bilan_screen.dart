@@ -21,6 +21,22 @@ class BilanScreen extends StatefulWidget {
 class _BilanScreenState extends State<BilanScreen> {
   @override
   void initState() {
+    FileService.writeFile(
+        "mes_bilans.txt",
+        BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 1)
+            .toJson()
+            .toString());
+    FileService.writeFile(
+        "mes_bilans.txt",
+        BilanModel(
+                date: "12/12/2021", type: "type 2", image: "image bilan", id: 2)
+            .toJson()
+            .toString());
+    FileService.writeFile(
+        "mes_bilans.txt",
+        BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 3)
+            .toJson()
+            .toString());
     super.initState();
   }
 
@@ -41,26 +57,8 @@ class _BilanScreenState extends State<BilanScreen> {
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
-    FileService.writeFile(
-        "mes_bilans.txt",
-        BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 1)
-            .toJson()
-            .toString());
-    FileService.writeFile(
-        "mes_bilans.txt",
-        BilanModel(
-                date: "12/12/2021", type: "type 2", image: "image bilan", id: 2)
-            .toJson()
-            .toString());
-    FileService.writeFile(
-        "mes_bilans.txt",
-        BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 3)
-            .toJson()
-            .toString());
 
-    FileService.getBilans("mes_bilans.txt").then((value) => setState(
-          () => listBilans = value,
-        ));
+    FileService.getBilans("mes_bilans.txt").then((value) => print(value));
 
     print(listBilans.length);
 
@@ -344,39 +342,21 @@ class _BilanScreenState extends State<BilanScreen> {
             ),
             BilanInfo(
               mediaQuery: mediaQuery,
-              title: "ta7lil boula",
+              title: "NFS",
               index: 1,
               date: "12/05/2023",
             ),
             BilanInfo(
               mediaQuery: mediaQuery,
-              title: "ta7lil DAM",
+              title: "Protéinurie",
               index: 2,
-              date: "10/05/2023",
+              date: "8/02/2023",
             ),
             BilanInfo(
               mediaQuery: mediaQuery,
-              title: "ta7lil boula",
-              index: 1,
-              date: "12/05/2023",
-            ),
-            BilanInfo(
-              mediaQuery: mediaQuery,
-              title: "ta7lil boula",
-              index: 1,
-              date: "12/05/2023",
-            ),
-            BilanInfo(
-              mediaQuery: mediaQuery,
-              title: "ta7lil boula",
-              index: 1,
-              date: "12/05/2023",
-            ),
-            BilanInfo(
-              mediaQuery: mediaQuery,
-              title: "ta7lil boula",
-              index: 1,
-              date: "12/05/2023",
+              title: "Protéinurie",
+              index: 3,
+              date: "5/02/2023",
             ),
           ]),
         ),
