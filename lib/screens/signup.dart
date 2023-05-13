@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
+import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../controllers/signup_controller.dart';
@@ -19,19 +21,17 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: CustomBottomBar(),
+      appBar: const CustomAppBar(
+        title: 'Mes informations',
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // logo goes here
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 40, 20, 70),
-                child: const FlutterLogo(
-                  size: 40,
-                ),
-              ),
+
               CustomTextField(
                 labelText: "Nom",
                 controller: nomController,
@@ -108,6 +108,7 @@ class SignUpScreen extends StatelessWidget {
                   },
                 ),
               ),
+              SizedBox(height: 40,)
             ],
           ),
         ),

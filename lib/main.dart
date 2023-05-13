@@ -2,6 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hospital_app/screens/bilan/bilan_screen.dart';
+import 'package:hospital_app/screens/dashboard.dart';
 
 import 'custom_widgets/custom_bottom_bar.dart';
 
@@ -59,8 +60,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomBottomBar(),
-      body: const SafeArea(child: BilanScreen()),
+      // bottomNavigationBar: CustomBottomBar(),
+      body: const SafeArea(child: DashboardScreen()),
 
     );
   }
