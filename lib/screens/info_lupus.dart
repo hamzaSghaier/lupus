@@ -8,7 +8,7 @@ class InfoLupusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewPlusExampleMainPage();
+    return const WebViewPlusExampleMainPage();
   }
 }
 
@@ -16,38 +16,30 @@ class WebViewPlusExampleMainPage extends StatefulWidget {
   const WebViewPlusExampleMainPage({Key? key}) : super(key: key);
 
   @override
-  _WebViewPlusExampleMainPageState createState() => _WebViewPlusExampleMainPageState();
+  _WebViewPlusExampleMainPageState createState() =>
+      _WebViewPlusExampleMainPageState();
 }
 
-class _WebViewPlusExampleMainPageState extends State<WebViewPlusExampleMainPage> {
+class _WebViewPlusExampleMainPageState
+    extends State<WebViewPlusExampleMainPage> {
   WebViewPlusController? _controller;
-  double _height = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-         appBar: const CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'A propos',
       ),
-       bottomNavigationBar: CustomBottomBar(),
+      bottomNavigationBar: CustomBottomBar(),
       body: ListView(
         children: [
           SizedBox(
-            height: _height,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             child: WebViewPlus(
-              serverPort: 5353,
-              javascriptChannels: null,
-              initialUrl: 'assets/lupus.html',
+              zoomEnabled: true,
               onWebViewCreated: (controller) {
-                _controller = controller;
-              },
-              onPageFinished: (url) {
-                _controller?.getHeight().then((double height) {
-                  debugPrint("Height: " + height.toString());
-                  setState(() {
-                    _height = height;
-                  });
-                });
+                controller.loadUrl('assets/lupus.html');
               },
               javascriptMode: JavascriptMode.unrestricted,
             ),

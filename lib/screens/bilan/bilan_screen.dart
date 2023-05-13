@@ -8,7 +8,6 @@ import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:hospital_app/screens/bilan/models/bilan_model.dart';
 import 'package:hospital_app/screens/bilan/widgets/bilan_info.dart';
 import 'package:hospital_app/screens/bilan/widgets/user_info.dart';
-import 'package:hospital_app/shared/file_service.dart';
 import 'package:intl/intl.dart';
 
 class BilanScreen extends StatefulWidget {
@@ -21,7 +20,7 @@ class BilanScreen extends StatefulWidget {
 class _BilanScreenState extends State<BilanScreen> {
   @override
   void initState() {
-   /* FileService.writeFile(
+    /* FileService.writeFile(
         "mes_bilans.txt",
         BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 1)
             .toJson()
@@ -65,7 +64,7 @@ class _BilanScreenState extends State<BilanScreen> {
 
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
-       appBar: const CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Bilan',
       ),
       body: SingleChildScrollView(

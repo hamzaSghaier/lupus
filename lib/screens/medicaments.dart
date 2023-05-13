@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:hospital_app/screens/bilan/widgets/user_info.dart';
 import 'package:intl/intl.dart';
 
 import '../controllers/medicaments_controller.dart';
@@ -33,7 +34,12 @@ class MedicamentsScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const NameRow(),
+                UserInfo(
+                  mediaQuery: MediaQuery.of(context),
+                  name: "Houssam Gaff",
+                  gender: "Homme",
+                  age: "20",
+                ),
                 const SizedBox(height: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -335,12 +341,12 @@ class NameRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             Text(
-              "Ines Hamdi",
+              "Ioussam Gaff",
               style: TextStyle(
                 color: Color.fromRGBO(116, 116, 116, 1),
               ),
             ),
-            Text("Femme-35")
+            Text("Homme-20")
           ],
         ),
       ),
