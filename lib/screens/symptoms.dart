@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
 import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:hospital_app/custom_widgets/custom_slider.dart';
 import 'package:hospital_app/entity/symptome.dart';
@@ -65,7 +66,9 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
-      appBar: AppBar(),
+      appBar: const CustomAppBar(
+        title: 'Symoptomes',
+      ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hospital_app/constants/colors.dart';
 import 'package:hospital_app/constants/icons.dart';
+import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
 import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:hospital_app/screens/bilan/models/bilan_model.dart';
 import 'package:hospital_app/screens/bilan/widgets/bilan_info.dart';
@@ -63,6 +64,9 @@ class _BilanScreenState extends State<BilanScreen> {
 
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
+       appBar: const CustomAppBar(
+        title: 'Bilan',
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
