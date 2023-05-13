@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hospital_app/constants/colors.dart';
 
 class UserInfo extends StatefulWidget {
@@ -29,7 +30,12 @@ class _UserInfoState extends State<UserInfo> {
           border: Border.all(color: greyContour),
           borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: SvgPicture.asset("assets/icons/avatar.svg"),
+        ),
         Text(widget.name),
+        const Spacer(),
         Text("${widget.gender}-${widget.age}")
       ]),
     );
