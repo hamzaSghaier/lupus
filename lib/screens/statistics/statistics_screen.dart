@@ -36,7 +36,7 @@ List<_DataModel> data4 = [
   _DataModel('Lundi', 3),
   _DataModel('Mardi', 10),
   _DataModel('Mercredi', 22),
-  _DataModel('Mercredi', 12),
+  _DataModel('jeudi', 12),
   _DataModel('Mercredi', 15),
   _DataModel('Mercredi', 22),
   _DataModel('Mercredi', 11),
@@ -64,7 +64,7 @@ class _StatisticsState extends State<Statistics> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
-            appBar: const CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Suivi',
       ),
       body: SafeArea(
@@ -72,92 +72,90 @@ class _StatisticsState extends State<Statistics> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
             child: Column(children: [
-              const TitleOfSlider(
+              ChartWidget(
                 titleAr: 'درجة التعب',
                 titleFr: 'La fatigue',
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              SfSparkBarChart.custom(
-                color: pink,
-                labelDisplayMode: SparkChartLabelDisplayMode.all,
-                xValueMapper: (int index) => data1[index].day,
-                yValueMapper: (int index) => data1[index].value,
-                dataCount: data1.length,
+                data: data1,
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              const TitleOfSlider(
+              ChartWidget(
                 titleAr: 'ألم مفصلي',
                 titleFr: 'Les arthralgies',
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              SfSparkBarChart.custom(
-                color: pink,
-                labelDisplayMode: SparkChartLabelDisplayMode.all,
-                xValueMapper: (int index) => data2[index].day,
-                yValueMapper: (int index) => data2[index].value,
-                dataCount: data2.length,
+                data: data2,
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              const TitleOfSlider(
+              ChartWidget(
                 titleAr: 'نشاط يومي',
                 titleFr: 'L’autonomie',
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              SfSparkBarChart.custom(
-                color: pink,
-                labelDisplayMode: SparkChartLabelDisplayMode.all,
-                xValueMapper: (int index) => data3[index].day,
-                yValueMapper: (int index) => data3[index].value,
-                dataCount: data3.length,
+                data: data3,
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              const TitleOfSlider(
+              ChartWidget(
                 titleAr: 'المزاج',
                 titleFr: 'Humeur',
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              SfSparkBarChart.custom(
-                color: pink,
-                labelDisplayMode: SparkChartLabelDisplayMode.all,
-                xValueMapper: (int index) => data4[index].day,
-                yValueMapper: (int index) => data4[index].value,
-                dataCount: data4.length,
+                data: data4,
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              const TitleOfSlider(
+              ChartWidget(
                 titleAr: '  جودة نومك',
                 titleFr: 'Sommeil',
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              SfSparkBarChart.custom(
-                color: pink,
-                labelDisplayMode: SparkChartLabelDisplayMode.all,
-                xValueMapper: (int index) => data5[index].day,
-                yValueMapper: (int index) => data5[index].value,
-                dataCount: data5.length,
+                data: data5,
               ),
             ]),
           ),
         ),
       ),
+    );
+  }
+}
+
+class ChartWidget extends StatelessWidget {
+  var data, titleAr, titleFr;
+
+  ChartWidget({super.key, this.titleAr, this.titleFr, this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: const BorderRadius.all(
+          Radius.circular(15),
+        ),
+        border: Border.all(
+          color: const Color.fromRGBO(232, 232, 232, 1),
+          width: 2,
+        ),
+      ),
+      child: Column(children: [
+        TitleOfSlider(
+          titleAr: titleAr,
+          titleFr: titleFr,
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.02,
+        ),
+        SfSparkAreaChart.custom(
+          color: pink.withAlpha(128),
+          labelDisplayMode: SparkChartLabelDisplayMode.all,
+          xValueMapper: (int index) => data[index].day,
+          yValueMapper: (int index) => data[index].value,
+          dataCount: data.length,
+          borderColor: Colors.purple[300],
+          axisLineColor: Colors.transparent,
+          trackball: const SparkChartTrackball(
+              activationMode: SparkChartActivationMode.longPress),
+        ),
+      ]),
     );
   }
 }
