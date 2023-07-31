@@ -29,6 +29,7 @@ class Symptome {
         'sommeil': sommeil,
       };
 }
+
 class SymptomeData {
   int value;
   DateTime date;

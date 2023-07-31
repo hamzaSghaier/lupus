@@ -1,19 +1,18 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/screens/bilan/bilan_screen.dart';
 import 'package:hospital_app/screens/dashboard.dart';
-
-import 'custom_widgets/custom_bottom_bar.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
+  Permission.notification.request();
   AwesomeNotifications().initialize(
       null,
       [
         NotificationChannel(
-            channelKey: "hopsital_app_notif_channel_key",
-            channelName: "Hospital App Notification Channel",
-            channelDescription: "Notification channel for Hospital App",
+            channelKey: "lupus_notif_channel_key",
+            channelName: "Notification Lupus channel",
+            channelDescription: "Notification Lupus",
             defaultColor: Colors.purpleAccent,
             ledColor: Colors.white),
       ],
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Hospital Application',
+      title: 'Lupus',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -59,10 +58,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       // bottomNavigationBar: CustomBottomBar(),
-      body: const SafeArea(child: DashboardScreen()),
-
+      body: SafeArea(child: DashboardScreen()),
     );
   }
 }

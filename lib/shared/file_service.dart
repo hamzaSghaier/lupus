@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hospital_app/screens/bilan/models/bilan_model.dart';
+import 'package:get/get.dart';
+import 'package:hospital_app/entity/symptome.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
@@ -101,17 +102,18 @@ class FileService {
     }
   }
 
-  static Future<List<BilanModel>> getBilans(String fileName) async {
+  static Future<List<SymptomeData>> getBilans(String fileName) async {
     try {
       final file = await _localFile(fileName);
 
       // Read the file
       String contents = await file.readAsString();
-      List<BilanModel> listBilans = [];
+      List<SymptomeData> listBilans = [];
       contents.split(";").forEach((element) {
-        //jsonDecode(element);
-        print(element);
-        //listBilans.add(BilanModel.fromJson());
+        if (element.isNotEmpty && element.isBlank == false) {
+          print(jsonDecode(element));
+          listBilans.add(SymptomeData.fromJson(jsonDecode(element)));
+        }
       });
 
       return listBilans;

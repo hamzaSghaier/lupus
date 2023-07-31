@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hospital_app/constants/colors.dart';
 import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
 import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:hospital_app/entity/symptome.dart';
+import 'package:hospital_app/shared/file_service.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class Statistics extends StatefulWidget {
@@ -13,47 +15,6 @@ class Statistics extends StatefulWidget {
   State<Statistics> createState() => _StatisticsState();
 }
 
-List<_DataModel> data1 = [
-  _DataModel('Lundi', 35),
-  _DataModel('Mardi', 28),
-  _DataModel('Mercredi', 28),
-  _DataModel('Mercredi', 25),
-  _DataModel('Mercredi', 21),
-  _DataModel('Mercredi', 18),
-];
-
-List<_DataModel> data2 = [
-  _DataModel('Lundi', 8),
-  _DataModel('Mardi', 28),
-  _DataModel('Mercredi', 45),
-];
-List<_DataModel> data3 = [
-  _DataModel('Lundi', 27),
-  _DataModel('Mardi', 33),
-  _DataModel('Mercredi', 11),
-  _DataModel('Mardi', 6),
-  _DataModel('Mardi', 10),
-];
-List<_DataModel> data4 = [
-  _DataModel('Lundi', 3),
-  _DataModel('Mardi', 10),
-  _DataModel('Mercredi', 22),
-  _DataModel('jeudi', 12),
-  _DataModel('Mercredi', 15),
-  _DataModel('Mercredi', 22),
-  _DataModel('Mercredi', 11),
-  _DataModel('Mercredi', 32),
-  _DataModel('Mercredi', 23),
-  _DataModel('Mercredi', 21),
-  _DataModel('Mercredi', 42),
-  _DataModel('Mercredi', 11),
-];
-List<_DataModel> data5 = [
-  _DataModel('Lundi', 1),
-  _DataModel('Mardi', 4),
-  _DataModel('Mercredi', 8),
-];
-
 class _DataModel {
   _DataModel(this.day, this.value);
 
@@ -62,6 +23,51 @@ class _DataModel {
 }
 
 class _StatisticsState extends State<Statistics> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<List<_DataModel>> getFatigue() async {
+    List<SymptomeData> fatigue = await FileService.getBilans("fatigue.txt");
+    return fatigue
+        .map((e) => _DataModel(
+            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .toList();
+  }
+
+  Future<List<_DataModel>> getArthralgies() async {
+    List<SymptomeData> fatigue = await FileService.getBilans("arthralgies.txt");
+    return fatigue
+        .map((e) => _DataModel(
+            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .toList();
+  }
+
+  Future<List<_DataModel>> getAutonomie() async {
+    List<SymptomeData> fatigue = await FileService.getBilans("autonomie.txt");
+    return fatigue
+        .map((e) => _DataModel(
+            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .toList();
+  }
+
+  Future<List<_DataModel>> getHumeur() async {
+    List<SymptomeData> fatigue = await FileService.getBilans("humeur.txt");
+    return fatigue
+        .map((e) => _DataModel(
+            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .toList();
+  }
+
+  Future<List<_DataModel>> getSommeil() async {
+    List<SymptomeData> fatigue = await FileService.getBilans("sommeil.txt");
+    return fatigue
+        .map((e) => _DataModel(
+            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,43 +80,86 @@ class _StatisticsState extends State<Statistics> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
             child: Column(children: [
-              ChartWidget(
-                titleAr: 'درجة التعب',
-                titleFr: 'La fatigue',
-                data: data1,
-              ),
+              FutureBuilder(
+                  future: getFatigue(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ChartWidget(
+                        titleAr: 'درجة التعب',
+                        titleFr: 'La fatigue',
+                        data: snapshot.data,
+                      );
+                    } else {
+                      return const Center(
+                          child: Text(
+                        "Pas de données disponibles !",
+                      ));
+                    }
+                  }),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              ChartWidget(
-                titleAr: 'ألم مفصلي',
-                titleFr: 'Les arthralgies',
-                data: data2,
-              ),
+              FutureBuilder(
+                  future: getArthralgies(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ChartWidget(
+                        titleAr: 'ألم مفصلي',
+                        titleFr: 'Les arthralgies',
+                        data: snapshot.data,
+                      );
+                    } else {
+                      return const Text("Pas de données disponibles !");
+                    }
+                  }),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              ChartWidget(
-                titleAr: 'نشاط يومي',
-                titleFr: 'L’autonomie',
-                data: data3,
-              ),
+              FutureBuilder(
+                  future: getAutonomie(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ChartWidget(
+                        titleAr: 'نشاط يومي',
+                        titleFr: 'L’autonomie',
+                        data: snapshot.data,
+                      );
+                    } else {
+                      return const Text("Pas de données disponibles !");
+                    }
+                  }),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              ChartWidget(
-                titleAr: 'المزاج',
-                titleFr: 'Humeur',
-                data: data4,
-              ),
+              FutureBuilder(
+                  future: getHumeur(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ChartWidget(
+                        titleAr: 'المزاج',
+                        titleFr: 'Humeur',
+                        data: snapshot.data,
+                      );
+                    } else {
+                      return const Text("Pas de données disponibles !");
+                    }
+                  }),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              ChartWidget(
-                titleAr: '  جودة نومك',
-                titleFr: 'Sommeil',
-                data: data5,
-              ),
+              FutureBuilder(
+                  future: getSommeil(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ChartWidget(
+                        titleAr: '  جودة نومك',
+                        titleFr: 'Sommeil',
+                        data: snapshot.data,
+                      );
+                    } else {
+                      return const Text("Pas de données disponibles !");
+                    }
+                  }),
             ]),
           ),
         ),
