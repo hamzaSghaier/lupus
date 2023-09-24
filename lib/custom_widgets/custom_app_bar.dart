@@ -4,13 +4,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     required this.title,
+    this.isLoggedIn = true,
   });
 
   final String title;
+  final bool isLoggedIn;
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: true,
+      automaticallyImplyLeading: isLoggedIn,
       centerTitle: true,
       actions: [
         Container(

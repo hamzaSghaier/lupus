@@ -57,9 +57,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomBottomBar(),
-      appBar: const CustomAppBar(
+      bottomNavigationBar: profile != null ? CustomBottomBar() : null,
+      appBar: CustomAppBar(
         title: 'Mes informations',
+        isLoggedIn: profile != null ? true : false,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -170,8 +171,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(
-                height: 40,
-              )
+                height: 10,
+              ),
+
+              if (profile != null)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  child: const Text(
+                    'Supprimer Compte',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirmation'),
+                          content: const Text(
+                              'Voulez-vous vraiment supprimer votre compte ?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // User cancels the deletion
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Annuler'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                // User confirms the deletion, call the method to delete the account
+                                await FileService.deleteAllFilesInDirectory();
+                                // Optionally, you can navigate to a different screen or perform other actions
+                                Navigator.of(context).pop();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SignUpScreen(), // Replace with your login screen
+                                  ),
+                                );
+                              },
+                              child: const Text('Supprimer'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
             ],
           ),
         ),

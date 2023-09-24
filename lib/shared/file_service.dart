@@ -93,6 +93,28 @@ class FileService {
     }
   }
 
+  static Future<void> deleteAllFilesInDirectory() async {
+    try {
+      final path = await _localPath;
+      final directory = Directory(path);
+
+      if (await directory.exists()) {
+        final files = directory.list();
+
+        await for (var file in files) {
+          if (file is File) {
+            await file.delete();
+            print('File ${file.path} deleted successfully');
+          }
+        }
+      } else {
+        print('Directory $path does not exist');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete files in directory $e');
+    }
+  }
+
   static Future<Map<String, dynamic>> getJson(String fileName) async {
     try {
       final file = await _localFile(fileName);
