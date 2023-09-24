@@ -5,12 +5,37 @@ import 'package:hospital_app/screens/bilan/widgets/user_info.dart';
 import 'package:intl/intl.dart';
 
 import '../controllers/medicaments_controller.dart';
+import '../entity/profile.dart';
+import '../shared/file_service.dart';
 
-class MedicamentsScreen extends StatelessWidget {
+class MedicamentsScreen extends StatefulWidget {
   MedicamentsScreen({super.key});
 
+  @override
+  State<MedicamentsScreen> createState() => _MedicamentsScreenState();
+}
+
+class _MedicamentsScreenState extends State<MedicamentsScreen> {
   final MedicamentsController medicamentsController =
       Get.put(MedicamentsController());
+
+  Profile? profile;
+
+  Future<Profile> getProfile() async {
+    Profile profileFile = await FileService.getProfile();
+
+    setState(() {
+      profile = profileFile;
+    });
+
+    return profileFile;
+  }
+
+  @override
+  void initState() {
+    getProfile();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +61,12 @@ class MedicamentsScreen extends StatelessWidget {
               children: [
                 UserInfo(
                   mediaQuery: MediaQuery.of(context),
-                  name: "Houssam Gaff",
-                  gender: "Homme",
-                  age: "20",
+                  name: "${profile?.nom} ${profile?.prenom}",
+                  gender: "",
+                  age: (DateTime.now().year -
+                          int.parse(
+                              profile?.dateNaissance?.substring(0, 4) ?? '0'))
+                      .toString(),
                 ),
                 const SizedBox(height: 20),
                 Column(

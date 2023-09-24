@@ -5,11 +5,13 @@ class CustomTextField extends StatelessWidget {
       {super.key,
       required this.labelText,
       required this.controller,
-      this.keyboardType});
+      this.keyboardType,
+      this.isPassword = false});
 
   final String labelText;
   final TextEditingController controller;
   final TextInputType? keyboardType;
+  final bool isPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class CustomTextField extends StatelessWidget {
           ? TextField(
               keyboardType: keyboardType,
               controller: controller,
+              obscureText: isPassword,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(90.0),
@@ -28,6 +31,7 @@ class CustomTextField extends StatelessWidget {
             )
           : TextField(
               controller: controller,
+              obscureText: isPassword,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(90.0),

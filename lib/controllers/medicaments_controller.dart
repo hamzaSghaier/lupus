@@ -39,15 +39,19 @@ class MedicamentsController extends GetxController {
       );
     }
 
-    AwesomeNotifications().createNotification(
+    AwesomeNotifications()
+        .createNotification(
       content: NotificationContent(
         id: id,
-        channelKey: "hopsital_app_notif_channel_key",
+        channelKey: "lupus_notif_channel_key",
         title: title,
         body: body,
       ),
       schedule: schedule,
-    );
+    )
+        .catchError((e) {
+      print("Error creating notification: $e");
+    });
   }
 
   Future<void> selectCorticoidesDate(BuildContext context) async {

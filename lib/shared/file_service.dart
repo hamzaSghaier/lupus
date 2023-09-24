@@ -8,11 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../entity/profile.dart';
+
 class FileService {
   //  Get local folder
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
-    print(directory);
+    print(directory.path);
     //Directory appDocDir = await getApplicationDocumentsDirectory();
     return directory.path;
   }
@@ -73,6 +75,12 @@ class FileService {
     return file.writeAsString('$content;', mode: FileMode.append);
   }
 
+  static Future<File> writeProfileFile(String fileName, String content) async {
+    final file = await _localFile(fileName);
+    // Write the file.
+    return file.writeAsString(content, mode: FileMode.write);
+  }
+
   static Future<String> readFile(String fileName) async {
     try {
       final file = await _localFile(fileName);
@@ -120,6 +128,21 @@ class FileService {
     } catch (e) {
       // If encountering an error, return 0
       throw Exception('Failed to get json, file $fileName | $e');
+    }
+  }
+
+  static Future<Profile> getProfile() async {
+    try {
+      final file = await _localFile("profile.txt");
+      String contents = await file.readAsString();
+
+      // Decode the JSON string and create a Profile object
+      final Map<String, dynamic> profileMap = jsonDecode(contents);
+      final Profile profile = Profile.fromJson(profileMap);
+
+      return profile;
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

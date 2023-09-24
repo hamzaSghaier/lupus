@@ -10,6 +10,9 @@ import 'package:hospital_app/screens/bilan/widgets/bilan_info.dart';
 import 'package:hospital_app/screens/bilan/widgets/user_info.dart';
 import 'package:intl/intl.dart';
 
+import '../../entity/profile.dart';
+import '../../shared/file_service.dart';
+
 class BilanScreen extends StatefulWidget {
   const BilanScreen({super.key});
 
@@ -18,8 +21,21 @@ class BilanScreen extends StatefulWidget {
 }
 
 class _BilanScreenState extends State<BilanScreen> {
+  Profile? profile;
+
+  Future<Profile> getProfile() async {
+    Profile profileFile = await FileService.getProfile();
+
+    setState(() {
+      profile = profileFile;
+    });
+
+    return profileFile;
+  }
+
   @override
   void initState() {
+    getProfile();
     /* FileService.writeFile(
         "mes_bilans.txt",
         BilanModel(date: "22/12/2022", type: "NSC", image: "image bilan", id: 1)
@@ -73,10 +89,12 @@ class _BilanScreenState extends State<BilanScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             UserInfo(
-              mediaQuery: mediaQuery,
-              name: "Houssam Gaff",
-              gender: "Homme",
-              age: "20",
+              mediaQuery: MediaQuery.of(context),
+              name: "${profile?.nom} ${profile?.prenom}",
+              gender: "",
+              age: (DateTime.now().year -
+                      int.parse(profile?.dateNaissance?.substring(0, 4) ?? '0'))
+                  .toString(),
             ),
             SizedBox(
               height: mediaQuery.size.height * 0.02,

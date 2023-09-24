@@ -1,18 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hospital_app/entity/profile.dart';
 
 import '../shared/file_service.dart';
 
 class SignupController extends GetxController {
   var isChecked = false.obs;
   var selectedDate = DateTime.now().obs;
-  var profile = {
-    "nom": "",
-    "prenom": "",
-    "numTel": "",
-    "password": "",
-    "dateNaissance": "",
-  }.obs;
+  var profile = Profile(
+          nom: "", prenom: "", dateNaissance: "", numTel: "", numDossier: "")
+      .obs;
 
   void onChanged(bool newValue) => isChecked.value = newValue;
 
@@ -29,14 +28,13 @@ class SignupController extends GetxController {
     }
   }
 
-  Future<void> createProfile(
-      String nom, String prenom, String numTel, String password) async {
-    profile["nom"] = nom;
-    profile["prenom"] = prenom;
-    profile["numTel"] = numTel;
-    profile["password"] = password;
-    profile["dateNaissance"] = selectedDate.value.toString();
-
-    await FileService.writeFile("profile.txt", profile.toString());
+  Future<void> createProfile(Profile profile) async {
+    try {
+      final jsonProfile =
+          jsonEncode(profile.toJson()); // Convert Profile to JSON string
+      await FileService.writeProfileFile("profile.txt", jsonProfile);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
   }
 }

@@ -8,8 +8,50 @@ import 'package:hospital_app/screens/medicaments.dart';
 import 'package:hospital_app/screens/signup.dart';
 import 'package:hospital_app/screens/symptoms.dart';
 
-class DashboardScreen extends StatelessWidget {
+import '../entity/profile.dart';
+import '../shared/file_service.dart';
+
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  Profile? profile;
+
+  Future<Profile> getProfile() async {
+    Profile profileFile = await FileService.getProfile();
+
+    setState(() {
+      profile = profileFile;
+    });
+
+    return profileFile;
+  }
+
+  @override
+  void initState() {
+    getProfile();
+    super.initState();
+  }
+
+  String _calculateBirthYear() {
+    String? dateOfBirth = profile?.dateNaissance;
+    print("DATE OF BIRTH: ${dateOfBirth}");
+    String ageString = "";
+
+    if (dateOfBirth != null) {
+      int yearOfBirth = int.tryParse(dateOfBirth.substring(0, 4)) ?? 0;
+      DateTime now = DateTime.now();
+      int currentYear = now.year;
+      int age = currentYear - yearOfBirth;
+      ageString = age.toString();
+    }
+
+    return ageString;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +68,9 @@ class DashboardScreen extends StatelessWidget {
             ),
             UserInfo(
               mediaQuery: MediaQuery.of(context),
-              name: "Houssam Gaff",
-              gender: "Homme",
-              age: "20",
+              name: "${profile?.nom} ${profile?.prenom}",
+              gender: "",
+              age: _calculateBirthYear(),
             ),
             Expanded(
               child: Column(
@@ -78,8 +120,7 @@ class DashboardScreen extends StatelessWidget {
                       HomeButton(
                         image: 'assets/Rectangle-1.png',
                         onPressed: () {
-                           Get.to( SignUpScreen());
-                       
+                          Get.to(SignUpScreen());
                         },
                         title: 'Profil',
                       ),
@@ -129,7 +170,10 @@ class HomeButton extends StatelessWidget {
             // Title at the bottom
             Text(
               title,
-              style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
             ),
           ],
         ),

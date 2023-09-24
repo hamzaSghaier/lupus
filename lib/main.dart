@@ -2,7 +2,11 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hospital_app/screens/dashboard.dart';
+import 'package:hospital_app/screens/signup.dart';
+import 'package:hospital_app/shared/file_service.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'entity/profile.dart';
 
 void main() {
   Permission.notification.request();
@@ -46,6 +50,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future<Profile?>? profileFuture;
+
   @override
   void initState() {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -53,14 +59,34 @@ class _HomeState extends State<Home> {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
+
+    profileFuture = FileService.getProfile();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       // bottomNavigationBar: CustomBottomBar(),
-      body: SafeArea(child: DashboardScreen()),
+      body: SafeArea(
+        child: FutureBuilder<Profile?>(
+          future: profileFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // While loading profile, show a loading indicator
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError ||
+                !snapshot.hasData ||
+                snapshot.data == null) {
+              // If there is an error or no profile data, show SignUpScreen
+              return const SignUpScreen();
+            } else {
+              // If profile data exists, show DashboardScreen
+              return const DashboardScreen();
+            }
+          },
+        ),
+      ),
     );
   }
 }
