@@ -1,14 +1,16 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/screens/dashboard.dart';
-import 'package:hospital_app/screens/signup.dart';
-import 'package:hospital_app/shared/file_service.dart';
+import 'package:lupus_app/constants/colors.dart';
+import 'package:lupus_app/screens/dashboard.dart';
+import 'package:lupus_app/screens/login.dart';
+import 'package:lupus_app/shared/file_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'entity/profile.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Permission.notification.request();
   AwesomeNotifications().initialize(
       null,
@@ -33,8 +35,17 @@ class MyApp extends StatelessWidget {
       title: 'Lupus',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 230, 0, 153)),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(fontSize: 16.0),
+          errorStyle: TextStyle(fontSize: 12.0),
+        ),
+        textTheme: const TextTheme(
+            bodyLarge: TextStyle(fontSize: 24.0),
+            bodySmall: TextStyle(fontSize: 18.0),
+            headlineSmall: TextStyle(fontSize: 16.0),
+            labelLarge: TextStyle(fontSize: 14.0),
+            bodyMedium: TextStyle(fontSize: 20.0)),
+        colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
         useMaterial3: true,
       ),
       home: const Home(),
@@ -77,9 +88,10 @@ class _HomeState extends State<Home> {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError ||
                 !snapshot.hasData ||
-                snapshot.data == null) {
+                snapshot.data == null ||
+                snapshot.data?.isLoggedIn == false) {
               // If there is an error or no profile data, show SignUpScreen
-              return const SignUpScreen();
+              return LoginScreen();
             } else {
               // If profile data exists, show DashboardScreen
               return const DashboardScreen();

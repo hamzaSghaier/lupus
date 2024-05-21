@@ -1,4 +1,4 @@
-# hospital_app
+# lupus_app
 
 A new Flutter project.
 

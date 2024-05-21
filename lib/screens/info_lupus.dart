@@ -1,6 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
-import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
-import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
+import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 class InfoLupusScreen extends StatelessWidget {
@@ -22,8 +24,6 @@ class WebViewPlusExampleMainPage extends StatefulWidget {
 
 class _WebViewPlusExampleMainPageState
     extends State<WebViewPlusExampleMainPage> {
-  WebViewPlusController? _controller;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

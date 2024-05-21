@@ -16,29 +16,29 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: keyboardType != null
-          ? TextField(
-              keyboardType: keyboardType,
-              controller: controller,
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(90.0),
-                ),
-                labelText: labelText,
-              ),
-            )
-          : TextField(
-              controller: controller,
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(90.0),
-                ),
-                labelText: labelText,
-              ),
-            ),
+      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+      child: TextFormField(
+        textInputAction: TextInputAction.next,
+        keyboardType: keyboardType,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            if (isPassword) {
+              return 'Mot de passe obligatoire !';
+            }
+            return 'Champ obligatoire !';
+          }
+          return null;
+        },
+        controller: controller,
+        obscureText: isPassword,
+        style: Theme.of(context).textTheme.bodySmall,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          labelText: labelText,
+        ),
+      ),
     );
   }
 }

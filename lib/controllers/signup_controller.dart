@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/entity/profile.dart';
+import 'package:lupus_app/entity/profile.dart';
 
 import '../shared/file_service.dart';
 
@@ -10,7 +10,13 @@ class SignupController extends GetxController {
   var isChecked = false.obs;
   var selectedDate = DateTime.now().obs;
   var profile = Profile(
-          nom: "", prenom: "", dateNaissance: "", numTel: "", numDossier: "")
+          isLoggedIn: false,
+          password: "",
+          nom: "",
+          prenom: "",
+          dateNaissance: "",
+          numTel: "",
+          numDossier: "")
       .obs;
 
   void onChanged(bool newValue) => isChecked.value = newValue;

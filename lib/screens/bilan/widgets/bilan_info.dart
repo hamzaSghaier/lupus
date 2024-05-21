@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hospital_app/constants/colors.dart';
-import 'package:hospital_app/constants/icons.dart';
+import 'package:lupus_app/constants/colors.dart';
+import 'package:lupus_app/constants/icons.dart';
 
 class BilanInfo extends StatelessWidget {
   const BilanInfo({
@@ -52,9 +52,9 @@ class BilanInfo extends StatelessWidget {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)))),
                       onPressed: () {},
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Icon(

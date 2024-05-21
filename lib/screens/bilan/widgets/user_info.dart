@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hospital_app/constants/colors.dart';
+import 'package:lupus_app/constants/colors.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({
@@ -24,7 +24,7 @@ class _UserInfoState extends State<UserInfo> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       height: widget.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
           color: grey,

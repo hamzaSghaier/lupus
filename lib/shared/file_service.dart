@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
-import 'package:hospital_app/entity/symptome.dart';
+import 'package:lupus_app/entity/symptome.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
@@ -161,6 +161,43 @@ class FileService {
       // Decode the JSON string and create a Profile object
       final Map<String, dynamic> profileMap = jsonDecode(contents);
       final Profile profile = Profile.fromJson(profileMap);
+
+      return profile;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  static Future<Profile?> getProfileByLogin(tel, password) async {
+    try {
+      final file = await _localFile("profile.txt");
+      String contents = await file.readAsString();
+
+      // Decode the JSON string and create a Profile object
+      final Map<String, dynamic> profileMap = jsonDecode(contents);
+      Profile profile = Profile.fromJson(profileMap);
+      if (profile.numTel == tel && profile.password == password) {
+        profile = await updateProfileIsLogged(true) ?? profile;
+        return profile;
+      }
+      return null;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  static Future<Profile?> updateProfileIsLogged(isLoggedIn) async {
+    try {
+      final file = await _localFile("profile.txt");
+      String contents = await file.readAsString();
+
+      // Decode the JSON string and create a Profile object
+      final Map<String, dynamic> profileMap = jsonDecode(contents);
+      final Profile profile = Profile.fromJson(profileMap);
+      profile.isLoggedIn = isLoggedIn;
+      final jsonProfile =
+          jsonEncode(profile.toJson()); // Convert Profile to JSON string
+      await FileService.writeProfileFile("profile.txt", jsonProfile);
 
       return profile;
     } catch (e) {

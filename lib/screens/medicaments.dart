@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
-import 'package:hospital_app/screens/bilan/widgets/user_info.dart';
+import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
 import 'package:intl/intl.dart';
 
 import '../controllers/medicaments_controller.dart';
@@ -9,7 +9,7 @@ import '../entity/profile.dart';
 import '../shared/file_service.dart';
 
 class MedicamentsScreen extends StatefulWidget {
-  MedicamentsScreen({super.key});
+  const MedicamentsScreen({super.key});
 
   @override
   State<MedicamentsScreen> createState() => _MedicamentsScreenState();
@@ -65,7 +65,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                   gender: "",
                   age: (DateTime.now().year -
                           int.parse(
-                              profile?.dateNaissance?.substring(0, 4) ?? '0'))
+                              profile?.dateNaissance.substring(0, 4) ?? '0'))
                       .toString(),
                 ),
                 const SizedBox(height: 20),
@@ -365,9 +365,9 @@ class NameRow extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(2)),
         ),
         padding: const EdgeInsets.all(15),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             Text(
               "Ioussam Gaff",
               style: TextStyle(

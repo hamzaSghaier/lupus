@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
-import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
-import 'package:hospital_app/entity/symptome.dart';
-import 'package:hospital_app/shared/file_service.dart';
+import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
+import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:lupus_app/entity/symptome.dart';
+import 'package:lupus_app/shared/file_service.dart';
 import 'package:reviews_slider/reviews_slider.dart';
 
 class SymptomsController extends GetxController {

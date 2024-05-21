@@ -1,11 +1,11 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:hospital_app/constants/colors.dart';
-import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
-import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
-import 'package:hospital_app/entity/symptome.dart';
-import 'package:hospital_app/shared/file_service.dart';
+import 'package:lupus_app/constants/colors.dart';
+import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
+import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:lupus_app/entity/symptome.dart';
+import 'package:lupus_app/shared/file_service.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class Statistics extends StatefulWidget {

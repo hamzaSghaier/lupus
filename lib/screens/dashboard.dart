@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
-import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
-import 'package:hospital_app/screens/bilan/bilan_screen.dart';
-import 'package:hospital_app/screens/bilan/widgets/user_info.dart';
-import 'package:hospital_app/screens/medicaments.dart';
-import 'package:hospital_app/screens/signup.dart';
-import 'package:hospital_app/screens/symptoms.dart';
+import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
+import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:lupus_app/screens/bilan/bilan_screen.dart';
+import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
+import 'package:lupus_app/screens/medicaments.dart';
+import 'package:lupus_app/screens/signup.dart';
+import 'package:lupus_app/screens/symptoms.dart';
 
 import '../entity/profile.dart';
 import '../shared/file_service.dart';
@@ -39,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   String _calculateBirthYear() {
     String? dateOfBirth = profile?.dateNaissance;
-    print("DATE OF BIRTH: ${dateOfBirth}");
+    print("DATE OF BIRTH: $dateOfBirth");
     String ageString = "";
 
     if (dateOfBirth != null) {
@@ -94,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       HomeButton(
                         image: 'assets/Rectangle-3.png',
                         onPressed: () {
-                          Get.to(SymptomsScreen());
+                          Get.to(const SymptomsScreen());
                         },
                         title: 'Symptome',
                       ),
@@ -120,7 +120,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       HomeButton(
                         image: 'assets/Rectangle-1.png',
                         onPressed: () {
-                          Get.to(SignUpScreen());
+                          Get.to(const SignUpScreen());
                         },
                         title: 'Profil',
                       ),
@@ -154,9 +154,10 @@ class HomeButton extends StatelessWidget {
         width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.width / 2.5,
         decoration: BoxDecoration(
-          color: Color.fromRGBO(255, 229, 245, 1),
+          color: const Color.fromRGBO(255, 229, 245, 1),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 3, color: Color.fromRGBO(255, 180, 252, 1)),
+          border: Border.all(
+              width: 3, color: const Color.fromRGBO(255, 180, 252, 1)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -166,11 +167,11 @@ class HomeButton extends StatelessWidget {
             Image.asset(
               image,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Title at the bottom
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 15,
                   color: Colors.black,
                   fontWeight: FontWeight.bold),

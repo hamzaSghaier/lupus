@@ -1,13 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hospital_app/constants/colors.dart';
-import 'package:hospital_app/constants/icons.dart';
-import 'package:hospital_app/custom_widgets/custom_app_bar.dart';
-import 'package:hospital_app/custom_widgets/custom_bottom_bar.dart';
-import 'package:hospital_app/screens/bilan/models/bilan_model.dart';
-import 'package:hospital_app/screens/bilan/widgets/bilan_info.dart';
-import 'package:hospital_app/screens/bilan/widgets/user_info.dart';
+import 'package:lupus_app/constants/colors.dart';
+import 'package:lupus_app/constants/icons.dart';
+import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
+import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
+import 'package:lupus_app/screens/bilan/models/bilan_model.dart';
+import 'package:lupus_app/screens/bilan/widgets/bilan_info.dart';
+import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
 import 'package:intl/intl.dart';
 
 import '../../entity/profile.dart';
@@ -75,9 +75,6 @@ class _BilanScreenState extends State<BilanScreen> {
     mediaQuery = MediaQuery.of(context);
 
     //FileService.getBilans("mes_bilans.txt").then((value) => print(value));
-
-    print(listBilans.length);
-
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
@@ -93,7 +90,7 @@ class _BilanScreenState extends State<BilanScreen> {
               name: "${profile?.nom} ${profile?.prenom}",
               gender: "",
               age: (DateTime.now().year -
-                      int.parse(profile?.dateNaissance?.substring(0, 4) ?? '0'))
+                      int.parse(profile?.dateNaissance.substring(0, 4) ?? '0'))
                   .toString(),
             ),
             SizedBox(
@@ -335,9 +332,9 @@ class _BilanScreenState extends State<BilanScreen> {
                                   ],
                                 )).show();
                           },
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.only(right: 10),
                                 child: Icon(

@@ -1,12 +1,9 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hospital_app/screens/bilan/bilan_screen.dart';
-import 'package:hospital_app/screens/dashboard.dart';
-import 'package:hospital_app/screens/info_lupus.dart';
-import 'package:hospital_app/screens/medicaments.dart';
-import 'package:hospital_app/screens/statistics/statistics_screen.dart';
-import 'package:hospital_app/screens/symptoms.dart';
+import 'package:lupus_app/screens/dashboard.dart';
+import 'package:lupus_app/screens/info_lupus.dart';
+import 'package:lupus_app/screens/statistics/statistics_screen.dart';
 
 import '../controllers/bottom_navigation_bar_controller.dart';
 
@@ -22,17 +19,28 @@ class CustomBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConvexAppBar(
       style: TabStyle.reactCircle,
-      activeColor: Color.fromRGBO(255, 180, 252, 0.6),
+      activeColor: const Color.fromRGBO(255, 180, 252, 0.6),
       items: const [
         TabItem(
-          icon: Icon(Icons.info_outline,size: 20,color: Colors.white,),
-          
+          icon: Icon(
+            Icons.info_outline,
+            size: 20,
+            color: Colors.white,
+          ),
         ),
         TabItem(
-          icon: Icon(Icons.dashboard,size: 20,color: Colors.white,),
+          icon: Icon(
+            Icons.dashboard,
+            size: 20,
+            color: Colors.white,
+          ),
         ),
         TabItem(
-          icon: Icon(Icons.bar_chart_outlined,size:20,color: Colors.white,),
+          icon: Icon(
+            Icons.bar_chart_outlined,
+            size: 20,
+            color: Colors.white,
+          ),
         ),
       ],
       initialActiveIndex: bottomNavigationBarController.selectedIndex.value,
