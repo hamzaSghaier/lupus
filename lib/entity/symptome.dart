@@ -17,6 +17,17 @@ class Symptome {
     required this.updatedAt,
   });
 
+  factory Symptome.empty() {
+    return Symptome(
+        fatigue: SymptomeData(date: DateTime.now(), value: 0),
+        arthralgies: SymptomeData(date: DateTime.now(), value: 0),
+        autonomie: SymptomeData(date: DateTime.now(), value: 0),
+        humeur: SymptomeData(date: DateTime.now(), value: 0),
+        sommeil: SymptomeData(date: DateTime.now(), value: 0),
+        createdAt: DateTime.now().add(const Duration(days: 7)),
+        updatedAt: DateTime.now().add(const Duration(days: 7)));
+  }
+
   factory Symptome.fromJson(Map<String, dynamic> json) {
     return Symptome(
       fatigue: SymptomeData.fromJson(json['fatigue']),

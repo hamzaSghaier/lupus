@@ -237,6 +237,11 @@ class ChartWidget extends StatelessWidget {
             series: <ChartSeries>[
               AreaSeries<_DataModel, String>(
                 color: pink.withAlpha(128),
+                markerSettings: MarkerSettings(
+                    isVisible: true,
+                    shape: DataMarkerType.diamond,
+                    borderWidth: 1,
+                    borderColor: pink.withAlpha(20)),
                 dataSource: data,
                 xValueMapper: (data, _) => data.day,
                 yValueMapper: (data, _) => data.value,

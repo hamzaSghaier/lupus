@@ -227,12 +227,16 @@ class FileService {
       String contents = await file.readAsString();
       List<String> c = contents.split(";");
       c.removeWhere((element) => element.isEmpty);
-      Symptome lastSymp = Symptome.fromJson(jsonDecode(c.last));
-      print(lastSymp.toJson());
+
+      Symptome lastSymp = Symptome.empty();
+      if (c.isNotEmpty) {
+        lastSymp = Symptome.fromJson(jsonDecode(c.last));
+      }
+      print("last : ${lastSymp.toJson()}");
       return lastSymp;
     } catch (e) {
       // If encountering an error, return 0
-      throw Exception('Failed to get json, file symptomes_log.txt | $e');
+      return Symptome.empty();
     }
   }
 
