@@ -75,6 +75,19 @@ class FileService {
     return file.writeAsString('$content;', mode: FileMode.append);
   }
 
+  static Future<File> updateFile(String fileName, String content) async {
+    final file = await _localFile(fileName);
+    String contents = await file.readAsString();
+    List<String> c = contents.split(";");
+    c.removeWhere((element) => element.isEmpty);
+    c.removeLast();
+    c.add(content);
+    String r = c.join(";");
+    print("updating $fileName");
+    // Write the file.
+    return file.writeAsString('$r;', mode: FileMode.write);
+  }
+
   static Future<File> writeProfileFile(String fileName, String content) async {
     final file = await _localFile(fileName);
     // Write the file.
@@ -139,6 +152,7 @@ class FileService {
       // Read the file
       String contents = await file.readAsString();
       List<SymptomeData> listBilans = [];
+      print(fileName);
       contents.split(";").forEach((element) {
         if (element.isNotEmpty && element.isBlank == false) {
           print(jsonDecode(element));
@@ -202,6 +216,41 @@ class FileService {
       return profile;
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  static Future<Symptome> getlatestSymptomes() async {
+    try {
+      final file = await _localFile("symptomes_log.txt");
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<String> c = contents.split(";");
+      c.removeWhere((element) => element.isEmpty);
+      Symptome lastSymp = Symptome.fromJson(jsonDecode(c.last));
+      print(lastSymp.toJson());
+      return lastSymp;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file symptomes_log.txt | $e');
+    }
+  }
+
+  static Future<Symptome> updatelatestSymptomes(Symptome newSymp) async {
+    try {
+      final file = await _localFile("symptomes_log.txt");
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<String> c = contents.split(";");
+      c.removeWhere((element) => element.isEmpty);
+      Symptome lastSymp = Symptome.fromJson(jsonDecode(c.removeLast()));
+      print(lastSymp.toJson());
+      writeFile("symptomes_log.txt", jsonEncode(newSymp.toJson()));
+      return newSymp;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file symptomes_log.txt | $e');
     }
   }
 }

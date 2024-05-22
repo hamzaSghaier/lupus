@@ -4,6 +4,8 @@ class Symptome {
   SymptomeData autonomie;
   SymptomeData humeur;
   SymptomeData sommeil;
+  DateTime createdAt;
+  DateTime updatedAt;
 
   Symptome({
     required this.fatigue,
@@ -11,22 +13,30 @@ class Symptome {
     required this.autonomie,
     required this.humeur,
     required this.sommeil,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  factory Symptome.fromJson(Map<String, dynamic> json) => Symptome(
-        fatigue: json['fatigue'],
-        arthralgies: json['arthralgies'],
-        autonomie: json['autonomie'],
-        humeur: json['humeur'],
-        sommeil: json['sommeil'],
-      );
+  factory Symptome.fromJson(Map<String, dynamic> json) {
+    return Symptome(
+      fatigue: SymptomeData.fromJson(json['fatigue']),
+      arthralgies: SymptomeData.fromJson(json['arthralgies']),
+      autonomie: SymptomeData.fromJson(json['autonomie']),
+      humeur: SymptomeData.fromJson(json['humeur']),
+      sommeil: SymptomeData.fromJson(json['sommeil']),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        'fatigue': fatigue,
-        'arthralgies': arthralgies,
-        'autonomie': autonomie,
-        'humeur': humeur,
-        'sommeil': sommeil,
+        'fatigue': fatigue.toJson(),
+        'arthralgies': arthralgies.toJson(),
+        'autonomie': autonomie.toJson(),
+        'humeur': humeur.toJson(),
+        'sommeil': sommeil.toJson(),
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
       };
 }
 

@@ -1,11 +1,13 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/entity/symptome.dart';
 import 'package:lupus_app/shared/file_service.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class Statistics extends StatefulWidget {
@@ -31,42 +33,56 @@ class _StatisticsState extends State<Statistics> {
   Future<List<_DataModel>> getFatigue() async {
     List<SymptomeData> fatigue = await FileService.getBilans("fatigue.txt");
     return fatigue
-        .map((e) => _DataModel(
-            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
+            double.parse(e.value.toString())))
         .toList();
   }
 
   Future<List<_DataModel>> getArthralgies() async {
     List<SymptomeData> fatigue = await FileService.getBilans("arthralgies.txt");
     return fatigue
-        .map((e) => _DataModel(
-            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
+            double.parse(e.value.toString())))
         .toList();
   }
 
   Future<List<_DataModel>> getAutonomie() async {
     List<SymptomeData> fatigue = await FileService.getBilans("autonomie.txt");
     return fatigue
-        .map((e) => _DataModel(
-            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
+            double.parse(e.value.toString())))
         .toList();
   }
 
   Future<List<_DataModel>> getHumeur() async {
     List<SymptomeData> fatigue = await FileService.getBilans("humeur.txt");
     return fatigue
-        .map((e) => _DataModel(
-            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
+            double.parse(e.value.toString())))
         .toList();
   }
 
   Future<List<_DataModel>> getSommeil() async {
     List<SymptomeData> fatigue = await FileService.getBilans("sommeil.txt");
     return fatigue
-        .map((e) => _DataModel(
-            e.date.toIso8601String(), double.parse(e.value.toString())))
+        .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
+            double.parse(e.value.toString())))
         .toList();
   }
+
+  List<String> autonomie = [
+    'Peu d\'activité \n   نشاط قليل',
+    'Intermédiaire \n  نشاط وسط',
+    'Normale \n  نشاط عادي'
+  ];
+
+  List<String> sommeil = [
+    'Mauvaise \n سيئة',
+    'Moyenne \n  متوسطة',
+    'Bonne \n  جيدة'
+  ];
+
+  List<String> humeur = ['Terrible', 'Mauvais', 'Moyen', 'Bon', 'Génial'];
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +139,7 @@ class _StatisticsState extends State<Statistics> {
                         titleAr: 'نشاط يومي',
                         titleFr: 'L’autonomie',
                         data: snapshot.data,
+                        values: autonomie,
                       );
                     } else {
                       return const Text("Pas de données disponibles !");
@@ -139,6 +156,7 @@ class _StatisticsState extends State<Statistics> {
                         titleAr: 'المزاج',
                         titleFr: 'Humeur',
                         data: snapshot.data,
+                        values: humeur,
                       );
                     } else {
                       return const Text("Pas de données disponibles !");
@@ -155,6 +173,7 @@ class _StatisticsState extends State<Statistics> {
                         titleAr: '  جودة نومك',
                         titleFr: 'Sommeil',
                         data: snapshot.data,
+                        values: sommeil,
                       );
                     } else {
                       return const Text("Pas de données disponibles !");
@@ -170,8 +189,9 @@ class _StatisticsState extends State<Statistics> {
 
 class ChartWidget extends StatelessWidget {
   var data, titleAr, titleFr;
+  List<String>? values;
 
-  ChartWidget({super.key, this.titleAr, this.titleFr, this.data});
+  ChartWidget({super.key, this.titleAr, this.titleFr, this.data, this.values});
 
   @override
   Widget build(BuildContext context) {
@@ -187,26 +207,44 @@ class ChartWidget extends StatelessWidget {
           width: 2,
         ),
       ),
-      child: Column(children: [
-        TitleOfSlider(
-          titleAr: titleAr,
-          titleFr: titleFr,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.02,
-        ),
-        SfSparkAreaChart.custom(
-          color: pink.withAlpha(128),
-          labelDisplayMode: SparkChartLabelDisplayMode.all,
-          xValueMapper: (int index) => data[index].day,
-          yValueMapper: (int index) => data[index].value,
-          dataCount: data.length,
-          borderColor: Colors.purple[300],
-          axisLineColor: Colors.transparent,
-          trackball: const SparkChartTrackball(
-              activationMode: SparkChartActivationMode.longPress),
-        ),
-      ]),
+      child: Column(
+        children: [
+          TitleOfSlider(
+            titleAr: titleAr,
+            titleFr: titleFr,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          SfCartesianChart(
+            enableAxisAnimation: true,
+            primaryXAxis: CategoryAxis(),
+            primaryYAxis: NumericAxis(
+              interactiveTooltip: const InteractiveTooltip(),
+              desiredIntervals: values?.length ?? 10,
+              labelFormat: '{value}',
+              anchorRangeToVisiblePoints: true,
+              maximum: values?.length.toDouble() ?? 11,
+              labelAlignment: LabelAlignment.center,
+              axisLabelFormatter: (AxisLabelRenderDetails details) {
+                return values == null
+                    ? ChartAxisLabel(details.value.toInt().toString(),
+                        const TextStyle(color: Colors.black))
+                    : ChartAxisLabel(values![details.value.toInt()],
+                        const TextStyle(color: Colors.black));
+              },
+            ),
+            series: <ChartSeries>[
+              AreaSeries<_DataModel, String>(
+                color: pink.withAlpha(128),
+                dataSource: data,
+                xValueMapper: (data, _) => data.day,
+                yValueMapper: (data, _) => data.value,
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
