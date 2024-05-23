@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -452,9 +453,69 @@ class MedicamentSection extends StatelessWidget {
               )
             ],
           ),
+          ElevatedButton(
+              onPressed: () {
+                var hour = 8;
+                if (horairePrise == 0) {
+                  hour = 8;
+                } else if (horairePrise == 1) {
+                  hour = 12;
+                } else
+                  hour = 17;
+                _scheduleNotification(
+                    medicamentName,
+                    "Il est temps de prendre vos $medicamentName",
+                    medicamentName.hashCode,
+                    hour,
+                    0,
+                    null);
+              },
+              child: const Text("Enregistrer"))
         ],
       ),
     );
+  }
+
+  void _scheduleNotification(
+    String title,
+    String body,
+    int id,
+    int? hour,
+    int? minute,
+    DateTime? date,
+  ) {
+    NotificationSchedule schedule;
+
+    if (date == null) {
+      schedule = NotificationCalendar.fromDate(
+          repeats: true,
+          allowWhileIdle: true,
+          date: DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+            hour!,
+            minute!,
+          ).add(const Duration(days: 1)));
+    } else {
+      schedule = NotificationCalendar.fromDate(
+        date: date,
+      );
+    }
+
+    AwesomeNotifications()
+        .createNotification(
+      content: NotificationContent(
+        id: id,
+        channelKey: "lupus_notif_channel_key",
+        title: title,
+        body: body,
+      ),
+      schedule: schedule,
+    )
+        .catchError((e) {
+      print("Error creating notification: $e");
+    });
   }
 }
 
