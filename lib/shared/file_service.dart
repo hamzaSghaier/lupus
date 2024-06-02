@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:lupus_app/entity/symptome.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
+import 'package:lupus_app/screens/statistics/rdv_model.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../entity/profile.dart';
@@ -164,6 +165,28 @@ class FileService {
     } catch (e) {
       // If encountering an error, return 0
       throw Exception('Failed to get json, file $fileName | $e');
+    }
+  }
+
+  static Future<List<RdvModel>> getRDVs() async {
+    try {
+      final file = await _localFile("rdv.txt");
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<RdvModel> listRdv = [];
+      print("rdv.txt");
+      contents.split(";").forEach((element) {
+        if (element.isNotEmpty && element.isBlank == false) {
+          print(jsonDecode(element));
+          listRdv.add(RdvModel.fromJson(jsonDecode(element)));
+        }
+      });
+
+      return listRdv;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file rdv.txt | $e');
     }
   }
 

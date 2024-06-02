@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lupus_app/screens/dashboard.dart';
 import 'package:lupus_app/screens/info_lupus.dart';
+import 'package:lupus_app/screens/statistics/calendar_screen.dart';
 import 'package:lupus_app/screens/statistics/statistics_screen.dart';
+import 'package:lupus_app/screens/statistics/suivi_screen.dart';
 
 import '../controllers/bottom_navigation_bar_controller.dart';
 
@@ -52,7 +54,7 @@ class CustomBottomBar extends StatelessWidget {
         } else if (bottomNavigationBarController.selectedIndex.value == 0) {
           Get.to(const InfoLupusScreen());
         } else if (bottomNavigationBarController.selectedIndex.value == 2) {
-          Get.to(const Statistics());
+          Get.to(const SuiviScreen());
         }
       },
       backgroundColor: const Color.fromRGBO(252, 78, 130, 1),

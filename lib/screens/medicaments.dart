@@ -3,6 +3,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
@@ -77,15 +78,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(240, 240, 240, 1),
-        title: const Text("Prescription"),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-        ),
+      appBar: const CustomAppBar(
+        title: 'Prescription',
       ),
       body: Container(
         decoration: const BoxDecoration(

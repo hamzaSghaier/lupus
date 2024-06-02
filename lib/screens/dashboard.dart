@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
-        title: 'Lupus Suivi',
+        title: 'Accueil',
       ),
       body: Center(
         child: Column(
@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       HomeButton(
                         image: 'assets/Rectangle-2.png',
                         onPressed: () {
-                          Get.to(MedicamentsScreen());
+                          Get.to(const MedicamentsScreen());
                         },
                         title: 'Medicament',
                       ),

@@ -2,6 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/screens/dashboard.dart';
 import 'package:lupus_app/screens/login.dart';
@@ -31,7 +32,7 @@ void main() async {
             ledColor: Colors.pink[200]),
       ],
       debug: false);
-  runApp(const MyApp());
+  initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

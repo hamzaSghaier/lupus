@@ -100,9 +100,10 @@ class _StatisticsState extends State<Statistics> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
-      appBar: const CustomAppBar(
-        title: 'Suivi',
-      ),
+      // appBar: const CustomAppBar(
+      //   title: 'Suivi',
+      //   isLoggedIn: false,
+      // ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -233,10 +234,11 @@ class _StatisticsState extends State<Statistics> {
                                       text: snapshot.data),
                                   style: const TextStyle(
                                       fontSize: 16, color: Colors.black),
-                                  maxLines: (("•")
-                                          .allMatches(snapshot.data ?? "")
-                                          .length)
-                                      .round(),
+                                  maxLines: 10,
+                                  // (("•")
+                                  //         .allMatches(snapshot.data ?? "")
+                                  //         .length)
+                                  //     .round() +
                                   enabled: true,
                                   readOnly: true,
                                   decoration: const InputDecoration(
