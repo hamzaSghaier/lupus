@@ -26,6 +26,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final TextEditingController passwordController = TextEditingController();
 
+  final TextEditingController doctorController = TextEditingController();
+
   final TextEditingController prenomController = TextEditingController();
 
   final TextEditingController numTelController = TextEditingController();
@@ -45,6 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       nomController.text = profileFile.nom;
       prenomController.text = profileFile.prenom;
       numTelController.text = profileFile.numTel;
+      doctorController.text = profileFile.doctor;
       numDossierController.text = profileFile.numDossier;
     }
 
@@ -118,6 +121,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: numDossierController,
                     keyboardType: TextInputType.number,
                   ),
+                  CustomTextField(
+                    labelText: "Médecin traitant",
+                    controller: doctorController,
+                    keyboardType: TextInputType.name,
+                  ),
                   if (profile == null)
                     CustomTextField(
                       labelText: "Mot de passe",
@@ -157,12 +165,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         minimumSize: const Size.fromHeight(50),
                       ),
                       child: profile == null
-                          ? const Text('S\'inscrire')
-                          : const Text("Modifier"),
+                          ? const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'S\'inscrire',
+                                ),
+                                Text(
+                                  'تسجيل',
+                                ),
+                              ],
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Modifier',
+                                ),
+                                Text(
+                                  'تعديل',
+                                ),
+                              ],
+                            ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           Profile profile = Profile(
                               isLoggedIn: true,
+                              doctor: doctorController.text,
                               password: passwordController.text,
                               nom: nomController.text,
                               prenom: prenomController.text,
@@ -211,11 +242,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50),
                         ),
-                        child: const Text(
-                          'Se déconnecter',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Se déconnecter',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            Text(
+                              'تسجيل الخروج',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
                         ),
                         onPressed: () {
                           showDialog(
@@ -236,6 +279,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     onPressed: () async {
                                       await FileService.updateProfileIsLogged(
                                           false);
+                                      // ignore: use_build_context_synchronously
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
@@ -262,11 +306,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50),
                         ),
-                        child: const Text(
-                          'Supprimer mon compte',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Supprimer mon compte',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            Text(
+                              'احذف حسابي',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
                         ),
                         onPressed: () {
                           showDialog(

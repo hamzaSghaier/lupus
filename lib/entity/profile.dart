@@ -5,6 +5,8 @@ class Profile {
   final String numTel;
   final String numDossier;
   final String password;
+  final String doctor;
+
   bool isLoggedIn;
 
   Profile(
@@ -14,11 +16,13 @@ class Profile {
       required this.numTel,
       required this.numDossier,
       required this.isLoggedIn,
+      required this.doctor,
       required this.password});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       nom: json['nom'],
+      doctor: json['doctor'],
       isLoggedIn: json['isLoggedIn'],
       prenom: json['prenom'],
       dateNaissance: json['dateNaissance'],
@@ -31,6 +35,7 @@ class Profile {
   Map<String, dynamic> toJson() {
     return {
       'nom': nom,
+      'doctor': doctor,
       'prenom': prenom,
       'isLoggedIn': isLoggedIn,
       'password': password,

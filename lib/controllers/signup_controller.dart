@@ -16,6 +16,7 @@ class SignupController extends GetxController {
           prenom: "",
           dateNaissance: "",
           numTel: "",
+          doctor: "",
           numDossier: "")
       .obs;
 
