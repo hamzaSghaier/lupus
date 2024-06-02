@@ -4,6 +4,8 @@ class Symptome {
   SymptomeData autonomie;
   SymptomeData humeur;
   SymptomeData sommeil;
+  Remarque remarque;
+
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -13,6 +15,7 @@ class Symptome {
     required this.autonomie,
     required this.humeur,
     required this.sommeil,
+    required this.remarque,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -24,6 +27,7 @@ class Symptome {
         autonomie: SymptomeData(date: DateTime.now(), value: 0),
         humeur: SymptomeData(date: DateTime.now(), value: 0),
         sommeil: SymptomeData(date: DateTime.now(), value: 0),
+        remarque: Remarque(date: DateTime.now(), value: ""),
         createdAt: DateTime.now().add(const Duration(days: 7)),
         updatedAt: DateTime.now().add(const Duration(days: 7)));
   }
@@ -35,6 +39,7 @@ class Symptome {
       autonomie: SymptomeData.fromJson(json['autonomie']),
       humeur: SymptomeData.fromJson(json['humeur']),
       sommeil: SymptomeData.fromJson(json['sommeil']),
+      remarque: Remarque.fromJson(json['remarque']),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
@@ -46,6 +51,7 @@ class Symptome {
         'autonomie': autonomie.toJson(),
         'humeur': humeur.toJson(),
         'sommeil': sommeil.toJson(),
+        'remarque': remarque.toJson(),
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };
@@ -59,6 +65,27 @@ class SymptomeData {
 
   factory SymptomeData.fromJson(Map<String, dynamic> json) {
     return SymptomeData(
+      value: json['value'],
+      date: DateTime.parse(json['date']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'value': value,
+      'date': date.toIso8601String(),
+    };
+  }
+}
+
+class Remarque {
+  String value;
+  DateTime date;
+
+  Remarque({required this.value, required this.date});
+
+  factory Remarque.fromJson(Map<String, dynamic> json) {
+    return Remarque(
       value: json['value'],
       date: DateTime.parse(json['date']),
     );

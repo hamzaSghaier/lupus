@@ -70,6 +70,18 @@ class _StatisticsState extends State<Statistics> {
         .toList();
   }
 
+  Future<String> getRemarques() async {
+    List<Remarque> remarques = await FileService.getRemarques();
+    String textResult = "";
+    for (var rq in remarques) {
+      textResult += "${DateFormat('dd-MM-yyyy').format(rq.date)}\n";
+      String list = "• ${rq.value.split("\n").join("\n• ")}";
+      textResult += list;
+    }
+    textResult += "\n__________\n";
+    return textResult;
+  }
+
   List<String> autonomie = [
     'Peu d\'activité \n   نشاط قليل',
     'Intermédiaire \n  نشاط وسط',
@@ -175,6 +187,66 @@ class _StatisticsState extends State<Statistics> {
                         data: snapshot.data,
                         values: sommeil,
                       );
+                    } else {
+                      return const Text("Pas de données disponibles !");
+                    }
+                  }),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              FutureBuilder(
+                  future: getRemarques(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                            border: Border.all(
+                              color: const Color.fromRGBO(232, 232, 232, 1),
+                              width: 2,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              const TitleOfSlider(
+                                titleAr: 'ملاحظات',
+                                titleFr: 'Remarques',
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              RawScrollbar(
+                                thumbVisibility: true,
+                                thumbColor: Colors.pink[100],
+                                thickness: 3,
+                                trackColor: Colors.pink[50],
+                                trackVisibility: true,
+                                child: TextFormField(
+                                  scrollPhysics: const ScrollPhysics(),
+                                  controller: TextEditingController(
+                                      text: snapshot.data),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                  maxLines: (("•")
+                                          .allMatches(snapshot.data ?? "")
+                                          .length)
+                                      .round(),
+                                  enabled: true,
+                                  readOnly: true,
+                                  decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 5),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                            ],
+                          ));
                     } else {
                       return const Text("Pas de données disponibles !");
                     }

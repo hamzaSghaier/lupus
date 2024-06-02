@@ -167,6 +167,27 @@ class FileService {
     }
   }
 
+  static Future<List<Remarque>> getRemarques() async {
+    try {
+      final file = await _localFile("remarques.txt");
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<Remarque> listRemarques = [];
+      contents.split(";").forEach((element) {
+        if (element.isNotEmpty && element.isBlank == false) {
+          print(jsonDecode(element));
+          listRemarques.add(Remarque.fromJson(jsonDecode(element)));
+        }
+      });
+
+      return listRemarques;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file remarques.txt | $e');
+    }
+  }
+
   static Future<Profile> getProfile() async {
     try {
       final file = await _localFile("profile.txt");

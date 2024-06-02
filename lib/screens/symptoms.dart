@@ -56,7 +56,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
 
   List<bool> _selectedAutonomie = <bool>[true, false, false];
   List<bool> _selectedSommeil = <bool>[true, false, false];
-
+  TextEditingController noteController = TextEditingController();
   List<Widget> autonomie = <Widget>[
     const Text('Peu d\'activité \n   نشاط قليل', textAlign: TextAlign.center),
     const Text('Intermédiaire \n  نشاط وسط', textAlign: TextAlign.center),
@@ -116,6 +116,9 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
 
                 _selectedSommeil = [false, false, false];
                 _selectedSommeil[_selectedSomeilValue] = true;
+
+                noteController.text =
+                    latestSymptomes.data?.remarque.value ?? "";
               }
               return latestSymptomes.hasData
                   ? Column(
@@ -136,7 +139,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                                     titleAr: 'درجة التعب',
                                     titleFr: 'La fatigue',
                                   ),
-                                  const SizedBox(height: 20),
+                                  const SizedBox(height: 10),
                                   Column(
                                     children: [
                                       Slider(
@@ -163,7 +166,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                                 ],
                               ),
 
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 10),
                               const TitleOfSlider(
                                 titleAr: 'ألم مفصلي',
                                 titleFr: 'Les arthralgies',
@@ -191,7 +194,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                               //   sliderName: symptoms[1],
                               //   sliderValue: _selectedArthralgieValue,
                               // ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 10),
                               const TitleOfSlider(
                                 titleAr: 'المزاج',
                                 titleFr: 'Humeur',
@@ -281,6 +284,20 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                                 isSelected: _selectedSommeil,
                                 children: sommeil,
                               ),
+
+                              const SizedBox(height: 20),
+                              const TitleOfSlider(
+                                titleAr: 'ملاحظات',
+                                titleFr: 'Remarques',
+                              ),
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: noteController,
+                                style: const TextStyle(fontSize: 14),
+                                maxLines: 3,
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder()),
+                              )
                             ],
                           ),
                         ),
@@ -330,12 +347,21 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                                       await FileService.updateFile(
                                           "sommeil.txt",
                                           jsonEncode(sommeil.toJson()));
+
+                                      var remarque = Remarque(
+                                          value: noteController.text,
+                                          date: now);
+                                      await FileService.updateFile(
+                                          "remarques.txt",
+                                          jsonEncode(remarque.toJson()));
+
                                       var symptome = Symptome(
                                           fatigue: fatigue,
                                           arthralgies: arthralgies,
                                           autonomie: autonomie,
                                           humeur: humeur,
                                           sommeil: sommeil,
+                                          remarque: remarque,
                                           createdAt: now,
                                           updatedAt: now);
 
@@ -395,12 +421,20 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                                           date: now);
                                       await FileService.writeFile("sommeil.txt",
                                           jsonEncode(sommeil.toJson()));
+                                      var remarque = Remarque(
+                                          value: noteController.text,
+                                          date: now);
+                                      await FileService.writeFile(
+                                          "remarques.txt",
+                                          jsonEncode(remarque.toJson()));
+
                                       var symptome = Symptome(
                                           fatigue: fatigue,
                                           arthralgies: arthralgies,
                                           autonomie: autonomie,
                                           humeur: humeur,
                                           sommeil: sommeil,
+                                          remarque: remarque,
                                           createdAt: now,
                                           updatedAt: now);
                                       FileService.writeFile("symptomes_log.txt",
