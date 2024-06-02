@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lupus_app/constants/colors.dart';
@@ -9,20 +10,27 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'entity/profile.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Permission.notification.request();
-  AwesomeNotifications().initialize(
+  await Permission.notification.request();
+  await AwesomeNotifications().initialize(
       null,
       [
         NotificationChannel(
             channelKey: "lupus_notif_channel_key",
+            playSound: true,
+            defaultPrivacy: NotificationPrivacy.Public,
+            defaultRingtoneType: DefaultRingtoneType.Alarm,
+            //icon: "assets/lupus-icon.png",
+            enableLights: true,
+            importance: NotificationImportance.Max,
+            enableVibration: true,
             channelName: "Notification Lupus channel",
             channelDescription: "Notification Lupus",
-            defaultColor: Colors.purpleAccent,
-            ledColor: Colors.white),
+            defaultColor: Colors.pink[200],
+            ledColor: Colors.pink[200]),
       ],
-      debug: true);
+      debug: false);
   runApp(const MyApp());
 }
 
@@ -72,7 +80,16 @@ class _HomeState extends State<Home> {
     });
 
     profileFuture = FileService.getProfile();
+    disableBattaryOptimization();
     super.initState();
+  }
+
+  void disableBattaryOptimization() {
+    DisableBatteryOptimization.showDisableAllOptimizationsSettings(
+        "Enable Auto Start",
+        "Follow the steps and enable the auto start of this app",
+        "Your device has additional battery optimization",
+        "Follow the steps and disable the optimizations to allow smooth functioning of this app");
   }
 
   @override
@@ -91,7 +108,7 @@ class _HomeState extends State<Home> {
                 snapshot.data == null ||
                 snapshot.data?.isLoggedIn == false) {
               // If there is an error or no profile data, show SignUpScreen
-              return LoginScreen();
+              return const LoginScreen();
             } else {
               // If profile data exists, show DashboardScreen
               return const DashboardScreen();

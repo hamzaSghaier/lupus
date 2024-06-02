@@ -215,7 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 'Vous avez été inscrit avec succès \n لقد تم تسجيلك بنجاح',
                             btnOkOnPress: () {
                               debugPrint('OnClcik');
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>

@@ -31,20 +31,15 @@ class _WebViewPlusExampleMainPageState
         title: 'A propos',
       ),
       bottomNavigationBar: CustomBottomBar(),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: WebViewPlus(
-              zoomEnabled: true,
-              onWebViewCreated: (controller) {
-                controller.loadUrl('assets/lupus.html');
-              },
-              javascriptMode: JavascriptMode.unrestricted,
-            ),
-          )
-        ],
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 25.0),
+        child: WebViewPlus(
+          zoomEnabled: true,
+          onWebViewCreated: (controller) {
+            controller.loadUrl('assets/lupus.html');
+          },
+          javascriptMode: JavascriptMode.unrestricted,
+        ),
       ),
     );
   }

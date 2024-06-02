@@ -27,6 +27,8 @@ dependencies:
   webview_flutter_plus: ^0.3.0+2
   json_annotation: ^4.8.1
   permission_handler: ^10.4.3
+  disable_battery_optimization: ^1.1.1
+
 
 
 

@@ -24,6 +24,17 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
 
   Profile? profile;
   var horaires = ["Matin", "Midi", "Soir"];
+  var jrs = [
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+    "Dimanche",
+    "Quotidien"
+  ];
+
   int dropdownvalue = 1;
   Future<Profile> getProfile() async {
     Profile profileFile = await FileService.getProfile();
@@ -54,6 +65,13 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
   int nbrMetho = 0;
   int nbrFoldine = 0;
   int nbrMMF = 0;
+
+  int jrsCort = 0;
+  int jrsPlaqenil = 0;
+  int jrsAzath = 0;
+  int jrsMetho = 0;
+  int jrsFoldine = 0;
+  int jrsMMF = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -94,116 +112,158 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                     children: [
                       const Text("Medicaments", style: TextStyle(fontSize: 20)),
                       MedicamentSection(
-                          prisesParJour: "Une seule prise par jour",
-                          horairePrise: priseCort,
-                          horaireChange: (value) {
-                            setState(() {
-                              priseCort = value ?? 0;
-                            });
-                          },
-                          medicamentName: "Corticoïdes",
-                          imgPath: "assets/corticoides.png",
-                          nbrPrises: nbrCort,
-                          prisesChange: (value) {
-                            setState(() {
-                              nbrCort = value ?? 0;
-                            });
-                          }),
+                        prisesParJour: "Une seule prise par jour",
+                        horairePrise: priseCort,
+                        horaireChange: (value) {
+                          setState(() {
+                            priseCort = value ?? 0;
+                          });
+                        },
+                        medicamentName: "Corticoïdes",
+                        imgPath: "assets/corticoides.png",
+                        nbrPrises: nbrCort,
+                        prisesChange: (value) {
+                          setState(() {
+                            nbrCort = value ?? 0;
+                          });
+                        },
+                        jrsChange: (value) {
+                          setState(() {
+                            jrsCort = value ?? 0;
+                          });
+                        },
+                        jrsPrises: jrsCort,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       MedicamentSection(
-                          prisesParJour: "Deux prises par jour",
-                          horairePrise: prisePlaqenil,
-                          horaireChange: (value) {
-                            setState(() {
-                              prisePlaqenil = value ?? 0;
-                            });
-                          },
-                          medicamentName: "Plaquenil",
-                          imgPath: "assets/plaquenil.png",
-                          nbrPrises: nbrPlaqenil,
-                          prisesChange: (value) {
-                            setState(() {
-                              nbrPlaqenil = value ?? 0;
-                            });
-                          }),
+                        prisesParJour: "Deux prises par jour",
+                        horairePrise: prisePlaqenil,
+                        horaireChange: (value) {
+                          setState(() {
+                            prisePlaqenil = value ?? 0;
+                          });
+                        },
+                        medicamentName: "Plaquenil",
+                        imgPath: "assets/plaquenil.png",
+                        nbrPrises: nbrPlaqenil,
+                        prisesChange: (value) {
+                          setState(() {
+                            nbrPlaqenil = value ?? 0;
+                          });
+                        },
+                        jrsChange: (value) {
+                          setState(() {
+                            jrsPlaqenil = value ?? 0;
+                          });
+                        },
+                        jrsPrises: jrsPlaqenil,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       MedicamentSection(
-                          prisesParJour: "Trois prises par jour",
-                          horairePrise: priseAzath,
-                          horaireChange: (value) {
-                            setState(() {
-                              priseAzath = value ?? 0;
-                            });
-                          },
-                          medicamentName: "Azathioprine",
-                          imgPath: "assets/azathioprine.png",
-                          nbrPrises: nbrAzath,
-                          prisesChange: (value) {
-                            setState(() {
-                              nbrAzath = value ?? 0;
-                            });
-                          }),
+                        prisesParJour: "Trois prises par jour",
+                        horairePrise: priseAzath,
+                        horaireChange: (value) {
+                          setState(() {
+                            priseAzath = value ?? 0;
+                          });
+                        },
+                        medicamentName: "Azathioprine",
+                        imgPath: "assets/azathioprine.png",
+                        nbrPrises: nbrAzath,
+                        prisesChange: (value) {
+                          setState(() {
+                            nbrAzath = value ?? 0;
+                          });
+                        },
+                        jrsChange: (value) {
+                          setState(() {
+                            jrsAzath = value ?? 0;
+                          });
+                        },
+                        jrsPrises: jrsAzath,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       MedicamentSection(
-                          prisesParJour: "Une prise par semaine",
-                          horairePrise: priseMetho,
-                          horaireChange: (value) {
-                            setState(() {
-                              priseMetho = value ?? 0;
-                            });
-                          },
-                          medicamentName: "Methotrexate",
-                          imgPath: "assets/methotrexate.png",
-                          nbrPrises: nbrMetho,
-                          prisesChange: (value) {
-                            setState(() {
-                              nbrMetho = value ?? 0;
-                            });
-                          }),
+                        prisesParJour: "Une prise par semaine",
+                        horairePrise: priseMetho,
+                        horaireChange: (value) {
+                          setState(() {
+                            priseMetho = value ?? 0;
+                          });
+                        },
+                        medicamentName: "Methotrexate",
+                        imgPath: "assets/methotrexate.png",
+                        nbrPrises: nbrMetho,
+                        prisesChange: (value) {
+                          setState(() {
+                            nbrMetho = value ?? 0;
+                          });
+                        },
+                        jrsChange: (value) {
+                          setState(() {
+                            jrsMetho = value ?? 0;
+                          });
+                        },
+                        jrsPrises: jrsMetho,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       MedicamentSection(
-                          prisesParJour: "Une prise par semaine",
-                          horairePrise: priseFoldine,
-                          horaireChange: (value) {
-                            setState(() {
-                              priseFoldine = value ?? 0;
-                            });
-                          },
-                          medicamentName: "Foldine",
-                          imgPath: "assets/foldine.png",
-                          nbrPrises: nbrFoldine,
-                          prisesChange: (value) {
-                            setState(() {
-                              nbrFoldine = value ?? 0;
-                            });
-                          }),
+                        prisesParJour: "Une prise par semaine",
+                        horairePrise: priseFoldine,
+                        horaireChange: (value) {
+                          setState(() {
+                            priseFoldine = value ?? 0;
+                          });
+                        },
+                        medicamentName: "Foldine",
+                        imgPath: "assets/foldine.png",
+                        nbrPrises: nbrFoldine,
+                        prisesChange: (value) {
+                          setState(() {
+                            nbrFoldine = value ?? 0;
+                          });
+                        },
+                        jrsChange: (value) {
+                          setState(() {
+                            jrsFoldine = value ?? 0;
+                          });
+                        },
+                        jrsPrises: jrsFoldine,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       MedicamentSection(
-                          prisesParJour: "Deux prises par jour",
-                          horairePrise: priseMMF,
-                          horaireChange: (value) {
-                            setState(() {
-                              priseMMF = value ?? 0;
-                            });
-                          },
-                          medicamentName: "MMF",
-                          imgPath: "assets/mmf.png",
-                          nbrPrises: nbrMMF,
-                          prisesChange: (value) {
-                            setState(() {
-                              nbrMMF = value ?? 0;
-                            });
-                          }),
+                        prisesParJour: "Deux prises par jour",
+                        horairePrise: priseMMF,
+                        horaireChange: (value) {
+                          setState(() {
+                            priseMMF = value ?? 0;
+                          });
+                        },
+                        medicamentName: "MMF",
+                        imgPath: "assets/mmf.png",
+                        nbrPrises: nbrMMF,
+                        prisesChange: (value) {
+                          setState(() {
+                            nbrMMF = value ?? 0;
+                          });
+                        },
+                        jrsChange: (value) {
+                          setState(() {
+                            jrsMMF = value ?? 0;
+                          });
+                        },
+                        jrsPrises: jrsMMF,
+                      ),
                     ],
                   ),
                 ),
@@ -342,25 +402,35 @@ class NameRow extends StatelessWidget {
 
 class MedicamentSection extends StatelessWidget {
   final String medicamentName, imgPath, prisesParJour;
-  final int nbrPrises, horairePrise;
-  final Function prisesChange, horaireChange;
+  final int nbrPrises, horairePrise, jrsPrises;
+  final Function prisesChange, horaireChange, jrsChange;
 
-  const MedicamentSection({
-    Key? key,
-    required this.prisesParJour,
-    required this.horairePrise,
-    required this.horaireChange,
-    required this.medicamentName,
-    required this.imgPath,
-    required this.nbrPrises,
-    required this.prisesChange,
-  }) : super(key: key);
+  const MedicamentSection(
+      {Key? key,
+      required this.prisesParJour,
+      required this.horairePrise,
+      required this.horaireChange,
+      required this.medicamentName,
+      required this.imgPath,
+      required this.nbrPrises,
+      required this.prisesChange,
+      required this.jrsChange,
+      required this.jrsPrises})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var horaires = ["Matin", "Midi", "Soir"];
-    var parSemaineJour = ["Par jour", "Par semaine"];
-
+    var jrs = [
+      "Quotidien",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+      "Dimanche",
+    ];
     return Container(
       decoration: BoxDecoration(
         boxShadow: const [
@@ -422,6 +492,41 @@ class MedicamentSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
+                "Fréquence de prise",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Color.fromRGBO(126, 126, 126, 1),
+                ),
+              ),
+              DropdownButton<int>(
+                value: jrsPrises,
+                iconEnabledColor: Colors.pink[200],
+                hint: const Text("---"),
+                alignment: Alignment.center,
+                items: <int>[0, 1, 2, 3, 4, 5, 6, 7].map((int value) {
+                  return DropdownMenuItem<int>(
+                    value: value,
+                    child: Text(
+                      jrs[value],
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Color.fromRGBO(126, 126, 126, 1),
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  jrsChange(value);
+                },
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
                 "Horaire de prise",
                 style: TextStyle(
                   fontSize: 15,
@@ -462,13 +567,28 @@ class MedicamentSection extends StatelessWidget {
                   hour = 12;
                 } else
                   hour = 17;
+
+                var day = jrsPrises;
+                if (jrsPrises == 0) {
+                  if (DateTime.now().hour > hour) {
+                    day = DateTime.now().add(const Duration(days: 1)).day;
+                  } else {
+                    day = DateTime.now().day;
+                  }
+                }
+
+                var nextDate = nextDayOfWeek(day);
+                var finalDate = DateTime(
+                  nextDate.year,
+                  nextDate.month,
+                  nextDate.day,
+                  hour,
+                );
                 _scheduleNotification(
                     medicamentName,
-                    "Il est temps de prendre vos $medicamentName",
+                    "Il est temps de prendre vos $medicamentName\n$nbrPrises comprimé(s)",
                     medicamentName.hashCode,
-                    hour,
-                    0,
-                    null);
+                    finalDate);
               },
               child: const Text("Enregistrer"))
         ],
@@ -476,223 +596,45 @@ class MedicamentSection extends StatelessWidget {
     );
   }
 
+  DateTime nextDayOfWeek(int dayOfWeek, [DateTime? from]) {
+    from ??= DateTime.now();
+    int daysToAdd = (dayOfWeek - from.weekday) % 7;
+    daysToAdd = daysToAdd <= 0 ? daysToAdd + 7 : daysToAdd;
+    return from.add(Duration(days: daysToAdd));
+  }
+
   void _scheduleNotification(
     String title,
     String body,
     int id,
-    int? hour,
-    int? minute,
-    DateTime? date,
+    DateTime date,
   ) {
     NotificationSchedule schedule;
 
-    if (date == null) {
-      schedule = NotificationCalendar.fromDate(
-          repeats: true,
-          allowWhileIdle: true,
-          date: DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-            hour!,
-            minute!,
-          ).add(const Duration(days: 1)));
-    } else {
-      schedule = NotificationCalendar.fromDate(
-        date: date,
-      );
-    }
+    schedule = NotificationCalendar.fromDate(
+      repeats: true,
+      preciseAlarm: true,
+      allowWhileIdle: true,
+      date: date,
+    );
 
     AwesomeNotifications()
         .createNotification(
-      content: NotificationContent(
-        id: id,
-        channelKey: "lupus_notif_channel_key",
-        title: title,
-        body: body,
-      ),
-      schedule: schedule,
-    )
+          content: NotificationContent(
+            category: NotificationCategory.Reminder,
+            displayOnBackground: true,
+            displayOnForeground: true,
+            wakeUpScreen: true,
+            id: id,
+            channelKey: "lupus_notif_channel_key",
+            title: title,
+            body: body,
+          ),
+          schedule: schedule,
+        )
+        .then((value) => print("notif value : $value"))
         .catchError((e) {
       print("Error creating notification: $e");
     });
   }
 }
-
-//  const Text("Corticoïdes Dates"),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       DateFormat("dd-MM-yyyy")
-//                           .format(medicamentsController.corticioidesDate.value)
-//                           .toString(),
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectCorticoidesDate(context),
-//                     child: const Text('Date pour les corticoïdes'),
-//                   )
-//                 ],
-//               ),
-//               const SizedBox(height: 20),
-//               const Text("Plaquenil Dates"),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       "${medicamentsController.plaquenilDate1.value.hour}:${medicamentsController.plaquenilDate1.value.minute}",
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectPlaquenilDate1(context),
-//                     child: const Text('Premiere date pour le plaquenil'),
-//                   )
-//                 ],
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       "${medicamentsController.plaquenilDate2.value.hour}:${medicamentsController.plaquenilDate2.value.minute}",
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectPlaquenilDate2(context),
-//                     child: const Text('Deuxieme date pour le plaquenil'),
-//                   )
-//                 ],
-//               ),
-//               const SizedBox(height: 20),
-//               const Text("Azathioprine Dates"),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       "${medicamentsController.azathioprineDate1.value.hour}:${medicamentsController.azathioprineDate1.value.minute}",
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectAzathioprineDate1(context),
-//                     child: const Text('Premiere date pour l\'azathioprine'),
-//                   )
-//                 ],
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       "${medicamentsController.azathioprineDate2.value.hour}:${medicamentsController.azathioprineDate2.value.minute}",
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectAzathioprineDate2(context),
-//                     child: const Text('Deuxieme date pour l\'azathioprine'),
-//                   )
-//                 ],
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       "${medicamentsController.azathioprineDate3.value.hour}:${medicamentsController.azathioprineDate3.value.minute}",
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectAzathioprineDate3(context),
-//                     child: const Text('Troisieme date pour l\'azathioprine'),
-//                   )
-//                 ],
-//               ),
-//               const SizedBox(height: 20),
-//               const Text("Methotrxate Dates"),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       DateFormat("dd-MM-yyyy")
-//                           .format(medicamentsController.methotrexateDate.value)
-//                           .toString(),
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectMethotrexateDate(context),
-//                     child: const Text('Date pour le methotrexate'),
-//                   )
-//                 ],
-//               ),
-//               const SizedBox(height: 20),
-//               const Text("Foldine Dates"),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       DateFormat("dd-MM-yyyy")
-//                           .format(medicamentsController.foldineDate.value)
-//                           .toString(),
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectFoldineDate(context),
-//                     child: const Text('Date pour le foldine'),
-//                   )
-//                 ],
-//               ),
-//               const SizedBox(height: 20),
-//               const Text("MMF Dates"),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       "${medicamentsController.mmfDate1.value.hour}:${medicamentsController.mmfDate1.value.minute}",
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectMmfDate1(context),
-//                     child: const Text('Premiere date de mmf'),
-//                   )
-//                 ],
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   Obx(
-//                     () => Text(
-//                       "${medicamentsController.mmfDate2.value.hour}:${medicamentsController.mmfDate2.value.minute}",
-//                       style: const TextStyle(fontSize: 15),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         medicamentsController.selectMmfDate2(context),
-//                     child: const Text('Deuxieme date de mmf'),
-//                   )
-//                 ],
-//               ),
