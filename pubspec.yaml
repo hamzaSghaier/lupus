@@ -2,7 +2,7 @@ name: lupus_app
 description: Application dédiée aux patients lupiques pour les aider à organiser la prise de leurs médicaments et à suivre leurs symptômes.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.0+2
+version: 1.2.0+2
 
 environment:
   sdk: '>=2.19.0 <3.0.0'
@@ -29,6 +29,8 @@ dependencies:
   permission_handler: ^10.4.3
   disable_battery_optimization: ^1.1.1
   table_calendar: ^3.1.1
+  url_launcher: ^6.0.20
+
 
 
 

@@ -125,11 +125,9 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         AbsorbPointer(
-                          absorbing: saved ||
-                              (!isEditing &&
-                                  areDatesOnSameDay(
-                                      latestSymptomes.data?.createdAt,
-                                      DateTime.now())),
+                          absorbing: !isEditing &&
+                              areDatesOnSameDay(latestSymptomes.data?.createdAt,
+                                  DateTime.now()),
                           child: Column(
                             children: [
                               Column(
@@ -453,9 +451,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                                         title: ' ',
                                         desc:
                                             'Les données ont été enregistrées avec succès \n تم تسجيل المعطيات بنجاح',
-                                        btnOkOnPress: () {
-                                          debugPrint('OnClcik');
-                                        },
+                                        btnOkOnPress: () {},
                                         btnOkIcon: Icons.check_circle,
                                         onDismissCallback: (type) {
                                           debugPrint(

@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
@@ -6,11 +7,13 @@ import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/entity/profile.dart';
 import 'package:lupus_app/screens/login.dart';
 import 'package:intl/intl.dart';
+import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 import '../controllers/signup_controller.dart';
 import '../custom_widgets/custom_text_field.dart';
 import '../shared/file_service.dart';
 import 'dashboard.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -126,6 +129,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: doctorController,
                     keyboardType: TextInputType.name,
                   ),
+                  if (profile != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 10),
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Afficher ',
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 16),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'les Conditions d\'utilisation',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ConditionsPage(),
+                                    ),
+                                  );
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   if (profile == null)
                     CustomTextField(
                       labelText: "Mot de passe",
@@ -136,14 +170,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          'Conditions d\'utilisation',
-                          textAlign: TextAlign.end,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(fontSize: 14),
-                        ),
                         Obx(
                           () => Checkbox(
                             checkColor: Colors.white,
@@ -155,6 +181,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 signupController.onChanged(newValue!),
                           ),
                         ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'J\'accepte ',
+                            style: const TextStyle(color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'les Conditions d\'utilisation',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ConditionsPage(),
+                                      ),
+                                    );
+                                  },
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
 
@@ -366,6 +417,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ConditionsPage extends StatelessWidget {
+  const ConditionsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Conditions d\'utilisation',
+      ),
+      bottomNavigationBar: CustomBottomBar(),
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 25.0),
+        child: WebViewPlus(
+          zoomEnabled: true,
+          onWebViewCreated: (controller) {
+            controller.loadUrl('assets/cgu.html');
+          },
+          javascriptMode: JavascriptMode.unrestricted,
         ),
       ),
     );

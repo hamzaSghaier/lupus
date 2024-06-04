@@ -77,8 +77,8 @@ class _StatisticsState extends State<Statistics> {
       textResult += "${DateFormat('dd-MM-yyyy').format(rq.date)}\n";
       String list = "• ${rq.value.split("\n").join("\n• ")}";
       textResult += list;
+      textResult += "\n__________\n";
     }
-    textResult += "\n__________\n";
     return textResult;
   }
 

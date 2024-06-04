@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -193,6 +194,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Methotrexate",
                         imgPath: "assets/methotrexate.png",
+                        isOneTime: true,
                         nbrPrises: nbrMetho,
                         prisesChange: (value) {
                           setState(() {
@@ -398,7 +400,7 @@ class MedicamentSection extends StatelessWidget {
   final String medicamentName, imgPath, prisesParJour;
   final int nbrPrises, horairePrise, jrsPrises;
   final Function prisesChange, horaireChange, jrsChange;
-
+  final bool isOneTime;
   const MedicamentSection(
       {Key? key,
       required this.prisesParJour,
@@ -409,6 +411,7 @@ class MedicamentSection extends StatelessWidget {
       required this.nbrPrises,
       required this.prisesChange,
       required this.jrsChange,
+      this.isOneTime = false,
       required this.jrsPrises})
       : super(key: key);
 
@@ -425,6 +428,12 @@ class MedicamentSection extends StatelessWidget {
       "Samedi",
       "Dimanche",
     ];
+    List<int> nbrC;
+    if (isOneTime) {
+      nbrC = [0, 1];
+    } else {
+      nbrC = [0, 1, 2, 3, 4, 5];
+    }
     return Container(
       decoration: BoxDecoration(
         boxShadow: const [
@@ -463,7 +472,7 @@ class MedicamentSection extends StatelessWidget {
                 iconEnabledColor: Colors.pink[200],
                 value: nbrPrises,
                 hint: const Text("---"),
-                items: <int>[0, 1, 2, 3, 4, 5].map((int value) {
+                items: nbrC.map((int value) {
                   return DropdownMenuItem<int>(
                     value: value,
                     child: Text(
@@ -583,6 +592,23 @@ class MedicamentSection extends StatelessWidget {
                     "Il est temps de prendre vos $medicamentName\n$nbrPrises comprimé(s)",
                     medicamentName.hashCode,
                     finalDate);
+
+                AwesomeDialog(
+                  context: context,
+                  animType: AnimType.leftSlide,
+                  headerAnimationLoop: false,
+                  dialogType: DialogType.success,
+                  showCloseIcon: true,
+                  title: ' ',
+                  desc: 'Rappel enregistré ! \n !تم تسجيل التذكير',
+                  btnOkOnPress: () {
+                    debugPrint('OnClcik');
+                  },
+                  btnOkIcon: Icons.check_circle,
+                  onDismissCallback: (type) {
+                    debugPrint('Dialog Dissmiss from callback $type');
+                  },
+                ).show();
               },
               child: const Text("Enregistrer"))
         ],

@@ -19,7 +19,7 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  late final ValueNotifier<List<RdvModel>> _selectedEvents;
+  late List<RdvModel> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -28,17 +28,32 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
+  late Future<List<RdvModel>> _rdvsFuture;
+
   @override
   void initState() {
     super.initState();
-
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    _rdvsFuture = FileService.getRDVs();
+    _rdvsFuture.then((value) {
+      Map<DateTime, List<RdvModel>> kEventSource = {};
+
+      for (var rdv in value) {
+        DateTime date = rdv.date;
+
+        if (kEventSource[date] == null) {
+          kEventSource[date] = [];
+        }
+        kEventSource[date]!.add(rdv);
+      }
+
+      kEvents.addAll(kEventSource);
+      _selectedEvents = _getEventsForDay(_selectedDay!);
+    });
   }
 
   @override
   void dispose() {
-    _selectedEvents.dispose();
     super.dispose();
   }
 
@@ -63,10 +78,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
         _focusedDay = focusedDay;
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
-        _rangeSelectionMode = RangeSelectionMode.toggledOff;
+        _rangeSelectionMode = RangeSelectionMode.disabled;
       });
 
-      _selectedEvents.value = _getEventsForDay(selectedDay);
+      _selectedEvents = _getEventsForDay(selectedDay);
     }
   }
 
@@ -81,11 +96,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     // `start` or `end` could be null
     if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
+      _selectedEvents = _getEventsForRange(start, end);
     } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start);
+      _selectedEvents = _getEventsForDay(start);
     } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end);
+      _selectedEvents = _getEventsForDay(end);
     }
   }
 
@@ -94,7 +109,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     hashCode: getHashCode,
   );
 
-  String _inputText = '';
+  final String _inputText = '';
 
   Future<void> _showInputDialog(BuildContext context) async {
     TextEditingController titleController = TextEditingController();
@@ -145,8 +160,24 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     "rdv.txt", jsonEncode(rdv.toJson()));
 
                 setState(() {
-                  _inputText = titleController.text;
+                  _rdvsFuture = FileService.getRDVs();
+                  _rdvsFuture.then((value) {
+                    Map<DateTime, List<RdvModel>> kEventSource = {};
+
+                    for (var rdv in value) {
+                      DateTime date = rdv.date;
+
+                      if (kEventSource[date] == null) {
+                        kEventSource[date] = [];
+                      }
+                      kEventSource[date]!.add(rdv);
+                    }
+
+                    kEvents.addAll(kEventSource);
+                    _selectedEvents = _getEventsForDay(_selectedDay!);
+                  });
                 });
+
                 Navigator.of(context).pop();
               },
             ),
@@ -171,7 +202,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               }),
         ),
         body: FutureBuilder(
-          future: FileService.getRDVs(),
+          future: _rdvsFuture,
           builder: (context, snapshot) {
             Map<DateTime, List<RdvModel>> kEventSource = {};
             if (snapshot.hasData) {
@@ -226,45 +257,39 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
                 const SizedBox(height: 8.0),
                 Expanded(
-                  child: ValueListenableBuilder<List<RdvModel>>(
-                    valueListenable: _selectedEvents,
-                    builder: (context, value, _) {
-                      return ListView.builder(
-                        itemCount: value.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(15),
-                              ),
-                              border: Border.all(
-                                color: const Color.fromRGBO(232, 232, 232, 1),
-                                width: 2,
-                              ),
-                            ),
-                            child: ListTile(
-                              onTap: () => print('${value[index]}'),
-                              title: Text(value[index].title),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Bilan : ${value[index].type}"),
-                                  Text(
-                                      "Date Consultation : ${value[index].dateProchaineConsultation}")
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
+                    child: ListView.builder(
+                  itemCount: _selectedEvents.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        border: Border.all(
+                          color: const Color.fromRGBO(232, 232, 232, 1),
+                          width: 2,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () => print('${_selectedEvents[index]}'),
+                        title: Text(_selectedEvents[index].title),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Bilan : ${_selectedEvents[index].type}"),
+                            Text(
+                                "Date Consultation : ${_selectedEvents[index].dateProchaineConsultation}")
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )),
               ],
             );
           },
