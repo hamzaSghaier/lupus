@@ -28,6 +28,18 @@ class SignupController extends GetxController {
       initialDate: selectedDate.value,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            textTheme: const TextTheme(
+              headlineMedium: TextStyle(fontSize: 15.0), // Selected date text
+              titleMedium: TextStyle(fontSize: 16.0), // Calendar header text
+              bodyMedium: TextStyle(fontSize: 14.0), // Calendar days
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null && picked != selectedDate.value) {

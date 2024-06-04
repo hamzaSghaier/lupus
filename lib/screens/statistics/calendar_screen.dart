@@ -4,6 +4,8 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
@@ -116,6 +118,32 @@ class _CalendarScreenState extends State<CalendarScreen> {
     TextEditingController rdvTypeController = TextEditingController();
     TextEditingController rdvDateController = TextEditingController();
 
+    Future<void> selectDate(BuildContext context) async {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData(
+              textTheme: const TextTheme(
+                headlineMedium: TextStyle(fontSize: 15.0), // Selected date text
+                titleMedium: TextStyle(fontSize: 16.0), // Calendar header text
+                bodyMedium: TextStyle(fontSize: 14.0), // Calendar days
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+      if (picked != null) {
+        setState(() {
+          rdvDateController.text = "${picked.toLocal()}".split(' ')[0];
+        });
+      }
+    }
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -126,17 +154,28 @@ class _CalendarScreenState extends State<CalendarScreen> {
             child: ListBody(
               children: <Widget>[
                 TextField(
+                  textInputAction: TextInputAction.next,
                   controller: titleController,
-                  decoration: const InputDecoration(hintText: "Votre RDV"),
+                  style: const TextStyle(fontSize: 14),
+                  decoration: const InputDecoration(
+                    hintText: "Votre RDV",
+                  ),
                 ),
                 TextField(
+                  textInputAction: TextInputAction.next,
+                  style: const TextStyle(fontSize: 14),
                   controller: rdvTypeController,
                   decoration: const InputDecoration(hintText: "Type RDV"),
                 ),
-                TextField(
+                TextFormField(
+                  style: const TextStyle(fontSize: 14),
                   controller: rdvDateController,
                   decoration:
                       const InputDecoration(hintText: "Prochaine consultation"),
+                  onTap: () async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    await selectDate(context);
+                  },
                 ),
               ],
             ),
@@ -178,13 +217,80 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   });
                 });
 
-                Navigator.of(context).pop();
+                //one day before rdv at 10 AM
+                var nDate = (_selectedDay ?? _focusedDay)
+                    .subtract(const Duration(days: 1));
+                var finalDate = DateTime(
+                  nDate.year,
+                  nDate.month,
+                  nDate.day,
+                  10,
+                );
+                _scheduleNotification(
+                    rdv.title,
+                    "Votre RDV ${rdv.title} est planifié le ${rdv.date}\nBilan : ${rdv.type}\nDate Prochaine Consult. : ${rdv.dateProchaineConsultation}",
+                    rdv.hashCode,
+                    finalDate);
+                Future.delayed(Duration.zero, () {
+                  AwesomeDialog(
+                    context: context,
+                    animType: AnimType.leftSlide,
+                    headerAnimationLoop: false,
+                    dialogType: DialogType.success,
+                    showCloseIcon: true,
+                    title: ' ',
+                    desc: 'Rappel enregistré ! \n !تم تسجيل التذكير',
+                    btnOkOnPress: () {
+                      debugPrint('OnClcik');
+                      Navigator.of(context).pop();
+                    },
+                    btnOkIcon: Icons.check_circle,
+                    onDismissCallback: (type) {
+                      debugPrint('Dialog Dissmiss from callback $type');
+                    },
+                  ).show();
+                });
               },
             ),
           ],
         );
       },
     );
+  }
+
+  void _scheduleNotification(
+    String title,
+    String body,
+    int id,
+    DateTime date,
+  ) {
+    NotificationSchedule schedule;
+
+    schedule = NotificationCalendar.fromDate(
+      repeats: true,
+      preciseAlarm: true,
+      allowWhileIdle: true,
+      date: date,
+    );
+
+    AwesomeNotifications()
+        .createNotification(
+          content: NotificationContent(
+            category: NotificationCategory.Reminder,
+            displayOnBackground: true,
+            displayOnForeground: true,
+            wakeUpScreen: true,
+            id: id,
+            channelKey: "lupus_notif_channel_key",
+            title: title,
+            body: body,
+          ),
+          schedule: schedule,
+        )
+        .then((value) => print("notif value : $value"))
+        .catchError((e) {
+      print("Error creating notification: $e");
+    });
   }
 
   @override

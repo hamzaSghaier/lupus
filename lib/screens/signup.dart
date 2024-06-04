@@ -52,6 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       numTelController.text = profileFile.numTel;
       doctorController.text = profileFile.doctor;
       numDossierController.text = profileFile.numDossier;
+      passwordController.text = profileFile.password;
     }
 
     return profileFile;

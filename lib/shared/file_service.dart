@@ -233,6 +233,7 @@ class FileService {
 
       // Decode the JSON string and create a Profile object
       final Map<String, dynamic> profileMap = jsonDecode(contents);
+      print(profileMap);
       Profile profile = Profile.fromJson(profileMap);
       if (profile.numTel == tel && profile.password == password) {
         profile = await updateProfileIsLogged(true) ?? profile;

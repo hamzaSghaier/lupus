@@ -117,8 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 CustomTextField(
-                  labelText: "Identifiant",
+                  labelText: "Numéro téléphone",
                   controller: loginController,
+                  keyboardType: TextInputType.phone,
                 ),
                 CustomTextField(
                   labelText: "Mot de passe",
