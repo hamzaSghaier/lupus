@@ -264,7 +264,7 @@ class FileService {
     }
   }
 
-  static Future<Symptome> getlatestSymptomes() async {
+  static Future<Symptome?> getlatestSymptomes() async {
     try {
       final file = await _localFile("symptomes_log.txt");
 
@@ -273,16 +273,14 @@ class FileService {
       List<String> c = contents.split(";");
       c.removeWhere((element) => element.isEmpty);
 
-      Symptome lastSymp = Symptome.empty();
       if (c.isNotEmpty) {
-        lastSymp = Symptome.fromJson(jsonDecode(c.last));
+        return Symptome.fromJson(jsonDecode(c.last));
       }
-      print("last : ${lastSymp.toJson()}");
-      return lastSymp;
     } catch (e) {
       // If encountering an error, return 0
-      return Symptome.empty();
+      return null;
     }
+    return null;
   }
 
   static Future<Symptome> updatelatestSymptomes(Symptome newSymp) async {

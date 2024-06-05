@@ -30,6 +30,8 @@ class _StatisticsState extends State<Statistics> {
     super.initState();
   }
 
+  final ScrollController _scrollController = ScrollController();
+
   Future<List<_DataModel>> getFatigue() async {
     List<SymptomeData> fatigue = await FileService.getBilans("fatigue.txt");
     return fatigue
@@ -228,7 +230,9 @@ class _StatisticsState extends State<Statistics> {
                                 thickness: 3,
                                 trackColor: Colors.pink[50],
                                 trackVisibility: true,
+                                controller: _scrollController,
                                 child: TextFormField(
+                                  scrollController: _scrollController,
                                   scrollPhysics: const ScrollPhysics(),
                                   controller: TextEditingController(
                                       text: snapshot.data),
