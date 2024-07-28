@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lupus_app/screens/statistics/calendar_screen.dart';
+import 'package:lupus_app/screens/statistics/bilan_done_screen.dart';
 import 'package:lupus_app/screens/statistics/statistics_screen.dart';
 
 class SuiviScreen extends StatefulWidget {
@@ -34,7 +34,7 @@ class _SuiviScreenState extends State<SuiviScreen>
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(text: 'RDV'),
+            Tab(text: 'Bilans'),
             Tab(text: 'Courbes'),
           ],
         ),
@@ -66,7 +66,7 @@ class _SuiviScreenState extends State<SuiviScreen>
       body: TabBarView(
         controller: _tabController,
         children: const [
-          CalendarScreen(),
+          BilanDoneScreen(),
           Statistics(),
         ],
       ),

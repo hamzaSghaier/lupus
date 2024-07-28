@@ -1,8 +1,9 @@
 class BilanModel {
-  int? id;
+  String? id;
   String? type;
   String? date;
   String? image;
+  bool done = false;
 
   BilanModel({this.id, this.type, this.date, this.image});
 
@@ -11,6 +12,7 @@ class BilanModel {
     type = json['type'];
     date = json['date'];
     image = json['image'];
+    done = json['done'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,7 @@ class BilanModel {
     data['type'] = type;
     data['date'] = date;
     data['image'] = image;
+    data['done'] = done;
     return data;
   }
 }

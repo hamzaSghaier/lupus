@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
-import 'package:lupus_app/entity/symptome.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
+import 'package:lupus_app/entity/symptome.dart';
+import 'package:lupus_app/screens/bilan/models/bilan_model.dart';
 import 'package:lupus_app/screens/statistics/rdv_model.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -89,6 +90,30 @@ class FileService {
     return file.writeAsString('$r;', mode: FileMode.write);
   }
 
+  static Future<File> updateBilan(BilanModel newBilan) async {
+    final file = await _localFile("bilans.txt");
+    String contents = await file.readAsString();
+    List<String> c = contents.split(";");
+    List<BilanModel> listbilans = [];
+    c.removeWhere((element) => element.isEmpty);
+    for (var e in c) {
+      listbilans.add(BilanModel.fromJson(jsonDecode(e)));
+    }
+    listbilans.removeWhere((element) => element.id == newBilan.id);
+    c = [];
+    for (var e in listbilans) {
+      c.add(jsonEncode(e.toJson()));
+    }
+
+    await FileService.writeFile(
+        "done_bilans.txt", jsonEncode(newBilan.toJson()));
+
+    String r = c.join(";");
+    print("updating bilans.txt");
+    // Write the file.
+    return file.writeAsString('$r;', mode: FileMode.write);
+  }
+
   static Future<File> writeProfileFile(String fileName, String content) async {
     final file = await _localFile(fileName);
     // Write the file.
@@ -146,7 +171,7 @@ class FileService {
     }
   }
 
-  static Future<List<SymptomeData>> getBilans(String fileName) async {
+  static Future<List<SymptomeData>> getSymptomes(String fileName) async {
     try {
       final file = await _localFile(fileName);
 
@@ -165,6 +190,50 @@ class FileService {
     } catch (e) {
       // If encountering an error, return 0
       throw Exception('Failed to get json, file $fileName | $e');
+    }
+  }
+
+  static Future<List<BilanModel>> getAllBilans() async {
+    try {
+      final file = await _localFile("bilans.txt");
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<BilanModel> listBilans = [];
+      print("bilans.txt");
+      contents.split(";").forEach((element) {
+        if (element.isNotEmpty && element.isBlank == false) {
+          print(jsonDecode(element));
+          listBilans.add(BilanModel.fromJson(jsonDecode(element)));
+        }
+      });
+
+      return listBilans;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file bilans.txt | $e');
+    }
+  }
+
+  static Future<List<BilanModel>> getDoneBilans() async {
+    try {
+      final file = await _localFile("done_bilans.txt");
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<BilanModel> listBilans = [];
+      print("done_bilans.txt");
+      contents.split(";").forEach((element) {
+        if (element.isNotEmpty && element.isBlank == false) {
+          print(jsonDecode(element));
+          listBilans.add(BilanModel.fromJson(jsonDecode(element)));
+        }
+      });
+
+      return listBilans;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file bilans.txt | $e');
     }
   }
 

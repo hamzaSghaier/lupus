@@ -3,12 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lupus_app/constants/colors.dart';
-import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/entity/symptome.dart';
 import 'package:lupus_app/shared/file_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key});
@@ -33,7 +31,7 @@ class _StatisticsState extends State<Statistics> {
   final ScrollController _scrollController = ScrollController();
 
   Future<List<_DataModel>> getFatigue() async {
-    List<SymptomeData> fatigue = await FileService.getBilans("fatigue.txt");
+    List<SymptomeData> fatigue = await FileService.getSymptomes("fatigue.txt");
     return fatigue
         .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
             double.parse(e.value.toString())))
@@ -41,7 +39,8 @@ class _StatisticsState extends State<Statistics> {
   }
 
   Future<List<_DataModel>> getArthralgies() async {
-    List<SymptomeData> fatigue = await FileService.getBilans("arthralgies.txt");
+    List<SymptomeData> fatigue =
+        await FileService.getSymptomes("arthralgies.txt");
     return fatigue
         .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
             double.parse(e.value.toString())))
@@ -49,7 +48,8 @@ class _StatisticsState extends State<Statistics> {
   }
 
   Future<List<_DataModel>> getAutonomie() async {
-    List<SymptomeData> fatigue = await FileService.getBilans("autonomie.txt");
+    List<SymptomeData> fatigue =
+        await FileService.getSymptomes("autonomie.txt");
     return fatigue
         .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
             double.parse(e.value.toString())))
@@ -57,7 +57,7 @@ class _StatisticsState extends State<Statistics> {
   }
 
   Future<List<_DataModel>> getHumeur() async {
-    List<SymptomeData> fatigue = await FileService.getBilans("humeur.txt");
+    List<SymptomeData> fatigue = await FileService.getSymptomes("humeur.txt");
     return fatigue
         .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
             double.parse(e.value.toString())))
@@ -65,7 +65,7 @@ class _StatisticsState extends State<Statistics> {
   }
 
   Future<List<_DataModel>> getSommeil() async {
-    List<SymptomeData> fatigue = await FileService.getBilans("sommeil.txt");
+    List<SymptomeData> fatigue = await FileService.getSymptomes("sommeil.txt");
     return fatigue
         .map((e) => _DataModel(DateFormat('dd-MM-yyyy').format(e.date),
             double.parse(e.value.toString())))

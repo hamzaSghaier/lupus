@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/bilan_screen.dart';
+import 'package:lupus_app/screens/bilan/widgets/rdv_widget.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
 import 'package:lupus_app/screens/medicaments.dart';
 import 'package:lupus_app/screens/signup.dart';
@@ -72,6 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               gender: "",
               age: _calculateBirthYear(),
             ),
+            RdvWidget(mediaQuery: MediaQuery.of(context)),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

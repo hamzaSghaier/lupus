@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/constants/icons.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
@@ -8,7 +11,6 @@ import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/models/bilan_model.dart';
 import 'package:lupus_app/screens/bilan/widgets/bilan_info.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
-import 'package:intl/intl.dart';
 
 import '../../entity/profile.dart';
 import '../../shared/file_service.dart';
@@ -33,6 +35,8 @@ class _BilanScreenState extends State<BilanScreen> {
     return profileFile;
   }
 
+  List<BilanModel> pendingBilans = [];
+
   @override
   void initState() {
     getProfile();
@@ -53,6 +57,7 @@ class _BilanScreenState extends State<BilanScreen> {
             .toJson()
             .toString());
             */
+
     super.initState();
   }
 
@@ -74,7 +79,6 @@ class _BilanScreenState extends State<BilanScreen> {
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
 
-    //FileService.getBilans("mes_bilans.txt").then((value) => print(value));
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
@@ -153,7 +157,16 @@ class _BilanScreenState extends State<BilanScreen> {
                                             shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15)))),
-                                        onPressed: () {
+                                        onPressed: () async {
+                                          BilanModel b = BilanModel(
+                                              id: DateTime.now()
+                                                  .millisecond
+                                                  .toString(),
+                                              type: selectedBilanType,
+                                              date: dateController.text);
+                                          await FileService.writeFile(
+                                              "bilans.txt",
+                                              jsonEncode(b.toJson()));
                                           Navigator.pop(context);
 
                                           AwesomeDialog(
@@ -355,24 +368,44 @@ class _BilanScreenState extends State<BilanScreen> {
                 ),
               ),
             ),
-            BilanInfo(
-              mediaQuery: mediaQuery,
-              title: "NFS",
-              index: 1,
-              date: "12/05/2023",
-            ),
-            BilanInfo(
-              mediaQuery: mediaQuery,
-              title: "Protéinurie",
-              index: 2,
-              date: "8/02/2023",
-            ),
-            BilanInfo(
-              mediaQuery: mediaQuery,
-              title: "Protéinurie",
-              index: 3,
-              date: "5/02/2023",
-            ),
+            FutureBuilder(
+              future: FileService.getAllBilans(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, index) => BilanInfo(
+                        mediaQuery: mediaQuery,
+                        index: index,
+                        bilan: snapshot.data![index]),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            )
+            // BilanInfo(
+            //   mediaQuery: mediaQuery,
+            //   title: "NFS",
+            //   index: 1,
+            //   date: "12/05/2023",
+            // )
+            // BilanInfo(
+            //   controller: controller,
+            //   mediaQuery: mediaQuery,
+            //   title: "Protéinurie",
+            //   index: 2,
+            //   date: "8/02/2023",
+            // ),
+            // BilanInfo(
+            //   controller: controller,
+            //   mediaQuery: mediaQuery,
+            //   title: "Protéinurie",
+            //   index: 3,
+            //   date: "5/02/2023",
+            // ),
           ]),
         ),
       ),
