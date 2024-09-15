@@ -7,6 +7,7 @@ import 'package:lupus_app/screens/bilan/widgets/rdv_widget.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
 import 'package:lupus_app/screens/medicaments.dart';
 import 'package:lupus_app/screens/signup.dart';
+import 'package:lupus_app/screens/statistics/rdv_model.dart';
 import 'package:lupus_app/screens/symptoms.dart';
 
 import '../entity/profile.dart';
@@ -21,6 +22,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   Profile? profile;
+  RdvModel? latestRdv;
 
   Future<Profile> getProfile() async {
     Profile profileFile = await FileService.getProfile();
@@ -32,15 +34,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return profileFile;
   }
 
+  Future<RdvModel?> getRdv() async {
+    RdvModel? rdvFile = await FileService.getLatestRDV();
+    setState(() {
+      latestRdv = rdvFile;
+    });
+
+    return rdvFile;
+  }
+
   @override
   void initState() {
     getProfile();
+    getRdv();
     super.initState();
   }
 
   String _calculateBirthYear() {
     String? dateOfBirth = profile?.dateNaissance;
-    print("DATE OF BIRTH: $dateOfBirth");
     String ageString = "";
 
     if (dateOfBirth != null) {
@@ -73,7 +84,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               gender: "",
               age: _calculateBirthYear(),
             ),
-            RdvWidget(mediaQuery: MediaQuery.of(context)),
+            RdvWidget(
+              mediaQuery: MediaQuery.of(context),
+              hasRdv: latestRdv != null,
+              rdv: latestRdv,
+              update: () async {
+                await getRdv();
+              },
+            ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

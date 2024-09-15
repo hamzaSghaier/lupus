@@ -259,6 +259,31 @@ class FileService {
     }
   }
 
+  static Future<RdvModel?> getLatestRDV() async {
+    try {
+      final file = await _localFile("rdv.txt");
+
+      // Read the file
+      String contents = await file.readAsString();
+      List<String> listRdv = [];
+      print("rdv.txt");
+      print(contents);
+      listRdv = contents.split(";");
+      listRdv.removeWhere((e) => e.isEmpty);
+      RdvModel? latest = RdvModel.fromJson(jsonDecode(listRdv.last));
+      if (latest.date.isBefore(DateTime.now())) {
+        return null;
+      }
+      return latest;
+    } catch (e) {
+      // If encountering an error, return 0
+      throw Exception('Failed to get json, file rdv.txt | $e');
+      return null;
+      //throw Exception('Failed to get json, file rdv.txt | $e');
+    }
+    return null;
+  }
+
   static Future<List<Remarque>> getRemarques() async {
     try {
       final file = await _localFile("remarques.txt");
