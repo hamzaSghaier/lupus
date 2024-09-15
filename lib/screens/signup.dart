@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/entity/profile.dart';
@@ -147,7 +148,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               color: Colors.black, fontSize: 16),
                           children: <TextSpan>[
                             TextSpan(
-                              text: 'les Conditions d\'utilisation',
+                              text:
+                                  'les Conditions d\'utilisation | شروط الاستخدام',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -159,7 +161,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const ConditionsPage(),
+                                          const ConditionsPage(
+                                        isloggedIn: true,
+                                      ),
                                     ),
                                   );
                                 },
@@ -195,7 +199,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: const TextStyle(color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
-                                text: 'les Conditions d\'utilisation',
+                                text:
+                                    'les Conditions d\'utilisation | شروط الاستخدام',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -206,7 +211,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const ConditionsPage(),
+                                            const ConditionsPage(
+                                          isloggedIn: false,
+                                        ),
                                       ),
                                     );
                                   },
@@ -324,17 +331,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text('Confirmation'),
+                                title: const Text('Confirmation\nتأكيد',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
                                 content: const Text(
-                                    'Êtes-vous sûr de vouloir vous déconnecter ?'),
+                                    'Êtes-vous sûr de vouloir vous déconnecter ?\nهل أنت متأكد أنك تريد تسجيل الخروج؟'),
                                 actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Annuler'),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)))),
+                                    onPressed: () => {Navigator.pop(context)},
+                                    child: const Text(
+                                      "Annuler | إلغاء",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
-                                  TextButton(
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: pink,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)))),
                                     onPressed: () async {
                                       await FileService.updateProfileIsLogged(
                                           false);
@@ -347,7 +370,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                       );
                                     },
-                                    child: const Text('Oui'),
+                                    child: const Text(
+                                      "Oui | نعم",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               );
@@ -388,18 +415,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text('Confirmation'),
+                                title: const Text(
+                                  'Confirmation\nتأكيد',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
                                 content: const Text(
-                                    'Êtes-vous sûr de vouloir supprimer votre compte ?'),
+                                    'Êtes-vous sûr de vouloir supprimer votre compte ?\nهل أنت متأكد أنك تريد حذف حسابك؟'),
                                 actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      // User cancels the deletion
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Annuler'),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)))),
+                                    onPressed: () => {Navigator.pop(context)},
+                                    child: const Text(
+                                      "Annuler | إلغاء",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
-                                  TextButton(
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: pink,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)))),
                                     onPressed: () async {
                                       // User confirms the deletion, call the method to delete the account
                                       await FileService
@@ -412,7 +456,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                       );
                                     },
-                                    child: const Text('Supprimer'),
+                                    child: const Text(
+                                      "Supprimer | حذف",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               );
@@ -432,15 +480,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
 }
 
 class ConditionsPage extends StatelessWidget {
-  const ConditionsPage({super.key});
-
+  const ConditionsPage({super.key, required this.isloggedIn});
+  final bool isloggedIn;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'Conditions d\'utilisation',
+        title: 'Conditions d\'utilisation\nشروط الاستخدام',
       ),
-      bottomNavigationBar: CustomBottomBar(),
+      bottomNavigationBar: isloggedIn ? CustomBottomBar() : null,
       body: Padding(
         padding: const EdgeInsets.only(bottom: 25.0),
         child: WebViewPlus(
