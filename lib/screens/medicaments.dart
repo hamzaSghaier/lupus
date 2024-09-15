@@ -3,9 +3,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
-
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
 
@@ -25,16 +23,16 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
       Get.put(MedicamentsController());
 
   Profile? profile;
-  var horaires = ["Matin", "Midi", "Soir"];
+  var horaires = ["Matin | الصباح", "Midi | الزوال", "Soir | المساء"];
   var jrs = [
-    "Lundi",
-    "Mardi",
-    "Mercredi",
-    "Jeudi",
-    "Vendredi",
-    "Samedi",
-    "Dimanche",
-    "Quotidien"
+    'Quotidien | يوميا',
+    'Lundi | الإثنين',
+    'Mardi | الثلاثاء',
+    'Mercredi | الأربعاء',
+    'Jeudi | الخميس',
+    'Vendredi | الجمعة',
+    'Samedi | السبت',
+    'Dimanche | الأحد'
   ];
 
   int dropdownvalue = 1;
@@ -80,7 +78,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
-        title: 'Prescription',
+        title: 'Prescription\nالوصفة الطبية',
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -105,9 +103,9 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text("Medicaments", style: TextStyle(fontSize: 20)),
                       MedicamentSection(
-                        prisesParJour: "Une seule prise par jour",
+                        prisesParJour:
+                            "Une seule prise par jour\nجرعة واحدة فقط في اليوم",
                         horairePrise: priseCort,
                         horaireChange: (value) {
                           setState(() {
@@ -133,7 +131,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour: "Deux prises par jour",
+                        prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: prisePlaqenil,
                         horaireChange: (value) {
                           setState(() {
@@ -159,7 +157,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour: "Trois prises par jour",
+                        prisesParJour:
+                            "Trois prises par jour\nثلاث جرعات يوميا",
                         horairePrise: priseAzath,
                         horaireChange: (value) {
                           setState(() {
@@ -185,7 +184,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour: "Une prise par semaine",
+                        prisesParJour:
+                            "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseMetho,
                         horaireChange: (value) {
                           setState(() {
@@ -212,7 +212,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour: "Une prise par semaine",
+                        prisesParJour:
+                            "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseFoldine,
                         horaireChange: (value) {
                           setState(() {
@@ -238,7 +239,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour: "Deux prises par jour",
+                        prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: priseMMF,
                         horaireChange: (value) {
                           setState(() {
@@ -364,38 +365,6 @@ class MedicamentCard extends StatelessWidget {
   }
 }
 
-class NameRow extends StatelessWidget {
-  const NameRow({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 308,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(2)),
-        ),
-        padding: const EdgeInsets.all(15),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Ioussam Gaff",
-              style: TextStyle(
-                color: Color.fromRGBO(116, 116, 116, 1),
-              ),
-            ),
-            Text("Homme-20")
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class MedicamentSection extends StatelessWidget {
   final String medicamentName, imgPath, prisesParJour;
   final int nbrPrises, horairePrise, jrsPrises;
@@ -417,16 +386,16 @@ class MedicamentSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var horaires = ["Matin", "Midi", "Soir"];
+    var horaires = ["Matin | الصباح", "Midi | الزوال", "Soir | المساء"];
     var jrs = [
-      "Quotidien",
-      "Lundi",
-      "Mardi",
-      "Mercredi",
-      "Jeudi",
-      "Vendredi",
-      "Samedi",
-      "Dimanche",
+      'Quotidien | يوميا',
+      'Lundi | الإثنين',
+      'Mardi | الثلاثاء',
+      'Mercredi | الأربعاء',
+      'Jeudi | الخميس',
+      'Vendredi | الجمعة',
+      'Samedi | السبت',
+      'Dimanche | الأحد'
     ];
     List<int> nbrC;
     if (isOneTime) {
@@ -461,7 +430,7 @@ class MedicamentSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Nombre de comprimés",
+                "Nombre de comprimés\nعدد الأقراص",
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -491,11 +460,12 @@ class MedicamentSection extends StatelessWidget {
               )
             ],
           ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Fréquence de prise",
+                "Fréquence de prise\nموعد الجرعة",
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -526,11 +496,12 @@ class MedicamentSection extends StatelessWidget {
               )
             ],
           ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Horaire de prise",
+                "Horaire de prise\nتوقيت الجرعة",
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -561,6 +532,9 @@ class MedicamentSection extends StatelessWidget {
               )
             ],
           ),
+          const SizedBox(
+            height: 20,
+          ),
           ElevatedButton(
               onPressed: () {
                 var hour = 8;
@@ -589,7 +563,7 @@ class MedicamentSection extends StatelessWidget {
                 );
                 _scheduleNotification(
                     medicamentName,
-                    "Il est temps de prendre vos $medicamentName\n$nbrPrises comprimé(s)",
+                    "Il est temps de prendre vos $medicamentName\n$nbrPrises comprimé(s)\nحان الوقت لتناول $medicamentName\n$nbrPrises أقراص",
                     medicamentName.hashCode,
                     finalDate);
 
@@ -610,7 +584,13 @@ class MedicamentSection extends StatelessWidget {
                   },
                 ).show();
               },
-              child: const Text("Enregistrer"))
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+                child: Text(
+                  "Enregistrer\nحفض",
+                  textAlign: TextAlign.center,
+                ),
+              ))
         ],
       ),
     );

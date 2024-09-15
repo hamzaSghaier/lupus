@@ -36,6 +36,7 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /*
             Padding(
               padding: const EdgeInsets.only(left: 18.0),
               child: Text(
@@ -43,6 +44,7 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
+            */
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               height: widget.mediaQuery.size.height * 0.07,
@@ -86,7 +88,7 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
                               ),
                             ),
                             Text(
-                              "Afficher",
+                              "Afficher | عرض",
                               style: TextStyle(color: Colors.white),
                             )
                           ],

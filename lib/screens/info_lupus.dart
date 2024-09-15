@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
-import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class InfoLupusScreen extends StatelessWidget {
   const InfoLupusScreen({Key? key}) : super(key: key);
@@ -28,19 +28,22 @@ class _WebViewPlusExampleMainPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'A propos',
+        title: 'A propos\nمعلومات',
       ),
       bottomNavigationBar: CustomBottomBar(),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 25.0),
-        child: WebViewPlus(
+          padding: const EdgeInsets.only(bottom: 25.0),
+          child: SfPdfViewer.asset('assets/about_lupus.pdf')
+          /*
+        WebViewPlus(
           zoomEnabled: true,
           onWebViewCreated: (controller) {
             controller.loadUrl('assets/lupus.html');
           },
           javascriptMode: JavascriptMode.unrestricted,
         ),
-      ),
+        */
+          ),
     );
   }
 }

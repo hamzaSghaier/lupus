@@ -59,7 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
-        title: 'Accueil',
+        title: 'Accueil\nالإستقبال',
       ),
       body: Center(
         child: Column(
@@ -88,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onPressed: () {
                           Get.to(const MedicamentsScreen());
                         },
-                        title: 'Medicament',
+                        title: 'Medicament\nالأدوية',
                       ),
                       const SizedBox(
                         width: 20,
@@ -98,7 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onPressed: () {
                           Get.to(const SymptomsScreen());
                         },
-                        title: 'Symptome',
+                        title: 'Symptome\nالأعراض',
                       ),
                     ],
                   ),
@@ -114,7 +114,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onPressed: () {
                           Get.to(const BilanScreen());
                         },
-                        title: 'Bilan',
+                        title: 'Bilan\nالفحص',
                       ),
                       const SizedBox(
                         width: 20,
@@ -124,7 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onPressed: () {
                           Get.to(const SignUpScreen());
                         },
-                        title: 'Profil',
+                        title: 'Profil\nالحساب',
                       ),
                     ],
                   )
@@ -162,17 +162,18 @@ class HomeButton extends StatelessWidget {
               width: 3, color: const Color.fromRGBO(255, 180, 252, 1)),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Image SVG at the top
             Image.asset(
               image,
             ),
-            const SizedBox(height: 10),
+            //const SizedBox(height: 10),
             // Title at the bottom
             Text(
               title,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                   fontSize: 15,
                   color: Colors.black,

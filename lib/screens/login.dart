@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/entity/profile.dart';
 import 'package:lupus_app/screens/dashboard.dart';
 import 'package:lupus_app/screens/signup.dart';
@@ -40,8 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 btnOkIcon: Icons.check_circle,
                 context: context,
                 headerAnimationLoop: false,
-                desc: "Verifier votre login !",
-                title: "Login Incorrect !")
+                desc: "Verifier votre login !\nتحقق من تسجيل الدخول الخاص بك!",
+                title: "Login Incorrect !\nتسجيل الدخول غير صحيح!")
             .show();
       }
     } catch (e) {
@@ -53,8 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
               dialogType: DialogType.error,
               context: context,
               headerAnimationLoop: false,
-              desc: "Verifier votre login !",
-              title: "Login Incorrect !")
+              desc: "Verifier votre login !\nتحقق من تسجيل الدخول الخاص بك!",
+              title: "Login Incorrect !\nتسجيل الدخول غير صحيح!")
           .show();
     }
   }
@@ -117,12 +114,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 CustomTextField(
-                  labelText: "Numéro téléphone",
+                  labelText: "Numéro de téléphone | رقم الهاتف",
                   controller: loginController,
                   keyboardType: TextInputType.phone,
                 ),
                 CustomTextField(
-                  labelText: "Mot de passe",
+                  labelText: "Mot de passe | كلمة المرور",
                   controller: passwordController,
                   isPassword: true,
                 ),
@@ -137,7 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       minimumSize: Size.fromHeight(
                           MediaQuery.of(context).size.height * 0.1),
                     ),
-                    child: const Text('Se connecter'),
+                    child: const Text(
+                      'Se connecter\nتسجيل الدخول',
+                      textAlign: TextAlign.center,
+                    ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         login(context);
@@ -148,7 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   onPressed: () {},
                   child: Text(
-                    'mot de passe oublié ?',
+                    'mot de passe oublié ?\nنسيت كلمة المرور؟',
+                    textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ),
@@ -158,7 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Get.to(() => const SignUpScreen());
                     },
                     child: Text(
-                      'Pas de compte ?',
+                      'Pas de compte ?\nليس لديك حساب؟',
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                   ),

@@ -34,8 +34,17 @@ class _SuiviScreenState extends State<SuiviScreen>
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(text: 'Bilans'),
-            Tab(text: 'Courbes'),
+            Tab(
+              child: Text(
+                'Bilans\nالفحوصات',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Tab(
+                child: Text(
+              'Courbes\nالإحصاءات',
+              textAlign: TextAlign.center,
+            )),
           ],
         ),
         actions: [
@@ -58,7 +67,8 @@ class _SuiviScreenState extends State<SuiviScreen>
               )),
         ],
         title: const Text(
-          "Suivi",
+          "Suivi\nالمتابعة",
+          textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
         ),

@@ -37,9 +37,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         validator: (value) {
           if (value == null || value.isEmpty) {
             if (widget.isPassword) {
-              return 'Mot de passe obligatoire !';
+              return 'Mot de passe obligatoire !\nكلمة المرور مطلوبة!';
             }
-            return 'Champ obligatoire !';
+            return 'Champ obligatoire !\nحقل إلزامي!';
           }
           return null;
         },

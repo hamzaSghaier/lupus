@@ -2,18 +2,17 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/entity/profile.dart';
 import 'package:lupus_app/screens/login.dart';
-import 'package:intl/intl.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 import '../controllers/signup_controller.dart';
 import '../custom_widgets/custom_text_field.dart';
 import '../shared/file_service.dart';
 import 'dashboard.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -69,7 +68,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       bottomNavigationBar: profile != null ? CustomBottomBar() : null,
       appBar: CustomAppBar(
-        title: profile != null ? 'Mes informations' : "Créer un compte",
+        title: profile != null
+            ? 'Mes informations\nمعلوماتي'
+            : "Créer un compte\nإنشاء حساب",
         isLoggedIn: profile != null ? true : false,
       ),
       body: SingleChildScrollView(
@@ -83,11 +84,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomTextField(
-                    labelText: "Votre Nom",
+                    labelText: "Votre Nom | اسمك",
                     controller: nomController,
                   ),
                   CustomTextField(
-                    labelText: "Votre Prenom",
+                    labelText: "Votre Prenom | لقبك",
                     controller: prenomController,
                   ),
                   // const CustomTextField(labelText: "Date de naissance"),
@@ -111,22 +112,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () => signupController.selectDate(context),
-                        child: const Text('Date de naissance'),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text(
+                            'Date de naissance\nتاريخ الميلاد',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       )
                     ],
                   ),
                   CustomTextField(
-                    labelText: "Numéro de téléphone",
+                    labelText: "Numéro de téléphone | رقم الهاتف",
                     controller: numTelController,
                     keyboardType: TextInputType.number,
                   ),
                   CustomTextField(
-                    labelText: "Numéro de Dossier",
+                    labelText: "Numéro de Dossier | رقم الملف",
                     controller: numDossierController,
                     keyboardType: TextInputType.number,
                   ),
                   CustomTextField(
-                    labelText: "Médecin traitant",
+                    labelText: "Médecin traitant | الطبيب المعالج",
                     controller: doctorController,
                     keyboardType: TextInputType.name,
                   ),
@@ -163,7 +170,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   if (profile == null)
                     CustomTextField(
-                      labelText: "Mot de passe",
+                      labelText: "Mot de passe | كلمة المرور",
                       controller: passwordController,
                       isPassword: true,
                     ),
@@ -174,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Obx(
                           () => Checkbox(
                             checkColor: Colors.white,
-                            fillColor: MaterialStateProperty.all(
+                            fillColor: WidgetStateProperty.all(
                               Theme.of(context).colorScheme.primary,
                             ),
                             value: signupController.isChecked.value,

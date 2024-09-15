@@ -82,7 +82,7 @@ class _BilanScreenState extends State<BilanScreen> {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
-        title: 'Bilan',
+        title: 'Bilan\nالفحص الطبي',
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -119,7 +119,8 @@ class _BilanScreenState extends State<BilanScreen> {
                             padding: const EdgeInsets.only(right: 10.0),
                             child: SvgPicture.asset(bilanIcon),
                           ),
-                          const Text("Veuillez ajouer votre bilan")
+                          const Text(
+                              "Veuillez ajouer votre bilan\nالرجاء إضافة الفحص الطبي الخاصة بك")
                         ],
                       ),
                       //button ajouter bilan
@@ -175,14 +176,16 @@ class _BilanScreenState extends State<BilanScreen> {
                                               body: const Padding(
                                                 padding: EdgeInsets.all(20.0),
                                                 child: Text(
-                                                  "Bilan Ajouté !",
+                                                  "Bilan Ajouté !\nتم إضافة الفحص !",
+                                                  textAlign: TextAlign.center,
                                                   style:
                                                       TextStyle(fontSize: 20),
                                                 ),
                                               )).show();
                                         },
                                         child: const Text(
-                                          "Ajouter",
+                                          "Ajouter | إضافة",
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
@@ -211,138 +214,148 @@ class _BilanScreenState extends State<BilanScreen> {
                                         onPressed: () =>
                                             {Navigator.pop(context)},
                                         child: const Text(
-                                          "Annuler",
+                                          "Annuler | إلغاء",
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                title: "Bilan",
-                                body: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Type de bilan",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: StatefulBuilder(
-                                        builder: (context, setState) =>
-                                            DropdownButton(
-                                                hint: const Text(
-                                                  "Type de bilan",
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                elevation: 5,
-                                                iconSize: 40,
-                                                iconEnabledColor: pink,
-                                                isExpanded: true,
-                                                underline: Container(),
-                                                value: selectedBilanType,
-                                                items: listBilanType
-                                                    .map((e) =>
-                                                        DropdownMenuItem(
-                                                          value: e.toString(),
-                                                          child: Text(
-                                                            e.toString(),
-                                                          ),
-                                                        ))
-                                                    .toList(),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    selectedBilanType = value!;
-                                                  });
-                                                }),
+                                title: "Bilan | الفحص الطبي",
+                                body: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Type de bilan | نوع الفحص الطبي",
+                                        style: TextStyle(fontSize: 14),
                                       ),
-                                    ),
-                                    const Text(
-                                      "Date de bilan",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: TextFormField(
-                                        enabled: true,
-                                        onTap: (() async {
-                                          DateTime? date = DateTime(1900);
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-
-                                          date = await showDatePicker(
-                                              builder: (context, child) =>
-                                                  Theme(
-                                                    data: ThemeData(),
-                                                    child: child!,
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: StatefulBuilder(
+                                          builder: (context, setState) =>
+                                              DropdownButton(
+                                                  hint: const Text(
+                                                    "Type de bilan",
                                                   ),
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime.now());
-
-                                          if (date != null) {
-                                            dateController.text =
-                                                DateFormat('dd-MM-yyyy')
-                                                    .format(date);
-                                          } else {
-                                            dateController.text = "";
-                                          }
-                                        }),
-                                        autovalidateMode:
-                                            //widget.shouldAutoValidate
-                                            //? AutovalidateMode.onUserInteraction
-                                            //:
-                                            AutovalidateMode.disabled,
-                                        validator: (value) {
-                                          if ((value != null &&
-                                                  value.isNotEmpty) &&
-                                              !RegExp("[0-9]{2}-[0-9]{2}-[0-9]{4}")
-                                                  .hasMatch(value)) {
-                                            return "Valeur invalide";
-                                          }
-                                          return null;
-                                        },
-                                        controller: dateController,
-                                        decoration: InputDecoration(
-                                            hintText: "Date",
-                                            suffixIcon: IconButton(
-                                              onPressed: (() async {
-                                                DateTime? date = DateTime(1900);
-                                                FocusScope.of(context)
-                                                    .requestFocus(FocusNode());
-
-                                                date = await showDatePicker(
-                                                    builder: (context, child) =>
-                                                        Theme(
-                                                          data: ThemeData(),
-                                                          child: child!,
-                                                        ),
-                                                    context: context,
-                                                    initialDate: DateTime.now(),
-                                                    firstDate: DateTime(2000),
-                                                    lastDate: DateTime.now());
-
-                                                if (date != null) {
-                                                  dateController.text =
-                                                      DateFormat('dd-MM-yyyy')
-                                                          .format(date);
-                                                } else {
-                                                  dateController.text = "";
-                                                }
-                                              }),
-                                              icon: SvgPicture.asset(
-                                                calendarIcon,
-                                                width: 20,
-                                                height: 20,
-                                                fit: BoxFit.scaleDown,
-                                              ),
-                                            )),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  elevation: 5,
+                                                  iconSize: 40,
+                                                  iconEnabledColor: pink,
+                                                  isExpanded: true,
+                                                  underline: Container(),
+                                                  value: selectedBilanType,
+                                                  items: listBilanType
+                                                      .map((e) =>
+                                                          DropdownMenuItem(
+                                                            value: e.toString(),
+                                                            child: Text(
+                                                              e.toString(),
+                                                            ),
+                                                          ))
+                                                      .toList(),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      selectedBilanType =
+                                                          value!;
+                                                    });
+                                                  }),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      const Text(
+                                        "Date de bilan | موعد الفحص الطبي",
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: TextFormField(
+                                          enabled: true,
+                                          onTap: (() async {
+                                            DateTime? date = DateTime(1900);
+                                            FocusScope.of(context)
+                                                .requestFocus(FocusNode());
+
+                                            date = await showDatePicker(
+                                                builder: (context, child) =>
+                                                    Theme(
+                                                      data: ThemeData(),
+                                                      child: child!,
+                                                    ),
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(2000),
+                                                lastDate: DateTime.now());
+
+                                            if (date != null) {
+                                              dateController.text =
+                                                  DateFormat('dd-MM-yyyy')
+                                                      .format(date);
+                                            } else {
+                                              dateController.text = "";
+                                            }
+                                          }),
+                                          autovalidateMode:
+                                              //widget.shouldAutoValidate
+                                              //? AutovalidateMode.onUserInteraction
+                                              //:
+                                              AutovalidateMode.disabled,
+                                          validator: (value) {
+                                            if ((value != null &&
+                                                    value.isNotEmpty) &&
+                                                !RegExp("[0-9]{2}-[0-9]{2}-[0-9]{4}")
+                                                    .hasMatch(value)) {
+                                              return "Valeur invalide";
+                                            }
+                                            return null;
+                                          },
+                                          controller: dateController,
+                                          decoration: InputDecoration(
+                                              hintText: "Date | التاريخ",
+                                              suffixIcon: IconButton(
+                                                onPressed: (() async {
+                                                  DateTime? date =
+                                                      DateTime(1900);
+                                                  FocusScope.of(context)
+                                                      .requestFocus(
+                                                          FocusNode());
+
+                                                  date = await showDatePicker(
+                                                      builder: (context,
+                                                              child) =>
+                                                          Theme(
+                                                            data: ThemeData(),
+                                                            child: child!,
+                                                          ),
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime(2000),
+                                                      lastDate: DateTime.now());
+
+                                                  if (date != null) {
+                                                    dateController.text =
+                                                        DateFormat('dd-MM-yyyy')
+                                                            .format(date);
+                                                  } else {
+                                                    dateController.text = "";
+                                                  }
+                                                }),
+                                                icon: SvgPicture.asset(
+                                                  calendarIcon,
+                                                  width: 20,
+                                                  height: 20,
+                                                  fit: BoxFit.scaleDown,
+                                                ),
+                                              )),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 )).show();
                           },
                           child: const Row(
@@ -356,7 +369,7 @@ class _BilanScreenState extends State<BilanScreen> {
                                 ),
                               ),
                               Text(
-                                "Ajouter",
+                                "Ajouter | إضافة",
                                 style: TextStyle(color: Colors.white),
                               )
                             ],

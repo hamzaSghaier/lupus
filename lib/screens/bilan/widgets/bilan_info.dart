@@ -66,13 +66,14 @@ class _BilanInfoState extends State<BilanInfo> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.only(left: 18.0),
               child: Text(
                 "Bilan ${widget.index}",
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
+            */
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               height: widget.mediaQuery.size.height * 0.07,
@@ -167,7 +168,10 @@ class _BilanInfoState extends State<BilanInfo> {
                                                                 EdgeInsets.all(
                                                                     20.0),
                                                             child: Text(
-                                                              "Photo Sauvegardée !",
+                                                              "Photo Sauvegardée !\nتم حفظ الصورة!",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
                                                               style: TextStyle(
                                                                   fontSize: 20),
                                                             ),
@@ -217,12 +221,12 @@ class _BilanInfoState extends State<BilanInfo> {
                             Padding(
                               padding: EdgeInsets.only(right: 10),
                               child: Icon(
-                                Icons.add_box_rounded,
+                                Icons.document_scanner,
                                 color: Colors.white,
                               ),
                             ),
                             Text(
-                              "Ajouter",
+                              "Photo | صورة",
                               style: TextStyle(color: Colors.white),
                             )
                           ],

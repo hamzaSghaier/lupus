@@ -296,7 +296,7 @@ class ChartWidget extends StatelessWidget {
           ),
           SfCartesianChart(
             enableAxisAnimation: true,
-            primaryXAxis: CategoryAxis(),
+            primaryXAxis: const CategoryAxis(),
             primaryYAxis: NumericAxis(
               interactiveTooltip: const InteractiveTooltip(),
               desiredIntervals: values?.length ?? 10,
@@ -312,7 +312,7 @@ class ChartWidget extends StatelessWidget {
                         const TextStyle(color: Colors.black));
               },
             ),
-            series: <ChartSeries>[
+            series: <CartesianSeries>[
               AreaSeries<_DataModel, String>(
                 color: pink.withAlpha(128),
                 markerSettings: MarkerSettings(

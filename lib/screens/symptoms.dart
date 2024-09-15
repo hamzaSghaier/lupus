@@ -89,7 +89,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
-        title: "Symptômes",
+        title: "Symptômes\nالأعراض",
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
