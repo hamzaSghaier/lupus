@@ -208,7 +208,7 @@ class FileService {
         }
       });
 
-      return listBilans;
+      return listBilans.reversed.toList();
     } catch (e) {
       // If encountering an error, return 0
       throw Exception('Failed to get json, file bilans.txt | $e');
@@ -230,7 +230,7 @@ class FileService {
         }
       });
 
-      return listBilans;
+      return listBilans.reversed.toList();
     } catch (e) {
       // If encountering an error, return 0
       throw Exception('Failed to get json, file bilans.txt | $e');

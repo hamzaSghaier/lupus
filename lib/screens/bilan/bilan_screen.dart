@@ -159,29 +159,38 @@ class _BilanScreenState extends State<BilanScreen> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15)))),
                                         onPressed: () async {
-                                          BilanModel b = BilanModel(
-                                              id: DateTime.now()
-                                                  .millisecond
-                                                  .toString(),
-                                              type: selectedBilanType,
-                                              date: dateController.text);
-                                          await FileService.writeFile(
-                                              "bilans.txt",
-                                              jsonEncode(b.toJson()));
-                                          Navigator.pop(context);
+                                          if (RegExp(
+                                                  r"^[0-9]{2}-[0-9]{2}-[0-9]{4}$")
+                                              .hasMatch(dateController.text)) {
+                                            BilanModel b = BilanModel(
+                                                id: DateTime.now()
+                                                    .millisecond
+                                                    .toString(),
+                                                type: selectedBilanType,
+                                                date: dateController.text);
 
-                                          AwesomeDialog(
-                                              context: context,
-                                              dialogType: DialogType.success,
-                                              body: const Padding(
-                                                padding: EdgeInsets.all(20.0),
-                                                child: Text(
-                                                  "Bilan Ajouté !\nتم إضافة الفحص !",
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                      TextStyle(fontSize: 20),
-                                                ),
-                                              )).show();
+                                            await FileService.writeFile(
+                                                "bilans.txt",
+                                                jsonEncode(b.toJson()));
+                                            dateController.clear();
+
+                                            Navigator.pop(context);
+
+                                            AwesomeDialog(
+                                                dismissOnBackKeyPress: true,
+                                                dismissOnTouchOutside: true,
+                                                context: context,
+                                                dialogType: DialogType.success,
+                                                body: const Padding(
+                                                  padding: EdgeInsets.all(20.0),
+                                                  child: Text(
+                                                    "Bilan Ajouté !\nتم إضافة الفحص !",
+                                                    textAlign: TextAlign.center,
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  ),
+                                                )).show();
+                                          }
                                         },
                                         child: const Text(
                                           "Ajouter | إضافة",
@@ -276,7 +285,8 @@ class _BilanScreenState extends State<BilanScreen> {
                                         child: TextFormField(
                                           enabled: true,
                                           onTap: (() async {
-                                            DateTime? date = DateTime(1900);
+                                            DateTime? date =
+                                                DateTime(lastDateYear);
                                             FocusScope.of(context)
                                                 .requestFocus(FocusNode());
 
@@ -288,8 +298,10 @@ class _BilanScreenState extends State<BilanScreen> {
                                                     ),
                                                 context: context,
                                                 initialDate: DateTime.now(),
-                                                firstDate: DateTime(2000),
-                                                lastDate: DateTime.now());
+                                                firstDate:
+                                                    DateTime(firstDateYear),
+                                                lastDate:
+                                                    DateTime(lastDateYear));
 
                                             if (date != null) {
                                               dateController.text =
@@ -303,11 +315,12 @@ class _BilanScreenState extends State<BilanScreen> {
                                               //widget.shouldAutoValidate
                                               //? AutovalidateMode.onUserInteraction
                                               //:
-                                              AutovalidateMode.disabled,
+                                              AutovalidateMode
+                                                  .onUserInteraction,
                                           validator: (value) {
                                             if ((value != null &&
                                                     value.isNotEmpty) &&
-                                                !RegExp("[0-9]{2}-[0-9]{2}-[0-9]{4}")
+                                                !RegExp(r"^[0-9]{2}-[0-9]{2}-[0-9]{4}$")
                                                     .hasMatch(value)) {
                                               return "Valeur invalide";
                                             }
@@ -334,8 +347,10 @@ class _BilanScreenState extends State<BilanScreen> {
                                                       context: context,
                                                       initialDate:
                                                           DateTime.now(),
-                                                      firstDate: DateTime(2000),
-                                                      lastDate: DateTime.now());
+                                                      firstDate: DateTime(
+                                                          firstDateYear),
+                                                      lastDate: DateTime(
+                                                          lastDateYear));
 
                                                   if (date != null) {
                                                     dateController.text =
@@ -399,26 +414,6 @@ class _BilanScreenState extends State<BilanScreen> {
                 }
               },
             )
-            // BilanInfo(
-            //   mediaQuery: mediaQuery,
-            //   title: "NFS",
-            //   index: 1,
-            //   date: "12/05/2023",
-            // )
-            // BilanInfo(
-            //   controller: controller,
-            //   mediaQuery: mediaQuery,
-            //   title: "Protéinurie",
-            //   index: 2,
-            //   date: "8/02/2023",
-            // ),
-            // BilanInfo(
-            //   controller: controller,
-            //   mediaQuery: mediaQuery,
-            //   title: "Protéinurie",
-            //   index: 3,
-            //   date: "5/02/2023",
-            // ),
           ]),
         ),
       ),

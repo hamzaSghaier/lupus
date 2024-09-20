@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/statistics/rdv_model.dart';
 import 'package:lupus_app/shared/file_service.dart';
@@ -122,7 +123,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime.now(),
-        lastDate: DateTime(2101),
+        lastDate: DateTime(lastDateYear),
         builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData(

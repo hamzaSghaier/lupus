@@ -152,13 +152,25 @@ class _BilanInfoState extends State<BilanInfo> {
                                                       newBilan.done = true;
                                                       newBilan.image =
                                                           image.path;
-                                                      await FileService
-                                                          .updateBilan(
-                                                              newBilan);
 
                                                       Navigator.pop(context);
 
                                                       AwesomeDialog(
+                                                          dismissOnBackKeyPress:
+                                                              false,
+                                                          dismissOnTouchOutside:
+                                                              false,
+                                                          btnOkOnPress:
+                                                              () async {
+                                                            await FileService
+                                                                .updateBilan(
+                                                                    newBilan);
+                                                            setState(() {
+                                                              controller
+                                                                  ?.dispose();
+                                                              initCamera();
+                                                            });
+                                                          },
                                                           context:
                                                               outerContext!,
                                                           dialogType: DialogType
@@ -211,8 +223,8 @@ class _BilanInfoState extends State<BilanInfo> {
                               );
                             },
                           ).then((onValue) {
-                            controller?.dispose();
-                            initCamera();
+                            // controller?.dispose();
+                            // initCamera();
                           });
                         },
                         child: const Row(

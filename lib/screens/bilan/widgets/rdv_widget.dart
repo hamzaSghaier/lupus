@@ -102,8 +102,8 @@ class _RdvWidgetState extends State<RdvWidget> {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2101),
+        firstDate: DateTime(firstDateYear),
+        lastDate: DateTime(lastDateYear),
         builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData(
@@ -257,8 +257,8 @@ class _RdvWidgetState extends State<RdvWidget> {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: widget.rdv?.date,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2101),
+        firstDate: DateTime(firstDateYear),
+        lastDate: DateTime(lastDateYear),
         builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData(

@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lupus_app/constants/colors.dart';
 
 class MedicamentsController extends GetxController {
   var corticioidesDate = DateTime.now().obs;
@@ -59,7 +60,7 @@ class MedicamentsController extends GetxController {
       context: context,
       initialDate: corticioidesDate.value,
       firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      lastDate: DateTime(lastDateYear),
     );
 
     if (picked != null && picked != corticioidesDate.value) {
@@ -186,7 +187,7 @@ class MedicamentsController extends GetxController {
       context: context,
       initialDate: methotrexateDate.value,
       firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      lastDate: DateTime(lastDateYear),
     );
 
     if (picked != null && picked != methotrexateDate.value) {
@@ -208,7 +209,7 @@ class MedicamentsController extends GetxController {
       context: context,
       initialDate: foldineDate.value,
       firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      lastDate: DateTime(lastDateYear),
     );
 
     if (picked != null && picked != foldineDate.value) {
