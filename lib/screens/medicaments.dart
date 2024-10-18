@@ -3,6 +3,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
@@ -62,7 +63,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
   int nbrCort = 0;
   int nbrPlaqenil = 0;
   int nbrAzath = 0;
-  int nbrMetho = 0;
+  int? nbrMetho;
   int nbrFoldine = 0;
   int nbrMMF = 0;
 
@@ -107,6 +108,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         prisesParJour:
                             "Une seule prise par jour\nجرعة واحدة فقط في اليوم",
                         horairePrise: priseCort,
+                        maxPrises: 12,
                         horaireChange: (value) {
                           setState(() {
                             priseCort = value ?? 0;
@@ -133,6 +135,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                       MedicamentSection(
                         prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: prisePlaqenil,
+                        maxPrises: 2,
                         horaireChange: (value) {
                           setState(() {
                             prisePlaqenil = value ?? 0;
@@ -160,6 +163,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         prisesParJour:
                             "Trois prises par jour\nثلاث جرعات يوميا",
                         horairePrise: priseAzath,
+                        maxPrises: 4,
                         horaireChange: (value) {
                           setState(() {
                             priseAzath = value ?? 0;
@@ -187,6 +191,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         prisesParJour:
                             "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseMetho,
+                        minPrises: 4,
+                        maxPrises: 8,
                         horaireChange: (value) {
                           setState(() {
                             priseMetho = value ?? 0;
@@ -215,6 +221,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         prisesParJour:
                             "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseFoldine,
+                        maxPrises: 5,
                         horaireChange: (value) {
                           setState(() {
                             priseFoldine = value ?? 0;
@@ -241,6 +248,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                       MedicamentSection(
                         prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: priseMMF,
+                        maxPrises: 6,
                         horaireChange: (value) {
                           setState(() {
                             priseMMF = value ?? 0;
@@ -365,44 +373,142 @@ class MedicamentCard extends StatelessWidget {
   }
 }
 
-class MedicamentSection extends StatelessWidget {
+class MedicamentSection extends StatefulWidget {
   final String medicamentName, imgPath, prisesParJour;
-  final int nbrPrises, horairePrise, jrsPrises;
+  final int horairePrise, jrsPrises, maxPrises, minPrises;
+  final int? nbrPrises;
   final Function prisesChange, horaireChange, jrsChange;
   final bool isOneTime;
-  const MedicamentSection(
-      {Key? key,
-      required this.prisesParJour,
-      required this.horairePrise,
-      required this.horaireChange,
-      required this.medicamentName,
-      required this.imgPath,
-      required this.nbrPrises,
-      required this.prisesChange,
-      required this.jrsChange,
-      this.isOneTime = false,
-      required this.jrsPrises})
-      : super(key: key);
+
+  const MedicamentSection({
+    Key? key,
+    required this.prisesParJour,
+    required this.horairePrise,
+    required this.horaireChange,
+    required this.medicamentName,
+    required this.imgPath,
+    required this.nbrPrises,
+    required this.prisesChange,
+    required this.jrsChange,
+    required this.maxPrises,
+    this.minPrises = 0,
+    this.isOneTime = false,
+    required this.jrsPrises,
+  }) : super(key: key);
+
+  @override
+  _MedicamentSectionState createState() => _MedicamentSectionState();
+}
+
+class _MedicamentSectionState extends State<MedicamentSection> {
+  List<String> selectedDays = [];
+  List<String> selectedTimes = [];
+
+  void _showPillReminderDialog() async {
+    final result = await showDialog<List<List<String>>>(
+      context: context,
+      builder: (BuildContext context) {
+        return PillReminderDialog(
+          isDaily: false,
+          pills: widget.nbrPrises ?? 0,
+        );
+      },
+    );
+
+    // Process the selected days and times from the dialog
+    if (result != null) {
+      setState(() {
+        selectedDays = result[0]; // Assuming first element is days
+        selectedTimes = result[1]; // Assuming second element is times
+      });
+    }
+  }
+
+  void _scheduleMedication() {
+    Map<String, int> timeMapping = {
+      'Matin - صباح': 9,
+      'Midi - الظهر': 12,
+      'Soir - مساء': 19
+    };
+
+    for (var day in selectedDays) {
+      for (var time in selectedTimes) {
+        int? hour = timeMapping[time];
+        if (hour == null) continue; // Skip if no valid hour mapping
+        DateTime now = DateTime.now();
+        DateTime scheduleDate = _getNextScheduleDate(day, hour, now);
+        _scheduleNotification(
+          widget.medicamentName,
+          "Il est temps de prendre vos ${widget.nbrPrises} comprimé(s) de ${widget.medicamentName}.\n"
+          "حان الوقت لتناول ${widget.medicamentName} ${widget.nbrPrises} أقراص",
+          widget.medicamentName.hashCode ^ scheduleDate.hashCode,
+          scheduleDate,
+        );
+      }
+    }
+
+    // Show success message
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.leftSlide,
+      headerAnimationLoop: false,
+      dialogType: DialogType.success,
+      showCloseIcon: true,
+      title: ' ',
+      desc: 'Rappel enregistré ! \n !تم تسجيل التذكير',
+      btnOkOnPress: () {},
+      btnOkIcon: Icons.check_circle,
+    ).show();
+  }
+
+  DateTime _getNextScheduleDate(String day, int hour, DateTime now) {
+    int dayOffset = 0;
+
+    Map<String, int> daysOfWeek = {
+      "Lun": 1,
+      "Mar": 2,
+      "Mer": 3,
+      "Jeu": 4,
+      "Ven": 5,
+      "Sam": 6,
+      "Dim": 7,
+      "Lundi": 1,
+      "Mardi": 2,
+      "Mercredi": 3,
+      "Jeudi": 4,
+      "Vendredi": 5,
+      "Samedi": 6,
+      "Dimanche": 7,
+      "الاثنين": 1,
+      "الثلاثاء": 2,
+      "الأربعاء": 3,
+      "الخميس": 4,
+      "الجمعة": 5,
+      "السبت": 6,
+      "الأحد": 7,
+    };
+
+    String cleanedDay = day.split(' - ')[0].trim();
+    int? selectedDayIndex = daysOfWeek[cleanedDay];
+    if (selectedDayIndex == null) {
+      throw Exception('Invalid day: $day');
+    }
+
+    dayOffset = (selectedDayIndex - now.weekday + 7) % 7;
+
+    // If the selected day is today and the time is already past, schedule for next week
+    if (dayOffset == 0 && now.hour >= hour) {
+      dayOffset += 7;
+    }
+
+    return DateTime(now.year, now.month, now.day + dayOffset, hour);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var horaires = ["Matin | الصباح", "Midi | الزوال", "Soir | المساء"];
-    var jrs = [
-      'Quotidien | يوميا',
-      'Lundi | الإثنين',
-      'Mardi | الثلاثاء',
-      'Mercredi | الأربعاء',
-      'Jeudi | الخميس',
-      'Vendredi | الجمعة',
-      'Samedi | السبت',
-      'Dimanche | الأحد'
-    ];
-    List<int> nbrC;
-    if (isOneTime) {
-      nbrC = [0, 1];
-    } else {
-      nbrC = [0, 1, 2, 3, 4, 5];
-    }
+    List<int> nbrC = List.generate(widget.maxPrises - widget.minPrises + 1,
+        (index) => index + widget.minPrises);
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: const [
@@ -410,21 +516,24 @@ class MedicamentSection extends StatelessWidget {
             color: Color.fromRGBO(255, 229, 245, 0.2),
             blurRadius: 4,
             spreadRadius: 0.1,
-            offset: Offset(4, 8), // Shadow position
+            offset: Offset(4, 8),
           ),
         ],
-        color: const Color.fromRGBO(255, 229, 245, 0.2),
+        color: const Color.fromARGB(19, 221, 88, 170),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-            width: 1, color: const Color.fromRGBO(255, 180, 252, 0.2)),
+          width: 1,
+          color: const Color.fromARGB(51, 250, 126, 246),
+        ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: Column(
         children: [
           MedicamentCard(
-              medicamentName: medicamentName,
-              imgPath: imgPath,
-              prisesParJour: prisesParJour),
+            medicamentName: widget.medicamentName,
+            imgPath: widget.imgPath,
+            prisesParJour: widget.prisesParJour,
+          ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -439,7 +548,9 @@ class MedicamentSection extends StatelessWidget {
               ),
               DropdownButton<int>(
                 iconEnabledColor: Colors.pink[200],
-                value: nbrPrises,
+                value: (widget.minPrises != 0 && widget.nbrPrises == null)
+                    ? widget.minPrises
+                    : widget.nbrPrises,
                 hint: const Text("---"),
                 items: nbrC.map((int value) {
                   return DropdownMenuItem<int>(
@@ -455,186 +566,428 @@ class MedicamentSection extends StatelessWidget {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  prisesChange(value);
+                  widget.prisesChange(value);
+                  setState(() {
+                    // Reset selected days and times when pill count changes
+                    selectedDays.clear();
+                    selectedTimes.clear();
+                  });
                 },
               )
             ],
           ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+          const SizedBox(height: 20),
+
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: widget.nbrPrises != 0 ? _showPillReminderDialog : null,
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+                backgroundColor: Colors.pinkAccent[200]?.withOpacity(0.7),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                elevation: 3,
+              ),
+              child: const Text(
                 "Fréquence de prise\nموعد الجرعة",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: Color.fromRGBO(126, 126, 126, 1),
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
-              DropdownButton<int>(
-                value: jrsPrises,
-                iconEnabledColor: Colors.pink[200],
-                hint: const Text("---"),
-                alignment: Alignment.center,
-                items: <int>[0, 1, 2, 3, 4, 5, 6, 7].map((int value) {
-                  return DropdownMenuItem<int>(
-                    value: value,
-                    child: Text(
-                      jrs[value],
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color.fromRGBO(126, 126, 126, 1),
-                      ),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  jrsChange(value);
-                },
-              )
-            ],
+            ),
           ),
+
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Horaire de prise\nتوقيت الجرعة",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: Color.fromRGBO(126, 126, 126, 1),
-                ),
+
+          // New Stylish Details Container
+          if (selectedDays.isNotEmpty || selectedTimes.isNotEmpty)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
-              DropdownButton<int>(
-                value: horairePrise,
-                iconEnabledColor: Colors.pink[200],
-                hint: const Text("---"),
-                alignment: Alignment.center,
-                items: <int>[0, 1, 2].map((int value) {
-                  return DropdownMenuItem<int>(
-                    value: value,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Center(
                     child: Text(
-                      horaires[value],
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color.fromRGBO(126, 126, 126, 1),
+                      "Détails de rappel\nتفاصيل التذكير",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.pink,
                       ),
                     ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  horaireChange(value);
-                },
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                var hour = 8;
-                if (horairePrise == 0) {
-                  hour = 8;
-                } else if (horairePrise == 1) {
-                  hour = 12;
-                } else
-                  hour = 17;
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 5),
+                  if (selectedDays.isNotEmpty)
+                    Text(
+                      "Jours - الأيام:\n${selectedDays.join(", ")}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  const Divider(
+                    indent: 80,
+                    endIndent: 80,
+                  ),
+                  if (selectedTimes.isNotEmpty)
+                    Text(
+                      "Heures - التوقيت:\n${selectedTimes.join(", ")}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold),
+                    ),
+                ],
+              ),
+            ),
 
-                var day = jrsPrises;
-                if (jrsPrises == 0) {
-                  if (DateTime.now().hour > hour) {
-                    day = DateTime.now().add(const Duration(days: 1)).day;
-                  } else {
-                    day = DateTime.now().day;
-                  }
-                }
+          const SizedBox(height: 20),
 
-                var nextDate = nextDayOfWeek(day);
-                var finalDate = DateTime(
-                  nextDate.year,
-                  nextDate.month,
-                  nextDate.day,
-                  hour,
-                );
-                _scheduleNotification(
-                    medicamentName,
-                    "Il est temps de prendre vos $medicamentName\n$nbrPrises comprimé(s)\nحان الوقت لتناول $medicamentName\n$nbrPrises أقراص",
-                    medicamentName.hashCode,
-                    finalDate);
-
-                AwesomeDialog(
-                  context: context,
-                  animType: AnimType.leftSlide,
-                  headerAnimationLoop: false,
-                  dialogType: DialogType.success,
-                  showCloseIcon: true,
-                  title: ' ',
-                  desc: 'Rappel enregistré ! \n !تم تسجيل التذكير',
-                  btnOkOnPress: () {
-                    debugPrint('OnClcik');
-                  },
-                  btnOkIcon: Icons.check_circle,
-                  onDismissCallback: (type) {
-                    debugPrint('Dialog Dissmiss from callback $type');
-                  },
-                ).show();
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-                child: Text(
-                  "Enregistrer\nحفض",
-                  textAlign: TextAlign.center,
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: selectedDays.isNotEmpty && selectedTimes.isNotEmpty
+                  ? _scheduleMedication
+                  : null,
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+                backgroundColor: Colors.green[300]?.withOpacity(0.7),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
-              ))
+                elevation: 3,
+              ),
+              child: const Text(
+                "Programmer le rappel\nجدولة التذكير",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+}
 
-  DateTime nextDayOfWeek(int dayOfWeek, [DateTime? from]) {
-    from ??= DateTime.now();
-    int daysToAdd = (dayOfWeek - from.weekday) % 7;
-    daysToAdd = daysToAdd <= 0 ? daysToAdd + 7 : daysToAdd;
-    return from.add(Duration(days: daysToAdd));
+DateTime nextDayOfWeek(int dayOfWeek, [DateTime? from]) {
+  from ??= DateTime.now();
+  int daysToAdd = (dayOfWeek - from.weekday) % 7;
+  daysToAdd = daysToAdd <= 0 ? daysToAdd + 7 : daysToAdd;
+  return from.add(Duration(days: daysToAdd));
+}
+
+void _scheduleNotification(
+  String title,
+  String body,
+  int id,
+  DateTime date,
+) {
+  // Validate the date
+  if (date.isBefore(DateTime.now())) {
+    print("Error: The notification date is in the past.");
+    // Optionally notify the user through the UI
+    return;
   }
 
-  void _scheduleNotification(
-    String title,
-    String body,
-    int id,
-    DateTime date,
-  ) {
-    NotificationSchedule schedule;
+  // Define the notification schedule
+  NotificationSchedule schedule = NotificationCalendar.fromDate(
+    repeats: true, // Set this based on user preference for daily or weekly
+    preciseAlarm: true,
+    allowWhileIdle: true,
+    date: date,
+  );
 
-    schedule = NotificationCalendar.fromDate(
-      repeats: true,
-      preciseAlarm: true,
-      allowWhileIdle: true,
-      date: date,
-    );
+  AwesomeNotifications()
+      .createNotification(
+        content: NotificationContent(
+          category: NotificationCategory.Reminder,
+          displayOnBackground: true,
+          displayOnForeground: true,
+          wakeUpScreen: true,
+          id: id,
+          channelKey: "lupus_notif_channel_key",
+          title: title,
+          body: body,
+        ),
+        schedule: schedule,
+      )
+      .then((value) => print("Notification scheduled: $value"))
+      .catchError((e) {
+    print("Error creating notification: $e");
+    // Optionally show an error message in the UI
+  });
+}
 
-    AwesomeNotifications()
-        .createNotification(
-          content: NotificationContent(
-            category: NotificationCategory.Reminder,
-            displayOnBackground: true,
-            displayOnForeground: true,
-            wakeUpScreen: true,
-            id: id,
-            channelKey: "lupus_notif_channel_key",
-            title: title,
-            body: body,
+class PillReminderDialog extends StatefulWidget {
+  final int pills;
+  final bool isDaily;
+
+  const PillReminderDialog(
+      {super.key, required this.pills, required this.isDaily});
+
+  @override
+  _PillReminderDialogState createState() => _PillReminderDialogState();
+}
+
+class _PillReminderDialogState extends State<PillReminderDialog> {
+  // Bilingual days of the week in French and Arabic
+  List<String> daysOfWeek = [
+    "Lun - الإثنين", // Monday
+    "Mar - الثلاثاء", // Tuesday
+    "Mer - الأربعاء", // Wednesday
+    "Jeu - الخميس", // Thursday
+    "Ven - الجمعة", // Friday
+    "Sam - السبت", // Saturday
+    "Dim - الأحد" // Sunday
+  ];
+
+  List<bool> selectedDays = List.generate(7, (index) => false);
+  bool morningChecked = false;
+  bool noonChecked = false;
+  bool eveningChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isDaily) {
+      // If daily, pre-select all days and disable modification
+      selectedDays = List.generate(7, (index) => true);
+    }
+  }
+
+  // Check if at least one day is selected
+  bool get isDaySelected {
+    return selectedDays.contains(true);
+  }
+
+  // Check if at least one time is selected
+  bool get isTimeSelected {
+    return morningChecked || noonChecked || eveningChecked;
+  }
+
+  // Check if the "Save" button should be enabled
+  bool get isSaveEnabled {
+    return isDaySelected && isTimeSelected;
+  }
+
+  // Check the number of selected days
+  int get selectedDaysCount => selectedDays.where((day) => day).length;
+
+  // Check the number of selected times
+  int get selectedTimesCount {
+    int count = 0;
+    if (morningChecked) count++;
+    if (noonChecked) count++;
+    if (eveningChecked) count++;
+    return count;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Center(
+        child: Text(
+          'Rappel du médicament\nتذكير الدواء',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Days of the week selector (if not daily)
+            if (!widget.isDaily)
+              Wrap(
+                spacing: 5.0,
+                children: List.generate(daysOfWeek.length, (index) {
+                  return ChoiceChip(
+                    label: Text(
+                      daysOfWeek[index],
+                      style: const TextStyle(
+                          fontWeight: FontWeight.normal, fontSize: 16),
+                    ),
+                    selected: selectedDays[index],
+                    onSelected: (bool selected) {
+                      if (selectedDaysCount < widget.pills ||
+                          selectedDays[index]) {
+                        setState(() {
+                          selectedDays[index] = selected;
+                        });
+                      } else {
+                        // If the user exceeds the allowed number of days, show a message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: const Duration(seconds: 2),
+                            content: Text(
+                                'Vous pouvez choisir seulement ${widget.pills} jours\nيمكنك اختيار ${widget.pills} أيام فقط'),
+                          ),
+                        );
+                      }
+                    },
+                  );
+                }),
+              ),
+
+            const SizedBox(height: 10),
+            const Divider(),
+            const SizedBox(height: 10),
+
+            // Morning checkbox (limited by the number of pills)
+            CheckboxListTile(
+              title: const Text(
+                "Matin - صباح",
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+              ),
+              value: morningChecked,
+              onChanged: (bool? value) {
+                if (selectedTimesCount < widget.pills || morningChecked) {
+                  setState(() {
+                    morningChecked = value ?? false;
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: const Duration(seconds: 2),
+                      content: Text(
+                          'Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
+                    ),
+                  );
+                }
+              },
+            ),
+
+            // Noon checkbox (limited by the number of pills)
+            CheckboxListTile(
+              title: const Text(
+                "Midi - الظهر",
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+              ),
+              value: noonChecked,
+              onChanged: (bool? value) {
+                if (selectedTimesCount < widget.pills || noonChecked) {
+                  setState(() {
+                    noonChecked = value ?? false;
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: const Duration(seconds: 2),
+                      content: Text(
+                          'Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
+                    ),
+                  );
+                }
+              },
+            ),
+
+            // Evening checkbox (limited by the number of pills)
+            CheckboxListTile(
+              title: const Text(
+                "Soir - مساء",
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+              ),
+              value: eveningChecked,
+              onChanged: (bool? value) {
+                if (selectedTimesCount < widget.pills || eveningChecked) {
+                  setState(() {
+                    eveningChecked = value ?? false;
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: const Duration(seconds: 2),
+                      content: Text(
+                          'Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+      actionsPadding: const EdgeInsets.only(bottom: 30),
+      actionsAlignment: MainAxisAlignment.spaceEvenly,
+      actions: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)))),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Annuler - إلغاء',
+            style: TextStyle(color: Colors.white),
           ),
-          schedule: schedule,
-        )
-        .then((value) => print("notif value : $value"))
-        .catchError((e) {
-      print("Error creating notification: $e");
-    });
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: pink,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)))),
+          onPressed: isSaveEnabled
+              ? () {
+                  // Prepare the selected days and times for the calling widget
+                  List<String> selectedDaysText = [];
+                  for (int i = 0; i < selectedDays.length; i++) {
+                    if (selectedDays[i]) {
+                      selectedDaysText.add(daysOfWeek[i]);
+                    }
+                  }
+                  List<String> selectedTimesText = [];
+                  if (morningChecked) selectedTimesText.add("Matin - صباح");
+                  if (noonChecked) selectedTimesText.add("Midi - الظهر");
+                  if (eveningChecked) selectedTimesText.add("Soir - مساء");
+
+                  // Show a success message after saving
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(
+                  //     content: Text('Rappel enregistré !\nتم تسجيل التذكير'),
+                  //   ),
+                  // );
+
+                  // Return selected days and times to the calling widget
+                  Navigator.of(context)
+                      .pop([selectedDaysText, selectedTimesText]);
+                }
+              : null,
+          child: const Text(
+            'Enregistrer - حفظ',
+            style: TextStyle(color: Colors.white),
+          ), // Disable button if conditions are not met
+        ),
+      ],
+    );
   }
 }
