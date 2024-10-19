@@ -352,11 +352,12 @@ class MedicamentCard extends StatelessWidget {
               Text(
                 medicamentName,
                 style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
                   color: Color.fromRGBO(126, 126, 126, 1),
                 ),
               ),
+              /*
               Text(
                 prisesParJour,
                 style: const TextStyle(
@@ -365,6 +366,7 @@ class MedicamentCard extends StatelessWidget {
                   color: Color.fromRGBO(126, 126, 126, 1),
                 ),
               ),
+              */
             ],
           ),
         ],
@@ -534,7 +536,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
             imgPath: widget.imgPath,
             prisesParJour: widget.prisesParJour,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
