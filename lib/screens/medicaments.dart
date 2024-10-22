@@ -136,6 +136,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: prisePlaqenil,
                         maxPrises: 2,
+                        daysCount: 7,
                         horaireChange: (value) {
                           setState(() {
                             prisePlaqenil = value ?? 0;
@@ -164,6 +165,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                             "Trois prises par jour\nثلاث جرعات يوميا",
                         horairePrise: priseAzath,
                         maxPrises: 4,
+                        daysCount: 7,
                         horaireChange: (value) {
                           setState(() {
                             priseAzath = value ?? 0;
@@ -193,6 +195,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         horairePrise: priseMetho,
                         minPrises: 4,
                         maxPrises: 8,
+                        daysCount: 7,
+                        isOneDay: true,
                         horaireChange: (value) {
                           setState(() {
                             priseMetho = value ?? 0;
@@ -221,7 +225,9 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         prisesParJour:
                             "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseFoldine,
-                        maxPrises: 5,
+                        maxPrises: 1,
+                        daysCount: 1,
+                        isOneDay: true,
                         horaireChange: (value) {
                           setState(() {
                             priseFoldine = value ?? 0;
@@ -249,6 +255,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: priseMMF,
                         maxPrises: 6,
+                        daysCount: 7,
                         horaireChange: (value) {
                           setState(() {
                             priseMMF = value ?? 0;
@@ -274,44 +281,6 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddMedicament extends StatelessWidget {
-  const AddMedicament({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        border: Border.all(
-          color: const Color.fromRGBO(232, 232, 232, 1),
-          width: 2,
-        ),
-      ),
-      width: 303,
-      padding: const EdgeInsets.all(15),
-      child: Center(
-        child: Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color.fromRGBO(245, 124, 204, 1),
-          ),
-          padding: const EdgeInsets.all(5),
-          // color: Colors.pinkAccent,
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
           ),
         ),
       ),
@@ -357,16 +326,6 @@ class MedicamentCard extends StatelessWidget {
                   color: Color.fromRGBO(126, 126, 126, 1),
                 ),
               ),
-              /*
-              Text(
-                prisesParJour,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Color.fromRGBO(126, 126, 126, 1),
-                ),
-              ),
-              */
             ],
           ),
         ],
@@ -377,10 +336,10 @@ class MedicamentCard extends StatelessWidget {
 
 class MedicamentSection extends StatefulWidget {
   final String medicamentName, imgPath, prisesParJour;
-  final int horairePrise, jrsPrises, maxPrises, minPrises;
+  final int horairePrise, jrsPrises, maxPrises, minPrises, daysCount;
   final int? nbrPrises;
   final Function prisesChange, horaireChange, jrsChange;
-  final bool isOneTime;
+  final bool isOneDay, isOneTime, canbeMultipleTimes;
 
   const MedicamentSection({
     Key? key,
@@ -395,6 +354,9 @@ class MedicamentSection extends StatefulWidget {
     required this.maxPrises,
     this.minPrises = 0,
     this.isOneTime = false,
+    this.canbeMultipleTimes = false,
+    this.daysCount = 7,
+    this.isOneDay = false,
     required this.jrsPrises,
   }) : super(key: key);
 
@@ -413,6 +375,8 @@ class _MedicamentSectionState extends State<MedicamentSection> {
         return PillReminderDialog(
           isDaily: false,
           pills: widget.nbrPrises ?? 0,
+          isOneDay: widget.isOneDay,
+          isMultipleTimes: widget.canbeMultipleTimes,
         );
       },
     );
@@ -511,6 +475,8 @@ class _MedicamentSectionState extends State<MedicamentSection> {
     List<int> nbrC = List.generate(widget.maxPrises - widget.minPrises + 1,
         (index) => index + widget.minPrises);
 
+    if (!nbrC.contains(0)) nbrC.insert(0, 0);
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: const [
@@ -550,15 +516,17 @@ class _MedicamentSectionState extends State<MedicamentSection> {
               ),
               DropdownButton<int>(
                 iconEnabledColor: Colors.pink[200],
-                value: (widget.minPrises != 0 && widget.nbrPrises == null)
-                    ? widget.minPrises
-                    : widget.nbrPrises,
-                hint: const Text("---"),
+                value:
+                    //(widget.minPrises != 0 && widget.nbrPrises == null)
+                    //? widget.minPrises
+                    //:
+                    widget.nbrPrises,
+                hint: const Text("--"),
                 items: nbrC.map((int value) {
                   return DropdownMenuItem<int>(
                     value: value,
                     child: Text(
-                      value.toString(),
+                      value == 0 ? "--" : value.toString(),
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -751,10 +719,17 @@ void _scheduleNotification(
 
 class PillReminderDialog extends StatefulWidget {
   final int pills;
+  int daysCount;
   final bool isDaily;
+  bool isOneDay, isMultipleTimes;
 
-  const PillReminderDialog(
-      {super.key, required this.pills, required this.isDaily});
+  PillReminderDialog(
+      {super.key,
+      required this.pills,
+      required this.isDaily,
+      this.daysCount = 7,
+      this.isMultipleTimes = true,
+      this.isOneDay = false});
 
   @override
   _PillReminderDialogState createState() => _PillReminderDialogState();
@@ -839,7 +814,20 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                     ),
                     selected: selectedDays[index],
                     onSelected: (bool selected) {
-                      if (selectedDaysCount < widget.pills ||
+                      bool daysCondition = (widget.daysCount > widget.pills) &&
+                          (selectedDaysCount < widget.daysCount) &&
+                          !widget.isOneDay;
+
+                      bool pillsCountAndNotOneDay =
+                          ((selectedDaysCount < widget.pills) &&
+                              !widget.isOneDay);
+
+                      bool isOneDayAndNotSelected =
+                          (widget.isOneDay && (selectedDaysCount < 1));
+
+                      if (pillsCountAndNotOneDay ||
+                          isOneDayAndNotSelected ||
+                          daysCondition ||
                           selectedDays[index]) {
                         setState(() {
                           selectedDays[index] = selected;
@@ -871,7 +859,15 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
               ),
               value: morningChecked,
               onChanged: (bool? value) {
-                if (selectedTimesCount < widget.pills || morningChecked) {
+                bool pillsCountAndNotOneDay =
+                    ((selectedTimesCount < widget.pills) &&
+                        !widget.isMultipleTimes);
+                bool isOneDayAndNotSelected =
+                    (widget.isOneDay && (selectedTimesCount < 1));
+
+                if (pillsCountAndNotOneDay ||
+                    isOneDayAndNotSelected ||
+                    morningChecked) {
                   setState(() {
                     morningChecked = value ?? false;
                   });
@@ -895,7 +891,15 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
               ),
               value: noonChecked,
               onChanged: (bool? value) {
-                if (selectedTimesCount < widget.pills || noonChecked) {
+                bool pillsCountAndNotOneDay =
+                    ((selectedTimesCount < widget.pills) &&
+                        !widget.isMultipleTimes);
+                bool isOneDayAndNotSelected =
+                    (widget.isOneDay && (selectedTimesCount < 1));
+
+                if (pillsCountAndNotOneDay ||
+                    isOneDayAndNotSelected ||
+                    noonChecked) {
                   setState(() {
                     noonChecked = value ?? false;
                   });
@@ -919,7 +923,15 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
               ),
               value: eveningChecked,
               onChanged: (bool? value) {
-                if (selectedTimesCount < widget.pills || eveningChecked) {
+                bool pillsCountAndNotOneDay =
+                    ((selectedTimesCount < widget.pills) &&
+                        !widget.isMultipleTimes);
+                bool isOneDayAndNotSelected =
+                    (widget.isOneDay && (selectedTimesCount < 1));
+
+                if (pillsCountAndNotOneDay ||
+                    isOneDayAndNotSelected ||
+                    eveningChecked) {
                   setState(() {
                     eveningChecked = value ?? false;
                   });
