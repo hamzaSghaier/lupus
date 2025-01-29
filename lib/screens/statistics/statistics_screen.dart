@@ -296,7 +296,7 @@ class ChartWidget extends StatelessWidget {
           ),
           SfCartesianChart(
             enableAxisAnimation: true,
-            primaryXAxis: const CategoryAxis(),
+            primaryXAxis:  CategoryAxis(),
             primaryYAxis: NumericAxis(
               interactiveTooltip: const InteractiveTooltip(),
               desiredIntervals: values?.length ?? 10,

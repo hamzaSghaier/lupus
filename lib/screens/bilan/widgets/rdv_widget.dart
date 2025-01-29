@@ -74,7 +74,7 @@ class _RdvWidgetState extends State<RdvWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 10.0),
                           child: Image(
                             image: AssetImage(rdvPlusIcon),
                             height: 60,
@@ -256,7 +256,7 @@ class _RdvWidgetState extends State<RdvWidget> {
     Future<void> selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: widget.rdv?.date,
+        initialDate: widget.rdv?.date ?? DateTime.now(),
         firstDate: DateTime(firstDateYear),
         lastDate: DateTime(lastDateYear),
         builder: (BuildContext context, Widget? child) {
