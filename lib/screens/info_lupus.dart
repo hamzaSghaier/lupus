@@ -28,7 +28,7 @@ class _WebViewPlusExampleMainPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'A propos\nمعلومات',
+        title: 'Informations\nمعلومات',
       ),
       bottomNavigationBar: CustomBottomBar(),
       body: Padding(

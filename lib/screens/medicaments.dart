@@ -3,7 +3,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
@@ -20,8 +19,7 @@ class MedicamentsScreen extends StatefulWidget {
 }
 
 class _MedicamentsScreenState extends State<MedicamentsScreen> {
-  final MedicamentsController medicamentsController =
-      Get.put(MedicamentsController());
+  final MedicamentsController medicamentsController = Get.put(MedicamentsController());
 
   Profile? profile;
   var horaires = ["Matin | الصباح", "Midi | الزوال", "Soir | المساء"];
@@ -93,20 +91,16 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                   mediaQuery: MediaQuery.of(context),
                   name: "${profile?.nom} ${profile?.prenom}",
                   gender: "",
-                  age: (DateTime.now().year -
-                          int.parse(
-                              profile?.dateNaissance.substring(0, 4) ?? '0'))
-                      .toString(),
+                  age: (DateTime.now().year - int.parse(profile?.dateNaissance.substring(0, 4) ?? '0')).toString(),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       MedicamentSection(
-                        prisesParJour:
-                            "Une seule prise par jour\nجرعة واحدة فقط في اليوم",
+                        prisesParJour: "Une seule prise par jour\nجرعة واحدة فقط في اليوم",
                         horairePrise: priseCort,
                         maxPrises: 12,
                         horaireChange: (value) {
@@ -161,8 +155,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour:
-                            "Trois prises par jour\nثلاث جرعات يوميا",
+                        prisesParJour: "Trois prises par jour\nثلاث جرعات يوميا",
                         horairePrise: priseAzath,
                         maxPrises: 4,
                         daysCount: 7,
@@ -190,8 +183,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour:
-                            "Une prise par semaine\nجرعة واحدة في الأسبوع",
+                        prisesParJour: "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseMetho,
                         minPrises: 4,
                         maxPrises: 8,
@@ -222,8 +214,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
-                        prisesParJour:
-                            "Une prise par semaine\nجرعة واحدة في الأسبوع",
+                        prisesParJour: "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseFoldine,
                         maxPrises: 1,
                         daysCount: 1,
@@ -365,6 +356,7 @@ class MedicamentSection extends StatefulWidget {
 }
 
 class _MedicamentSectionState extends State<MedicamentSection> {
+  bool _isScheduled = false; // <--- ADDED
   List<String> selectedDays = [];
   List<String> selectedTimes = [];
 
@@ -391,11 +383,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
   }
 
   void _scheduleMedication() {
-    Map<String, int> timeMapping = {
-      'Matin - صباح': 9,
-      'Midi - الظهر': 12,
-      'Soir - مساء': 19
-    };
+    Map<String, int> timeMapping = {'Matin - صباح': 9, 'Midi - الظهر': 12, 'Soir - مساء': 19};
 
     for (var day in selectedDays) {
       for (var time in selectedTimes) {
@@ -422,7 +410,11 @@ class _MedicamentSectionState extends State<MedicamentSection> {
       showCloseIcon: true,
       title: ' ',
       desc: 'Rappel enregistré ! \n !تم تسجيل التذكير',
-      btnOkOnPress: () {},
+      btnOkOnPress: () {
+        setState(() {
+          _isScheduled = true; // <--- ADDED
+        });
+      },
       btnOkIcon: Icons.check_circle,
     ).show();
   }
@@ -472,8 +464,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
 
   @override
   Widget build(BuildContext context) {
-    List<int> nbrC = List.generate(widget.maxPrises - widget.minPrises + 1,
-        (index) => index + widget.minPrises);
+    List<int> nbrC = List.generate(widget.maxPrises - widget.minPrises + 1, (index) => index + widget.minPrises);
 
     if (!nbrC.contains(0)) nbrC.insert(0, 0);
 
@@ -502,14 +493,14 @@ class _MedicamentSectionState extends State<MedicamentSection> {
             imgPath: widget.imgPath,
             prisesParJour: widget.prisesParJour,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 "Nombre de comprimés\nعدد الأقراص",
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: Color.fromRGBO(126, 126, 126, 1),
                 ),
@@ -546,15 +537,13 @@ class _MedicamentSectionState extends State<MedicamentSection> {
               )
             ],
           ),
-          const SizedBox(height: 20),
 
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: widget.nbrPrises != 0 ? _showPillReminderDialog : null,
               style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
                 backgroundColor: Colors.pinkAccent[200]?.withOpacity(0.7),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
@@ -562,18 +551,16 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                 elevation: 3,
               ),
               child: const Text(
-                "Fréquence de prise\nموعد الجرعة",
+                "Fréquence et horaire de prise\nموعد الجرعة",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
             ),
           ),
-
-          const SizedBox(height: 10),
 
           // New Stylish Details Container
           if (selectedDays.isNotEmpty || selectedTimes.isNotEmpty)
@@ -612,10 +599,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                     Text(
                       "Jours - الأيام:\n${selectedDays.join(", ")}",
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 14, color: Colors.black54, fontWeight: FontWeight.bold),
                     ),
                   const Divider(
                     indent: 80,
@@ -623,42 +607,48 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                   ),
                   if (selectedTimes.isNotEmpty)
                     Text(
-                      "Heures - التوقيت:\n${selectedTimes.join(", ")}",
+                      "Heures - التوقيت:\n${selectedTimes.join(" ")}",
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 14, color: Colors.black54, fontWeight: FontWeight.bold),
                     ),
                 ],
               ),
             ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
 
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: selectedDays.isNotEmpty && selectedTimes.isNotEmpty
-                  ? _scheduleMedication
-                  : null,
+              onPressed: selectedDays.isNotEmpty && selectedTimes.isNotEmpty ? _scheduleMedication : null,
               style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-                backgroundColor: Colors.green[300]?.withOpacity(0.7),
+                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+                backgroundColor:_isScheduled? Colors.black?.withOpacity(0.7): Colors.black?.withOpacity(0.7),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 elevation: 3,
               ),
-              child: const Text(
-                "Programmer le rappel\nجدولة التذكير",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+
+                  const Text(
+                    "Programmer le rappel\nجدولة التذكير",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  if (_isScheduled) // <--- ADDED
+                    const Padding(
+                      padding: EdgeInsets.only(left: 12.0),
+                      child: Icon(Icons.check_circle, color: Colors.green),
+                    ),
+                ],
               ),
             ),
           ),
@@ -723,13 +713,7 @@ class PillReminderDialog extends StatefulWidget {
   final bool isDaily;
   bool isOneDay, isMultipleTimes;
 
-  PillReminderDialog(
-      {super.key,
-      required this.pills,
-      required this.isDaily,
-      this.daysCount = 7,
-      this.isMultipleTimes = true,
-      this.isOneDay = false});
+  PillReminderDialog({super.key, required this.pills, required this.isDaily, this.daysCount = 7, this.isMultipleTimes = true, this.isOneDay = false});
 
   @override
   _PillReminderDialogState createState() => _PillReminderDialogState();
@@ -809,26 +793,17 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                   return ChoiceChip(
                     label: Text(
                       daysOfWeek[index],
-                      style: const TextStyle(
-                          fontWeight: FontWeight.normal, fontSize: 16),
+                      style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
                     ),
                     selected: selectedDays[index],
                     onSelected: (bool selected) {
-                      bool daysCondition = (widget.daysCount > widget.pills) &&
-                          (selectedDaysCount < widget.daysCount) &&
-                          !widget.isOneDay;
+                      bool daysCondition = (widget.daysCount > widget.pills) && (selectedDaysCount < widget.daysCount) && !widget.isOneDay;
 
-                      bool pillsCountAndNotOneDay =
-                          ((selectedDaysCount < widget.pills) &&
-                              !widget.isOneDay);
+                      bool pillsCountAndNotOneDay = ((selectedDaysCount < widget.pills) && !widget.isOneDay);
 
-                      bool isOneDayAndNotSelected =
-                          (widget.isOneDay && (selectedDaysCount < 1));
+                      bool isOneDayAndNotSelected = (widget.isOneDay && (selectedDaysCount < 1));
 
-                      if (pillsCountAndNotOneDay ||
-                          isOneDayAndNotSelected ||
-                          daysCondition ||
-                          selectedDays[index]) {
+                      if (pillsCountAndNotOneDay || isOneDayAndNotSelected || daysCondition || selectedDays[index]) {
                         setState(() {
                           selectedDays[index] = selected;
                         });
@@ -837,8 +812,7 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             duration: const Duration(seconds: 2),
-                            content: Text(
-                                'Vous pouvez choisir seulement ${widget.pills} jours\nيمكنك اختيار ${widget.pills} أيام فقط'),
+                            content: Text('Vous pouvez choisir seulement ${widget.pills} jours\nيمكنك اختيار ${widget.pills} أيام فقط'),
                           ),
                         );
                       }
@@ -854,20 +828,15 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
             // Morning checkbox (limited by the number of pills)
             CheckboxListTile(
               title: const Text(
-                "Matin - صباح",
-                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                " 09:00 Matin - صباح ",
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
               ),
               value: morningChecked,
               onChanged: (bool? value) {
-                bool pillsCountAndNotOneDay =
-                    ((selectedTimesCount < widget.pills) &&
-                        !widget.isMultipleTimes);
-                bool isOneDayAndNotSelected =
-                    (widget.isOneDay && (selectedTimesCount < 1));
+                bool pillsCountAndNotOneDay = ((selectedTimesCount < widget.pills) && !widget.isMultipleTimes);
+                bool isOneDayAndNotSelected = (widget.isOneDay && (selectedTimesCount < 1));
 
-                if (pillsCountAndNotOneDay ||
-                    isOneDayAndNotSelected ||
-                    morningChecked) {
+                if (pillsCountAndNotOneDay || isOneDayAndNotSelected || morningChecked) {
                   setState(() {
                     morningChecked = value ?? false;
                   });
@@ -875,8 +844,7 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       duration: const Duration(seconds: 2),
-                      content: Text(
-                          'Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
+                      content: Text('Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
                     ),
                   );
                 }
@@ -886,20 +854,15 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
             // Noon checkbox (limited by the number of pills)
             CheckboxListTile(
               title: const Text(
-                "Midi - الظهر",
-                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                "12:00 Midi - الظهر",
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
               ),
               value: noonChecked,
               onChanged: (bool? value) {
-                bool pillsCountAndNotOneDay =
-                    ((selectedTimesCount < widget.pills) &&
-                        !widget.isMultipleTimes);
-                bool isOneDayAndNotSelected =
-                    (widget.isOneDay && (selectedTimesCount < 1));
+                bool pillsCountAndNotOneDay = ((selectedTimesCount < widget.pills) && !widget.isMultipleTimes);
+                bool isOneDayAndNotSelected = (widget.isOneDay && (selectedTimesCount < 1));
 
-                if (pillsCountAndNotOneDay ||
-                    isOneDayAndNotSelected ||
-                    noonChecked) {
+                if (pillsCountAndNotOneDay || isOneDayAndNotSelected || noonChecked) {
                   setState(() {
                     noonChecked = value ?? false;
                   });
@@ -907,8 +870,7 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       duration: const Duration(seconds: 2),
-                      content: Text(
-                          'Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
+                      content: Text('Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
                     ),
                   );
                 }
@@ -918,20 +880,15 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
             // Evening checkbox (limited by the number of pills)
             CheckboxListTile(
               title: const Text(
-                "Soir - مساء",
-                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                "19:00 Soir - مساء",
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
               ),
               value: eveningChecked,
               onChanged: (bool? value) {
-                bool pillsCountAndNotOneDay =
-                    ((selectedTimesCount < widget.pills) &&
-                        !widget.isMultipleTimes);
-                bool isOneDayAndNotSelected =
-                    (widget.isOneDay && (selectedTimesCount < 1));
+                bool pillsCountAndNotOneDay = ((selectedTimesCount < widget.pills) && !widget.isMultipleTimes);
+                bool isOneDayAndNotSelected = (widget.isOneDay && (selectedTimesCount < 1));
 
-                if (pillsCountAndNotOneDay ||
-                    isOneDayAndNotSelected ||
-                    eveningChecked) {
+                if (pillsCountAndNotOneDay || isOneDayAndNotSelected || eveningChecked) {
                   setState(() {
                     eveningChecked = value ?? false;
                   });
@@ -939,8 +896,7 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       duration: const Duration(seconds: 2),
-                      content: Text(
-                          'Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
+                      content: Text('Vous pouvez choisir seulement ${widget.pills} créneaux horaires\nيمكنك اختيار ${widget.pills} توقيتات فقط'),
                     ),
                   );
                 }
@@ -954,9 +910,7 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
       actions: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15)))),
+              backgroundColor: Colors.red, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -967,9 +921,7 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: pink,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15)))),
+              backgroundColor: Colors.green, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
           onPressed: isSaveEnabled
               ? () {
                   // Prepare the selected days and times for the calling widget
@@ -980,9 +932,9 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                     }
                   }
                   List<String> selectedTimesText = [];
-                  if (morningChecked) selectedTimesText.add("Matin - صباح");
-                  if (noonChecked) selectedTimesText.add("Midi - الظهر");
-                  if (eveningChecked) selectedTimesText.add("Soir - مساء");
+                  if (morningChecked) selectedTimesText.add(" 09:00 Matin - صباح \n ");
+                  if (noonChecked) selectedTimesText.add(" 12:00 Midi - الظهر \n ");
+                  if (eveningChecked) selectedTimesText.add(" 19:00 Soir - مساء \n ");
 
                   // Show a success message after saving
                   // ScaffoldMessenger.of(context).showSnackBar(
@@ -992,8 +944,7 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                   // );
 
                   // Return selected days and times to the calling widget
-                  Navigator.of(context)
-                      .pop([selectedDaysText, selectedTimesText]);
+                  Navigator.of(context).pop([selectedDaysText, selectedTimesText]);
                 }
               : null,
           child: const Text(

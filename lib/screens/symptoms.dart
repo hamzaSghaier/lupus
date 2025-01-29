@@ -6,8 +6,9 @@ import 'package:get/get.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/entity/symptome.dart';
+import 'package:lupus_app/screens/bilan/widgets/expanded_widget/humeur_icons_slider.dart';
 import 'package:lupus_app/shared/file_service.dart';
-import 'package:reviews_slider/reviews_slider.dart';
+
 
 class SymptomsController extends GetxController {
   var fatigue = 0.0.obs;
@@ -25,55 +26,25 @@ class SymptomsScreen extends StatefulWidget {
 }
 
 class _SymptomsScreenState extends State<SymptomsScreen> {
-  final List<String> symptoms = [
-    "Fatigue",
-    "Arthralgies",
-    "Autonomie(Vie Quotidienne)",
-    "Humeur (Echelle Visages)",
-    "Activité physique (nombre de pas)"
-  ];
+  final List<String> symptoms = ["Fatigue", "Arthralgies", "النشاط اليومي", "المزاج", "جودة النوم"];
 
-  // late int selectedValue1 = 1;
   int _selectedValueHumeur = 0;
   int _selectedAutonomieValue = 0;
   int _selectedSomeilValue = 1;
   double _selectedFatigueValue = 0;
   double _selectedArthralgieValue = 0;
+
   bool isEditing = false;
   bool canEdit = false;
   bool saved = false;
-  // void onChange1(int value) {
-  //   setState(() {
-  //     selectedValue1 = value;
-  //   });
-  // }
-
-  void onChange2(int value) {
-    setState(() {
-      _selectedValueHumeur = value;
-    });
-  }
 
   List<bool> _selectedAutonomie = <bool>[true, false, false];
   List<bool> _selectedSommeil = <bool>[true, false, false];
+
   TextEditingController noteController = TextEditingController();
-  List<Widget> autonomie = <Widget>[
-    const Text('Peu d\'activité \n   نشاط قليل', textAlign: TextAlign.center),
-    const Text('Intermédiaire \n  نشاط وسط', textAlign: TextAlign.center),
-    const Text('Normale \n  نشاط عادي', textAlign: TextAlign.center)
-  ];
 
-  List<Widget> sommeil = <Widget>[
-    const Text(
-      'Mauvaise \n سيئة',
-      textAlign: TextAlign.center,
-    ),
-    const Text('Moyenne \n  متوسطة', textAlign: TextAlign.center),
-    const Text('Bonne \n  جيدة', textAlign: TextAlign.center)
-  ];
-
-  late ThemeData theme;
-  bool vertical = false;
+  /// Colors for the mood (Red → Orange → Yellow → LightGreen → Green)
+  final List<Color> _moodColors = [Colors.red, Colors.orange, Colors.amber, Colors.lightGreen, Colors.green];
 
   bool areDatesOnSameDay(DateTime? date1, DateTime? date2) {
     if (date1 == null || date2 == null) return false;
@@ -82,8 +53,6 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    theme = Theme.of(context);
-
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
@@ -111,149 +80,178 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
 
                 noteController.text = latestSymptomes.data?.remarque.value ?? "";
               }
+
               return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  /// Absorb user input if not editing and data is for today
                   AbsorbPointer(
-                    absorbing: !isEditing && areDatesOnSameDay(latestSymptomes.data?.createdAt, DateTime.now()),
+                    absorbing: (!isEditing && areDatesOnSameDay(latestSymptomes.data?.createdAt, DateTime.now())),
                     child: Column(
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            const TitleOfSlider(
-                              titleAr: 'درجة التعب',
-                              titleFr: 'La fatigue',
-                            ),
-                            const SizedBox(height: 10),
-                            Column(
-                              children: [
-                                Slider(
-                                  value: _selectedFatigueValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedFatigueValue = value;
-                                    });
-                                  },
-                                  min: 0,
-                                  max: 10,
-                                  divisions: 10,
-                                  label: _selectedFatigueValue.round().toString(),
-                                ),
-                                const SizedBox(height: 20),
-                              ],
-                            ),
-                            // CustomSlider(
-                            //   sliderName: symptoms[0],
-                            //   sliderValue: _selectedFatigueValue,
-                            // ),
-                          ],
+                        //===== FATIGUE =====
+                        const TitleOfSlider(
+                          titleAr: 'درجة التعب',
+                          titleFr: 'La fatigue',
+                        ),
+                        Text(
+                          _selectedFatigueValue.round().toString(),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                        Slider(
+                          value: _selectedFatigueValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedFatigueValue = value;
+                            });
+                          },
+                          min: 0,
+                          max: 10,
+                          divisions: 10,
+                          label: _selectedFatigueValue.round().toString(),
                         ),
 
                         const SizedBox(height: 10),
+
+                        //===== ARTHRALGIES =====
                         const TitleOfSlider(
-                          titleAr: 'ألم مفصلي',
                           titleFr: 'Les arthralgies',
+                          titleAr: 'ألم مفصلي',
                         ),
-                        Column(
-                          children: [
-                            Slider(
-                              value: _selectedArthralgieValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedArthralgieValue = value;
-                                });
-                              },
-                              min: 0,
-                              max: 10,
-                              divisions: 10,
-                              label: _selectedArthralgieValue.round().toString(),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
+                        Text(
+                          _selectedArthralgieValue.round().toString(),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey,
+                          ),
                         ),
-                        // CustomSlider(
-                        //   sliderName: symptoms[1],
-                        //   sliderValue: _selectedArthralgieValue,
-                        // ),
+                        Slider(
+                          value: _selectedArthralgieValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedArthralgieValue = value;
+                            });
+                          },
+                          min: 0,
+                          max: 10,
+                          divisions: 10,
+                          label: _selectedArthralgieValue.round().toString(),
+                        ),
+
                         const SizedBox(height: 10),
+
+                        //===== HUMEUR =====
                         const TitleOfSlider(
-                          titleAr: 'المزاج',
                           titleFr: 'Humeur',
+                          titleAr: 'المزاج',
                         ),
                         const SizedBox(height: 10),
                         ReviewSlider(
-                            optionStyle: const TextStyle(color: Colors.pink, fontWeight: FontWeight.bold, fontSize: 14),
-                            circleDiameter: 60,
-                            onChange: onChange2,
-                            initialValue: _selectedValueHumeur,
-                            options: const ['Terrible', 'Mauvais', 'Moyen', 'Bon', 'Génial']),
+                          optionStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          circleDiameter: 60,
+                          onChange: (index) {
+                            setState(() {
+                              _selectedValueHumeur = index;
+                            });
+                          },
+                          initialValue: _selectedValueHumeur,
+                          options: const ['Terrible', 'Mauvais', 'Moyen', 'Bon', 'Génial'],
+                          // activeColor: _moodColors[_selectedValueHumeur.clamp(0, 4)],
+                        ),
+
                         const SizedBox(height: 20),
+
+                        //===== AUTONOMIE =====
                         const TitleOfSlider(
-                          titleAr: 'نشاط يومي',
                           titleFr: 'L’autonomie',
+                          titleAr: 'النشاط اليومي',
                         ),
                         const SizedBox(height: 10),
                         ToggleButtons(
-                          direction: vertical ? Axis.vertical : Axis.horizontal,
                           onPressed: (int index) {
                             setState(() {
-                              // The button that is tapped is set to true, and the others to false.
                               _selectedAutonomieValue = index;
                               for (int i = 0; i < _selectedAutonomie.length; i++) {
                                 _selectedAutonomie[i] = i == index;
                               }
                             });
                           },
-                          textStyle: theme.textTheme.headlineSmall,
                           borderRadius: const BorderRadius.all(Radius.circular(8)),
-                          selectedBorderColor: Colors.red[700],
+                          selectedBorderColor: Colors.red,
                           selectedColor: Colors.white,
-                          fillColor: Colors.red[200],
-                          color: Colors.red[400],
+                          fillColor: Colors.redAccent,
+                          color: Colors.red,
+                          textStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                           constraints: const BoxConstraints(
                             minHeight: 60.0,
-                            minWidth: 100.0,
+                            minWidth: 90.0,
                           ),
                           isSelected: _selectedAutonomie,
-                          children: autonomie,
+                          children: const [
+                            Text(
+                              'Peu d\'activité\nنشاط قليل',
+                              textAlign: TextAlign.center,
+                            ),
+                            Text('Intermédiaire\nنشاط وسط', textAlign: TextAlign.center),
+                            Text('Normale\nنشاط عادي', textAlign: TextAlign.center),
+                          ],
                         ),
 
                         const SizedBox(height: 20),
+
+                        //===== SOMMEIL =====
                         const TitleOfSlider(
-                          titleAr: '  جودة نومك',
-                          titleFr: 'Sommeil',
+                          titleFr: 'La qualité du sommeil',
+                          titleAr: 'جودة النوم',
                         ),
                         const SizedBox(height: 10),
                         ToggleButtons(
-                          direction: vertical ? Axis.vertical : Axis.horizontal,
                           onPressed: (int index) {
                             setState(() {
-                              // The button that is tapped is set to true, and the others to false.
                               _selectedSomeilValue = index;
                               for (int i = 0; i < _selectedSommeil.length; i++) {
                                 _selectedSommeil[i] = i == index;
                               }
                             });
                           },
-                          textStyle: theme.textTheme.headlineSmall,
                           borderRadius: const BorderRadius.all(Radius.circular(8)),
-                          selectedBorderColor: Colors.red[700],
+                          selectedBorderColor: Colors.red,
                           selectedColor: Colors.white,
-                          fillColor: Colors.red[200],
-                          color: Colors.red[400],
+                          fillColor: Colors.redAccent,
+                          color: Colors.red,
                           constraints: const BoxConstraints(
                             minHeight: 60.0,
-                            minWidth: 100.0,
+                            minWidth: 80.0,
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                           ),
                           isSelected: _selectedSommeil,
-                          children: sommeil,
+                          children: const [
+                            Text('Mauvaise\nسيئة', textAlign: TextAlign.center),
+                            Text('Moyenne\nمتوسطة', textAlign: TextAlign.center),
+                            Text('Bonne\nجيدة', textAlign: TextAlign.center),
+                          ],
                         ),
 
                         const SizedBox(height: 20),
+
+                        //===== REMARQUES =====
                         const TitleOfSlider(
-                          titleAr: 'ملاحظات',
                           titleFr: 'Remarques',
+                          titleAr: 'ملاحظات',
                         ),
                         const SizedBox(height: 10),
                         TextFormField(
@@ -261,161 +259,228 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                           style: const TextStyle(fontSize: 14),
                           maxLines: 3,
                           decoration: const InputDecoration(border: OutlineInputBorder()),
-                        )
+                        ),
                       ],
                     ),
                   ),
-                  (!areDatesOnSameDay(latestSymptomes.data?.createdAt, DateTime.now()) || isEditing)
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.pink,
-                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
-                            onPressed: () async {
-                              if (isEditing) {
+
+                  const SizedBox(height: 25),
+
+                  //===== BUTTONS =====
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // If not same day or we are editing => Show ENREGISTRER (green)
+                      (!areDatesOnSameDay(latestSymptomes.data?.createdAt, DateTime.now()) || isEditing)
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              onPressed: () async {
                                 DateTime now = DateTime.now();
 
-                                var fatigue = SymptomeData(value: _selectedFatigueValue.round(), date: now);
-                                await FileService.updateFile("fatigue.txt", jsonEncode(fatigue.toJson()));
-                                var arthralgies = SymptomeData(value: _selectedArthralgieValue.round(), date: now);
-                                await FileService.updateFile("arthralgies.txt", jsonEncode(arthralgies.toJson()));
-                                var autonomie = SymptomeData(value: _selectedAutonomieValue, date: now);
-                                await FileService.updateFile("autonomie.txt", jsonEncode(autonomie.toJson()));
-                                var humeur = SymptomeData(value: _selectedValueHumeur, date: now);
-                                await FileService.updateFile("humeur.txt", jsonEncode(humeur.toJson()));
-                                var sommeil = SymptomeData(value: _selectedSomeilValue, date: now);
-                                await FileService.updateFile("sommeil.txt", jsonEncode(sommeil.toJson()));
-
-                                var remarque = Remarque(value: noteController.text, date: now);
-                                await FileService.updateFile("remarques.txt", jsonEncode(remarque.toJson()));
+                                var fatigue = SymptomeData(
+                                  value: _selectedFatigueValue.round(),
+                                  date: now,
+                                );
+                                var arthralgies = SymptomeData(
+                                  value: _selectedArthralgieValue.round(),
+                                  date: now,
+                                );
+                                var autonomie = SymptomeData(
+                                  value: _selectedAutonomieValue,
+                                  date: now,
+                                );
+                                var humeur = SymptomeData(
+                                  value: _selectedValueHumeur,
+                                  date: now,
+                                );
+                                var sommeil = SymptomeData(
+                                  value: _selectedSomeilValue,
+                                  date: now,
+                                );
+                                var remarksValue = noteController.text.trim();
+                                var remarque = Remarque(
+                                  value: remarksValue.isEmpty ? '' : remarksValue,
+                                  date: now,
+                                );
 
                                 var symptome = Symptome(
-                                    fatigue: fatigue,
-                                    arthralgies: arthralgies,
-                                    autonomie: autonomie,
-                                    humeur: humeur,
-                                    sommeil: sommeil,
-                                    remarque: remarque,
-                                    createdAt: now,
-                                    updatedAt: now);
+                                  fatigue: fatigue,
+                                  arthralgies: arthralgies,
+                                  autonomie: autonomie,
+                                  humeur: humeur,
+                                  sommeil: sommeil,
+                                  remarque: remarque,
+                                  createdAt: now,
+                                  updatedAt: now,
+                                );
 
-                                await FileService.updatelatestSymptomes(symptome);
+                                if (isEditing) {
+                                  await FileService.updateFile("fatigue.txt", jsonEncode(fatigue.toJson()));
+                                  await FileService.updateFile("arthralgies.txt", jsonEncode(arthralgies.toJson()));
+                                  await FileService.updateFile("autonomie.txt", jsonEncode(autonomie.toJson()));
+                                  await FileService.updateFile("humeur.txt", jsonEncode(humeur.toJson()));
+                                  await FileService.updateFile("sommeil.txt", jsonEncode(sommeil.toJson()));
+                                  await FileService.updateFile("remarques.txt", jsonEncode(remarque.toJson()));
+                                  await FileService.updatelatestSymptomes(symptome);
+                                  await FileService.updatelatestSymptomes(symptome);
+                                  setState(() {
+                                    saved = true;
+                                    isEditing = false;
+                                  });
+                                  // ignore: use_build_context_synchronously
+                                  AwesomeDialog(
+                                    context: context,
+                                    animType: AnimType.leftSlide,
+                                    headerAnimationLoop: false,
+                                    dialogType: DialogType.success,
+                                    showCloseIcon: true,
+                                    title: ' ',
+                                    desc: 'Les données ont été modifiées avec succès \n تم تعديل المعطيات بنجاح',
+                                    btnOkOnPress: () {
+                                      debugPrint('OnClcik');
+                                    },
+                                    btnOkIcon: Icons.check_circle,
+                                    onDismissCallback: (type) {
+                                      debugPrint('Dialog Dissmiss from callback $type');
+                                    },
+                                  ).show();
+                                  await FileService.updatelatestSymptomes(symptome);
+                                  setState(() {
+                                    saved = true;
+                                    isEditing = false;
+                                  });
+                                  // ignore: use_build_context_synchronously
+                                  // AwesomeDialog(
+                                  //   context: context,
+                                  //   animType: AnimType.leftSlide,
+                                  //   headerAnimationLoop: false,
+                                  //   dialogType: DialogType.success,
+                                  //   showCloseIcon: true,
+                                  //   title: ' ',
+                                  //   desc: 'Les données ont été modifiées avec succès \n تم تعديل المعطيات بنجاح',
+                                  //   btnOkOnPress: () {
+                                  //     debugPrint('OnClcik');
+                                  //   },
+                                  //   btnOkIcon: Icons.check_circle,
+                                  //   onDismissCallback: (type) {
+                                  //     debugPrint('Dialog Dissmiss from callback $type');
+                                  //   },
+                                  // ).show();
+                                } else {
+                                  DateTime now = DateTime.now();
+
+                                  var fatigue = SymptomeData(value: _selectedFatigueValue.round(), date: now);
+                                  await FileService.writeFile("fatigue.txt", jsonEncode(fatigue.toJson()));
+                                  var arthralgies = SymptomeData(value: _selectedArthralgieValue.round(), date: now);
+                                  await FileService.writeFile("arthralgies.txt", jsonEncode(arthralgies.toJson()));
+                                  var autonomie = SymptomeData(value: _selectedAutonomieValue, date: now);
+                                  await FileService.writeFile("autonomie.txt", jsonEncode(autonomie.toJson()));
+                                  var humeur = SymptomeData(value: _selectedValueHumeur, date: now);
+                                  await FileService.writeFile("humeur.txt", jsonEncode(humeur.toJson()));
+                                  var sommeil = SymptomeData(value: _selectedSomeilValue, date: now);
+                                  await FileService.writeFile("sommeil.txt", jsonEncode(sommeil.toJson()));
+                                  var remarque = Remarque(value: noteController.text, date: now);
+                                  await FileService.writeFile("remarques.txt", jsonEncode(remarque.toJson()));
+
+                                  var symptome = Symptome(
+                                      fatigue: fatigue,
+                                      arthralgies: arthralgies,
+                                      autonomie: autonomie,
+                                      humeur: humeur,
+                                      sommeil: sommeil,
+                                      remarque: remarque,
+                                      createdAt: now,
+                                      updatedAt: now);
+                                  FileService.writeFile("symptomes_log.txt", jsonEncode(symptome.toJson()));
+                                  setState(() {
+                                    saved = true;
+                                    canEdit = true;
+                                  });
+                                  // ignore: use_build_context_synchronously
+                                  AwesomeDialog(
+                                    context: context,
+                                    animType: AnimType.leftSlide,
+                                    headerAnimationLoop: false,
+                                    dialogType: DialogType.success,
+                                    showCloseIcon: true,
+                                    title: ' ',
+                                    desc: 'Les données ont été enregistrées avec succès \n تم تسجيل المعطيات بنجاح',
+                                    btnOkOnPress: () {},
+                                    btnOkIcon: Icons.check_circle,
+                                    onDismissCallback: (type) {
+                                      debugPrint('Dialog Dissmiss from callback $type');
+                                    },
+                                  ).show();
+                                }
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.save_sharp, color: Colors.white),
+                                  SizedBox(width: 6),
+                                  Text("Enregistrer  تسجيل", style: TextStyle(color: Colors.white)),
+                                ],
+                              ),
+                            )
+                          : Container(),
+
+                      // If it's the same day and not editing => show Modifier (blue)
+                      areDatesOnSameDay(latestSymptomes.data?.createdAt, DateTime.now()) && !isEditing
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              onPressed: () {
                                 setState(() {
-                                  saved = true;
+                                  isEditing = true;
+                                });
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.edit, color: Colors.white),
+                                  SizedBox(width: 6),
+                                  Text("Modifier  تعديل", style: TextStyle(color: Colors.white)),
+                                ],
+                              ),
+                            )
+                          : Container(),
+
+                      // If editing => show Annuler (red)
+                      isEditing
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
                                   isEditing = false;
                                 });
-                                // ignore: use_build_context_synchronously
-                                AwesomeDialog(
-                                  context: context,
-                                  animType: AnimType.leftSlide,
-                                  headerAnimationLoop: false,
-                                  dialogType: DialogType.success,
-                                  showCloseIcon: true,
-                                  title: ' ',
-                                  desc: 'Les données ont été modifiées avec succès \n تم تعديل المعطيات بنجاح',
-                                  btnOkOnPress: () {
-                                    debugPrint('OnClcik');
-                                  },
-                                  btnOkIcon: Icons.check_circle,
-                                  onDismissCallback: (type) {
-                                    debugPrint('Dialog Dissmiss from callback $type');
-                                  },
-                                ).show();
-                              } else {
-                                DateTime now = DateTime.now();
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.cancel, color: Colors.white),
+                                  SizedBox(width: 6),
+                                  Text("Annuler  إلغاء", style: TextStyle(color: Colors.white)),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
 
-                                var fatigue = SymptomeData(value: _selectedFatigueValue.round(), date: now);
-                                await FileService.writeFile("fatigue.txt", jsonEncode(fatigue.toJson()));
-                                var arthralgies = SymptomeData(value: _selectedArthralgieValue.round(), date: now);
-                                await FileService.writeFile("arthralgies.txt", jsonEncode(arthralgies.toJson()));
-                                var autonomie = SymptomeData(value: _selectedAutonomieValue, date: now);
-                                await FileService.writeFile("autonomie.txt", jsonEncode(autonomie.toJson()));
-                                var humeur = SymptomeData(value: _selectedValueHumeur, date: now);
-                                await FileService.writeFile("humeur.txt", jsonEncode(humeur.toJson()));
-                                var sommeil = SymptomeData(value: _selectedSomeilValue, date: now);
-                                await FileService.writeFile("sommeil.txt", jsonEncode(sommeil.toJson()));
-                                var remarque = Remarque(value: noteController.text, date: now);
-                                await FileService.writeFile("remarques.txt", jsonEncode(remarque.toJson()));
-
-                                var symptome = Symptome(
-                                    fatigue: fatigue,
-                                    arthralgies: arthralgies,
-                                    autonomie: autonomie,
-                                    humeur: humeur,
-                                    sommeil: sommeil,
-                                    remarque: remarque,
-                                    createdAt: now,
-                                    updatedAt: now);
-                                FileService.writeFile("symptomes_log.txt", jsonEncode(symptome.toJson()));
-                                setState(() {
-                                  saved = true;
-                                  canEdit = true;
-                                });
-                                // ignore: use_build_context_synchronously
-                                AwesomeDialog(
-                                  context: context,
-                                  animType: AnimType.leftSlide,
-                                  headerAnimationLoop: false,
-                                  dialogType: DialogType.success,
-                                  showCloseIcon: true,
-                                  title: ' ',
-                                  desc: 'Les données ont été enregistrées avec succès \n تم تسجيل المعطيات بنجاح',
-                                  btnOkOnPress: () {},
-                                  btnOkIcon: Icons.check_circle,
-                                  onDismissCallback: (type) {
-                                    debugPrint('Dialog Dissmiss from callback $type');
-                                  },
-                                ).show();
-                              }
-                            },
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Icon(
-                                    Icons.save_sharp,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  "Enregistrer  قم بتسجيل ",
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.pink,
-                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
-                            onPressed: () async {
-                              setState(() {
-                                isEditing = true;
-                              });
-                            },
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  "Modifier  قم بالتعديل ",
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
                   const SizedBox(height: 50),
                 ],
               );
@@ -428,18 +493,15 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
 }
 
 class TitleOfSlider extends StatelessWidget {
-  const TitleOfSlider({
-    super.key,
-    required this.titleFr,
-    required this.titleAr,
-  });
+  const TitleOfSlider({super.key, required this.titleFr, required this.titleAr});
+
   final String titleFr;
   final String titleAr;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 20, right: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -449,11 +511,16 @@ class TitleOfSlider extends StatelessWidget {
             style: const TextStyle(
               color: Colors.black,
               fontSize: 15,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Text(
             titleAr,
-            style: const TextStyle(color: Colors.black, fontSize: 15),
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
