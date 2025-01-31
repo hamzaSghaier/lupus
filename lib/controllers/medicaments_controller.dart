@@ -61,6 +61,18 @@ class MedicamentsController extends GetxController {
       initialDate: corticioidesDate.value,
       firstDate: DateTime.now(),
       lastDate: DateTime(lastDateYear),
+          builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            textTheme: const TextTheme(
+              headlineMedium: TextStyle(fontSize: 12.0), // Selected date text
+              titleMedium: TextStyle(fontSize: 13.0), // Calendar header text
+              bodyMedium: TextStyle(fontSize: 12.0), // Calendar days
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null && picked != corticioidesDate.value) {
@@ -84,8 +96,7 @@ class MedicamentsController extends GetxController {
     );
 
     if (picked != null && picked != plaquenilDate1.value) {
-      plaquenilDate1.value =
-          TimeOfDay(hour: picked.hour, minute: picked.minute);
+      plaquenilDate1.value = TimeOfDay(hour: picked.hour, minute: picked.minute);
 
       _scheduleNotification(
         "Plaquenil",
@@ -105,8 +116,7 @@ class MedicamentsController extends GetxController {
     );
 
     if (picked != null && picked != plaquenilDate2.value) {
-      plaquenilDate2.value =
-          TimeOfDay(hour: picked.hour, minute: picked.minute);
+      plaquenilDate2.value = TimeOfDay(hour: picked.hour, minute: picked.minute);
 
       _scheduleNotification(
         "Plaquenil",
@@ -126,8 +136,7 @@ class MedicamentsController extends GetxController {
     );
 
     if (picked != null && picked != azathioprineDate1.value) {
-      azathioprineDate1.value =
-          TimeOfDay(hour: picked.hour, minute: picked.minute);
+      azathioprineDate1.value = TimeOfDay(hour: picked.hour, minute: picked.minute);
 
       _scheduleNotification(
         "Azathioprine",
@@ -147,8 +156,7 @@ class MedicamentsController extends GetxController {
     );
 
     if (picked != null && picked != azathioprineDate2.value) {
-      azathioprineDate2.value =
-          TimeOfDay(hour: picked.hour, minute: picked.minute);
+      azathioprineDate2.value = TimeOfDay(hour: picked.hour, minute: picked.minute);
 
       _scheduleNotification(
         "Azathioprine",
@@ -168,8 +176,7 @@ class MedicamentsController extends GetxController {
     );
 
     if (picked != null && picked != azathioprineDate3.value) {
-      azathioprineDate3.value =
-          TimeOfDay(hour: picked.hour, minute: picked.minute);
+      azathioprineDate3.value = TimeOfDay(hour: picked.hour, minute: picked.minute);
 
       _scheduleNotification(
         "Azathioprine",
@@ -188,6 +195,18 @@ class MedicamentsController extends GetxController {
       initialDate: methotrexateDate.value,
       firstDate: DateTime.now(),
       lastDate: DateTime(lastDateYear),
+          builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            textTheme: const TextTheme(
+              headlineMedium: TextStyle(fontSize: 12.0), // Selected date text
+              titleMedium: TextStyle(fontSize: 13.0), // Calendar header text
+              bodyMedium: TextStyle(fontSize: 12.0), // Calendar days
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null && picked != methotrexateDate.value) {
@@ -210,6 +229,18 @@ class MedicamentsController extends GetxController {
       initialDate: foldineDate.value,
       firstDate: DateTime.now(),
       lastDate: DateTime(lastDateYear),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            textTheme: const TextTheme(
+              headlineMedium: TextStyle(fontSize: 12.0), // Selected date text
+              titleMedium: TextStyle(fontSize: 13.0), // Calendar header text
+              bodyMedium: TextStyle(fontSize: 12.0), // Calendar days
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null && picked != foldineDate.value) {

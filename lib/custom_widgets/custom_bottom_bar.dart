@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/screens/dashboard.dart';
 import 'package:lupus_app/screens/info_lupus.dart';
 import 'package:lupus_app/screens/statistics/suivi_screen.dart';
@@ -19,7 +20,7 @@ class CustomBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConvexAppBar(
       style: TabStyle.reactCircle,
-      activeColor: const Color.fromRGBO(255, 180, 252, 0.6),
+      activeColor: seedColor,
       items: const [
         TabItem(
           icon: Icon(
@@ -55,7 +56,7 @@ class CustomBottomBar extends StatelessWidget {
           Get.to(const SuiviScreen());
         }
       },
-      backgroundColor: const Color.fromRGBO(252, 78, 130, 1),
+      backgroundColor: seedColor.withOpacity(0.5),
     );
   }
 }

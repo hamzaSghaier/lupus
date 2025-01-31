@@ -38,6 +38,7 @@ dependencies:
   syncfusion_flutter_core: ^22.2.12
   syncfusion_flutter_pdfviewer: ^22.2.12
   camera: ^0.10.5+9
+  flutter_local_notifications: ^18.0.1
 
 dependency_overrides:
   intl: ^0.18.0

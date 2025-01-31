@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/bilan_screen.dart';
@@ -9,6 +10,7 @@ import 'package:lupus_app/screens/medicaments.dart';
 import 'package:lupus_app/screens/signup.dart';
 import 'package:lupus_app/screens/statistics/rdv_model.dart';
 import 'package:lupus_app/screens/symptoms.dart';
+
 import '../entity/profile.dart';
 import '../shared/file_service.dart';
 
@@ -21,7 +23,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   Profile? profile;
-  RdvModel? latestRdv;
+  List<RdvModel> rdvList = [];
   String? errorMessage;
 
   Future<void> getProfile() async {
@@ -39,32 +41,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  Future<void> getRdv() async {
+  Future<void> loadRdvs() async {
     try {
-      RdvModel? rdvFile = await FileService.getLatestRDV();
+      final List<RdvModel> rdvs = await FileService.getRDVs();
       setState(() {
-        latestRdv = rdvFile;
+        rdvList = rdvs.where((rdv) => rdv.date.isAfter(DateTime.now())).toList();
+        // Sort RDVs by date
+        rdvList.sort((a, b) => a.date.compareTo(b.date));
         errorMessage = null;
       });
     } catch (e) {
-      // Only set latestRdv to null, don't show error message as this is expected for new users
       setState(() {
-        latestRdv = null;
+        rdvList = [];
       });
-      debugPrint('No RDV found or error loading RDV: $e');
+      debugPrint('Error loading RDVs: $e');
     }
   }
 
   @override
   void initState() {
-    getProfile();
-    getRdv();
     super.initState();
+    getProfile();
+    loadRdvs();
   }
 
   String _calculateBirthYear() {
     if (profile?.dateNaissance == null) return "";
-    
+
     try {
       int yearOfBirth = int.parse(profile!.dateNaissance.substring(0, 4));
       int age = DateTime.now().year - yearOfBirth;
@@ -83,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final spacing = size.size.width * 0.05;
 
     return Scaffold(
-      bottomNavigationBar:  CustomBottomBar(),
+      bottomNavigationBar: CustomBottomBar(),
       appBar: const CustomAppBar(
         title: 'Accueil\nالإستقبال',
       ),
@@ -109,9 +112,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 RdvWidget(
                   mediaQuery: size,
-                  hasRdv: latestRdv != null,
-                  rdv: latestRdv,
-                  update: getRdv,
+                  rdvs: rdvList,
+                  hasRdv: rdvList.isNotEmpty,
+                  update: loadRdvs,
                 ),
                 SizedBox(height: spacing),
                 _buildMenuGrid(buttonSize, spacing),
@@ -195,14 +198,14 @@ class HomeButton extends StatelessWidget {
       onTap: onPressed,
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        width: size,
-        height: size * 1.2,
+        width: size * 0.9,
+        height: size * 1,
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(255, 229, 245, 1),
+          color: seedColor.withOpacity(0.5),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             width: 3,
-            color: const Color.fromRGBO(255, 180, 252, 1),
+            color: seedColor,
           ),
         ),
         child: Column(
@@ -211,8 +214,8 @@ class HomeButton extends StatelessWidget {
           children: [
             Image.asset(
               image,
-              width: size * 0.4,
-              height: size * 0.4,
+              width: size * 0.3,
+              height: size * 0.3,
               fit: BoxFit.contain,
             ),
             Padding(
@@ -223,7 +226,7 @@ class HomeButton extends StatelessWidget {
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: size * 0.12,
+                    fontSize: size * 0.09,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),

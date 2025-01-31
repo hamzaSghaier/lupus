@@ -37,7 +37,8 @@ class _UserInfoState extends State<UserInfo> {
         ),
         Text(widget.name),
         const Spacer(),
-        Text("${widget.gender} ${widget.age}")
+        // ${widget.age == "0" ? "" : widget.age+" ans" }
+        // Text("${widget.gender}  ", style: const TextStyle(fontWeight: FontWeight.normal)),
       ]),
     );
   }

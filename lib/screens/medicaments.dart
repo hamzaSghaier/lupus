@@ -3,6 +3,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/custom_widgets/custom_app_bar.dart';
 import 'package:lupus_app/custom_widgets/custom_bottom_bar.dart';
 import 'package:lupus_app/screens/bilan/widgets/user_info.dart';
@@ -478,7 +479,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
             offset: Offset(4, 8),
           ),
         ],
-        color: const Color.fromARGB(19, 221, 88, 170),
+        color: seedColor.withOpacity(0.3),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           width: 1,
@@ -502,11 +503,11 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: Color.fromRGBO(126, 126, 126, 1),
+                  // color: Color.fromRGBO(126, 126, 126, 1),
                 ),
               ),
               DropdownButton<int>(
-                iconEnabledColor: Colors.pink[200],
+                iconEnabledColor: seedColor,
                 value:
                     //(widget.minPrises != 0 && widget.nbrPrises == null)
                     //? widget.minPrises
@@ -544,7 +545,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
               onPressed: widget.nbrPrises != 0 ? _showPillReminderDialog : null,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-                backgroundColor: Colors.pinkAccent[200]?.withOpacity(0.7),
+                backgroundColor: seedColor.withOpacity(0.7),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
@@ -556,7 +557,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -589,7 +590,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: Colors.pink,
+                        color: seedColor,
                       ),
                     ),
                   ),
@@ -623,7 +624,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
               onPressed: selectedDays.isNotEmpty && selectedTimes.isNotEmpty ? _scheduleMedication : null,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-                backgroundColor:_isScheduled? Colors.black?.withOpacity(0.7): Colors.black?.withOpacity(0.7),
+                backgroundColor:_isScheduled? seedColor?.withOpacity(0.7): Colors.black?.withOpacity(0.7),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
@@ -640,7 +641,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   if (_isScheduled) // <--- ADDED
@@ -908,49 +909,55 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
       actionsPadding: const EdgeInsets.only(bottom: 30),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text(
-            'Annuler - إلغاء',
-            style: TextStyle(color: Colors.white),
+        Container(
+          padding: EdgeInsets.all(8),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Annuler - إلغاء',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
-          onPressed: isSaveEnabled
-              ? () {
-                  // Prepare the selected days and times for the calling widget
-                  List<String> selectedDaysText = [];
-                  for (int i = 0; i < selectedDays.length; i++) {
-                    if (selectedDays[i]) {
-                      selectedDaysText.add(daysOfWeek[i]);
+        Container(
+          padding: EdgeInsets.all(8),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
+            onPressed: isSaveEnabled
+                ? () {
+                    // Prepare the selected days and times for the calling widget
+                    List<String> selectedDaysText = [];
+                    for (int i = 0; i < selectedDays.length; i++) {
+                      if (selectedDays[i]) {
+                        selectedDaysText.add(daysOfWeek[i]);
+                      }
                     }
+                    List<String> selectedTimesText = [];
+                    if (morningChecked) selectedTimesText.add(" 09:00 Matin - صباح \n ");
+                    if (noonChecked) selectedTimesText.add(" 12:00 Midi - الظهر \n ");
+                    if (eveningChecked) selectedTimesText.add(" 19:00 Soir - مساء \n ");
+        
+                    // Show a success message after saving
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(
+                    //     content: Text('Rappel enregistré !\nتم تسجيل التذكير'),
+                    //   ),
+                    // );
+        
+                    // Return selected days and times to the calling widget
+                    Navigator.of(context).pop([selectedDaysText, selectedTimesText]);
                   }
-                  List<String> selectedTimesText = [];
-                  if (morningChecked) selectedTimesText.add(" 09:00 Matin - صباح \n ");
-                  if (noonChecked) selectedTimesText.add(" 12:00 Midi - الظهر \n ");
-                  if (eveningChecked) selectedTimesText.add(" 19:00 Soir - مساء \n ");
-
-                  // Show a success message after saving
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(
-                  //     content: Text('Rappel enregistré !\nتم تسجيل التذكير'),
-                  //   ),
-                  // );
-
-                  // Return selected days and times to the calling widget
-                  Navigator.of(context).pop([selectedDaysText, selectedTimesText]);
-                }
-              : null,
-          child: const Text(
-            'Enregistrer - حفظ',
-            style: TextStyle(color: Colors.white),
-          ), // Disable button if conditions are not met
+                : null,
+            child: const Text(
+              'Enregistrer - حفظ',
+              style: TextStyle(color: Colors.white),
+            ), // Disable button if conditions are not met
+          ),
         ),
       ],
     );

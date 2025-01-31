@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
@@ -45,12 +47,10 @@ class FileService {
           return file;
         } else {
           client.close();
-          throw Exception(
-              'Failed to Download Video . Network connection failed . filename : $filename');
+          throw Exception('Failed to Download Video . Network connection failed . filename : $filename');
         }
       } catch (e) {
-        throw Exception(
-            'Failed to Download Video . Network connection failed . filename : $filename');
+        throw Exception('Failed to Download Video . Network connection failed . filename : $filename');
       }
     }
   }
@@ -91,27 +91,47 @@ class FileService {
   }
 
   static Future<File> updateBilan(BilanModel newBilan) async {
-    final file = await _localFile("bilans.txt");
-    String contents = await file.readAsString();
-    List<String> c = contents.split(";");
-    List<BilanModel> listbilans = [];
-    c.removeWhere((element) => element.isEmpty);
-    for (var e in c) {
-      listbilans.add(BilanModel.fromJson(jsonDecode(e)));
-    }
-    listbilans.removeWhere((element) => element.id == newBilan.id);
-    c = [];
-    for (var e in listbilans) {
-      c.add(jsonEncode(e.toJson()));
-    }
+    try {
+      final file = await _localFile("bilans.txt");
+      String contents = await file.readAsString();
+      List<String> entries = contents.split(";");
+      List<BilanModel> listBilans = [];
 
-    await FileService.writeFile(
-        "done_bilans.txt", jsonEncode(newBilan.toJson()));
+      // Remove empty entries
+      entries.removeWhere((element) => element.isEmpty);
 
-    String r = c.join(";");
-    print("updating bilans.txt");
-    // Write the file.
-    return file.writeAsString('$r;', mode: FileMode.write);
+      // Convert all entries to BilanModel objects
+      for (var entry in entries) {
+        listBilans.add(BilanModel.fromJson(jsonDecode(entry)));
+      }
+
+      // Find and update the matching bilan
+      int bilanIndex = listBilans.indexWhere((bilan) => bilan.id == newBilan.id);
+
+      if (bilanIndex != -1) {
+        // Only move to done_bilans if the bilan is marked as done
+        if (newBilan.done && !listBilans[bilanIndex].done) {
+          // Remove from main list and add to done_bilans
+          listBilans.removeAt(bilanIndex);
+          await FileService.writeFile("done_bilans.txt", jsonEncode(newBilan.toJson()));
+        } else {
+          // Just update the bilan in the main list
+          listBilans[bilanIndex] = newBilan;
+        }
+      }
+
+      // Convert back to JSON strings
+      List<String> updatedEntries = listBilans.map((bilan) => jsonEncode(bilan.toJson())).toList();
+
+      // Join with semicolons and add final semicolon
+      String result = "${updatedEntries.join(';')};";
+
+      // Write back to file
+      return file.writeAsString(result, mode: FileMode.write);
+    } catch (e) {
+      print('Error updating bilan: $e');
+      rethrow;
+    }
   }
 
   static Future<File> writeProfileFile(String fileName, String content) async {
@@ -211,7 +231,8 @@ class FileService {
       return listBilans.reversed.toList();
     } catch (e) {
       // If encountering an error, return 0
-      throw Exception('Failed to get json, file bilans.txt | $e');
+      // throw Exception('Failed to get json, file bilans.txt | $e');
+      return [];
     }
   }
 
@@ -240,48 +261,85 @@ class FileService {
   static Future<List<RdvModel>> getRDVs() async {
     try {
       final file = await _localFile("rdv.txt");
-
-      // Read the file
       String contents = await file.readAsString();
       List<RdvModel> listRdv = [];
-      print("rdv.txt");
-      contents.split(";").forEach((element) {
-        if (element.isNotEmpty && element.isBlank == false) {
-          print(jsonDecode(element));
-          listRdv.add(RdvModel.fromJson(jsonDecode(element)));
+
+      if (contents.isNotEmpty) {
+        final entries = contents.split(";").where((element) => element.isNotEmpty && element.isBlank == false);
+
+        for (var element in entries) {
+          try {
+            final rdv = RdvModel.fromJson(jsonDecode(element));
+            listRdv.add(rdv);
+          } catch (e) {
+            debugPrint('Error parsing RDV: $e');
+            // Continue with next entry if one fails
+            continue;
+          }
         }
-      });
+
+        // Sort RDVs by date, most recent first
+        listRdv.sort((a, b) => b.date.compareTo(a.date));
+      }
 
       return listRdv;
     } catch (e) {
-      // If encountering an error, return 0
-      throw Exception('Failed to get json, file rdv.txt | $e');
+      debugPrint('Error reading RDVs: $e');
+      return []; // Return empty list instead of throwing
+    }
+  }
+
+  static Future<void> deleteRdv(RdvModel rdv) async {
+    try {
+      final file = await _localFile("rdv.txt");
+      String contents = await file.readAsString();
+      List<String> entries = contents.split(";");
+      List<RdvModel> listRdv = [];
+
+      // Remove empty entries and convert to RdvModel
+      entries.removeWhere((element) => element.isEmpty);
+      for (var e in entries) {
+        final currentRdv = RdvModel.fromJson(jsonDecode(e));
+        if (currentRdv.id != rdv.id) {
+          listRdv.add(currentRdv);
+        }
+      }
+
+      // Convert back to string and write to file
+      String updatedContent = listRdv.map((rdv) => jsonEncode(rdv.toJson())).join(';');
+      await file.writeAsString('$updatedContent;', mode: FileMode.write);
+
+      // Cancel the notification if it exists
+      // Convert the ID to a 32-bit integer
+      if (rdv.id != null) {
+        final notificationId = rdv.id!.abs() % 100000; // Keep last 5 digits
+        await AwesomeNotifications().cancel(notificationId);
+      }
+    } catch (e) {
+      debugPrint('Error deleting RDV: $e');
+      rethrow;
     }
   }
 
   static Future<RdvModel?> getLatestRDV() async {
     try {
-      final file = await _localFile("rdv.txt");
+      final rdvs = await getRDVs();
 
-      // Read the file
-      String contents = await file.readAsString();
-      List<String> listRdv = [];
-      print("rdv.txt");
-      print(contents);
-      listRdv = contents.split(";");
-      listRdv.removeWhere((e) => e.isEmpty);
-      RdvModel? latest = RdvModel.fromJson(jsonDecode(listRdv.last));
-      if (latest.date.isBefore(DateTime.now())) {
-        return null;
-      }
-      return latest;
+      // Filter future RDVs and sort by date
+      final futureRdvs = rdvs.where((rdv) => rdv.date.isAfter(DateTime.now())).toList()..sort((a, b) => a.date.compareTo(b.date));
+
+      // Return the earliest future RDV
+      return futureRdvs.isNotEmpty ? futureRdvs.first : null;
     } catch (e) {
-      // If encountering an error, return 0
-      throw Exception('Failed to get json, file rdv.txt | $e');
+      debugPrint('Error getting latest RDV: $e');
       return null;
-      //throw Exception('Failed to get json, file rdv.txt | $e');
     }
-    return null;
+  }
+
+  static Future<File> updateRdvFile(List<RdvModel> rdvs) async {
+    final file = await _localFile("rdv.txt");
+    final content = rdvs.map((rdv) => jsonEncode(rdv.toJson())).join(';');
+    return await file.writeAsString('$content;', mode: FileMode.write);
   }
 
   static Future<List<Remarque>> getRemarques() async {
@@ -348,8 +406,7 @@ class FileService {
       final Map<String, dynamic> profileMap = jsonDecode(contents);
       final Profile profile = Profile.fromJson(profileMap);
       profile.isLoggedIn = isLoggedIn;
-      final jsonProfile =
-          jsonEncode(profile.toJson()); // Convert Profile to JSON string
+      final jsonProfile = jsonEncode(profile.toJson()); // Convert Profile to JSON string
       await FileService.writeProfileFile("profile.txt", jsonProfile);
 
       return profile;

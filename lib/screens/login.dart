@@ -87,8 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Container(
                     margin: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).size.height * 0.05,
-                      top: MediaQuery.of(context).size.height * 0.1,
+                      bottom: MediaQuery.of(context).size.height * 0.02,
+                      top: MediaQuery.of(context).size.height * 0.02,
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15), // Image border
@@ -96,8 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         size: const Size.fromRadius(38), // Image radius
                         child: Image.asset(
                           "assets/lupus-icon.png",
-                          width: 64,
-                          height: 48,
+                          width: 40,
+                          height: 40,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery.of(context).size.height * 0.14,
                   padding: const EdgeInsets.all(20),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

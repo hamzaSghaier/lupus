@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lupus_app/constants/colors.dart';
 import 'package:lupus_app/constants/icons.dart';
 import 'package:lupus_app/screens/bilan/models/bilan_model.dart';
-import 'package:lupus_app/screens/bilan/widgets/image_preview.dart';
+import 'package:lupus_app/screens/bilan/widgets/bilan_info.dart';
 
 class BilanDoneInfo extends StatefulWidget {
   const BilanDoneInfo({
@@ -28,10 +28,7 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-            border: Border.all(
-                color: Colors.grey.withAlpha(30),
-                style: BorderStyle.solid,
-                width: 2),
+            border: Border.all(color: Colors.grey.withAlpha(30), style: BorderStyle.solid, width: 2),
             borderRadius: const BorderRadius.all(Radius.circular(15))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,58 +45,49 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               height: widget.mediaQuery.size.height * 0.07,
-              decoration: const BoxDecoration(
-                  color: lightPink,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(widget.bilan.type ?? ""),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20.0,
-                      ),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: pink,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)))),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ImagePreview(
-                                path: widget.bilan.image ?? "",
-                                date: widget.bilan.date ?? "",
-                                type: widget.bilan.type ?? "",
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(
-                                Icons.image_outlined,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "Afficher | عرض",
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
+              decoration: const BoxDecoration(color: lightPink, borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text(widget.bilan.type ?? "", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16)),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20.0,
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: pink, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BilanImagesGallery(
+                            imagePaths: widget.bilan.images ?? [],
+                            initialIndex: 0,
+                          ),
                         ),
-                      ),
+                      );
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: Icon(
+                            Icons.image_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          "Afficher | عرض",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
                     ),
-                  ]),
+                  ),
+                ),
+              ]),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
               child: Container(
                 decoration: const BoxDecoration(
                   color: grey,

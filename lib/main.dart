@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
             bodySmall: TextStyle(fontSize: 18.0),
             headlineSmall: TextStyle(fontSize: 16.0),
             labelLarge: TextStyle(fontSize: 14.0),
-            bodyMedium: TextStyle(fontSize: 20.0)),
+            bodyMedium: TextStyle(fontSize: 18.0)),
         colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
         useMaterial3: true,
       ),
