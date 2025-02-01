@@ -258,7 +258,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       bottomNavigationBar: profile != null ? CustomBottomBar() : null,
       appBar: CustomAppBar(
-        title: profile != null ? 'Mes informations\nمعلوماتي' : "Créer un compte\nإنشاء حساب",
+        title: profile != null
+            ? 'Mes informations\nمعلوماتي'
+            : "Créer un compte\nإنشاء حساب",
         isLoggedIn: profile != null,
       ),
       body: SafeArea(
@@ -307,12 +309,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Column(
       children: [
         _buildResponsiveTextField(
-          "Votre Nom | الاسم",
+          "Votre Nom | اللقب",
           nomController,
           baseTextSize,
         ),
         _buildResponsiveTextField(
-          "Votre Prénom | اللقب",
+          "Votre Prénom | الاسم",
           prenomController,
           baseTextSize,
         ),
@@ -366,8 +368,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             () => Container(
               margin: const EdgeInsets.only(left: 20),
               child: Text(
-                DateFormat("dd-MM-yyyy").format(signupController.selectedDate.value).toString(),
-                style: TextStyle(fontSize: textSize, fontWeight: FontWeight.w300),
+                DateFormat("dd-MM-yyyy")
+                    .format(signupController.selectedDate.value)
+                    .toString(),
+                style:
+                    TextStyle(fontSize: textSize, fontWeight: FontWeight.w300),
               ),
             ),
           ),
@@ -408,7 +413,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 value: signupController.isChecked.value,
                 onChanged: (value) => signupController.onChanged(value!),
                 checkColor: Colors.white,
-                fillColor: MaterialStateProperty.all(Colors.black),
+                fillColor: WidgetStateProperty.all(Colors.black),
               ),
             ),
           ),
@@ -438,7 +443,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ConditionsPage(isloggedIn: false),
+                    builder: (context) =>
+                        const ConditionsPage(isloggedIn: false),
                   ),
                 );
               },
@@ -468,7 +474,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ConditionsPage(isloggedIn: true),
+                      builder: (context) =>
+                          const ConditionsPage(isloggedIn: true),
                     ),
                   );
                 },
