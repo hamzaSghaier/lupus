@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tulup/constants/colors.dart';
 import 'package:tulup/entity/profile.dart';
 import 'package:tulup/screens/dashboard.dart';
 import 'package:tulup/screens/signup.dart';
@@ -27,7 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
       Profile? profile = await FileService.getProfileByLogin(
           loginController.text, passwordController.text);
       if (profile != null) {
-        Get.to(const DashboardScreen());
+        //Get.to(const DashboardScreen());
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          (Route<dynamic> route) => false,
+        );
       } else {
         AwesomeDialog(
                 dialogType: DialogType.error,
@@ -127,16 +133,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.14,
-                  padding: const EdgeInsets.all(20),
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: seedColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       minimumSize: Size.fromHeight(
-                          MediaQuery.of(context).size.height * 0.1),
+                          MediaQuery.of(context).size.height * 0.12),
                     ),
                     child: const Text(
                       'Se connecter\nتسجيل الدخول',
                       textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -145,14 +156,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'mot de passe oublié ?\nنسيت كلمة المرور؟',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
-                ),
+                // TextButton(
+                //   onPressed: () {},
+                //   child: Text(
+                //     'mot de passe oublié ?\nنسيت كلمة المرور؟',
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(color: Colors.grey[600]),
+                //   ),
+                // ),
                 if (profile == null)
                   TextButton(
                     onPressed: () {

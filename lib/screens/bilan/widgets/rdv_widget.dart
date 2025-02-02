@@ -49,7 +49,7 @@ class _RdvWidgetState extends State<RdvWidget> {
             ),
             // Main Consultation Appointments
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
               //
               decoration: BoxDecoration(
                 color: grey,
@@ -66,38 +66,54 @@ class _RdvWidgetState extends State<RdvWidget> {
                   if (!widget.hasRdv)
                     InkWell(
                       onTap: () => _showInputDialog(context, "Consultation"),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Ajouter un RDV",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Text(
-                                "أضف موعدًا",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: Image(
-                              image: AssetImage(rdvPlusIcon),
-                              height: 40,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 5.0,
                             ),
-                          ),
-                        ],
+                          ],
+                          border: Border.all(color: greyContour),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Ajouter un RDV",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Text(
+                                  "أضف موعدًا",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Image(
+                                image: AssetImage(rdvPlusIcon),
+                                height: 40,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],

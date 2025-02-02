@@ -93,11 +93,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       desc: 'Vous avez été inscrit avec succès \n لقد تم تسجيلك بنجاح',
       btnOkOnPress: () {
         debugPrint('OnClick');
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const DashboardScreen(),
           ),
+          (route) => false,
         );
       },
       btnOkIcon: Icons.check_circle,
@@ -146,12 +147,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             try {
               await FileService.updateProfileIsLogged(false);
               if (!context.mounted) return;
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
-                ),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                  (route) => false);
             } catch (e) {
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
@@ -179,11 +180,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             try {
               await FileService.deleteAllFilesInDirectory();
               if (!context.mounted) return;
-              Navigator.pushReplacement(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const LoginScreen(),
                 ),
+                (route) => false,
               );
             } catch (e) {
               if (!context.mounted) return;
@@ -377,13 +379,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: seedColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             onPressed: () => signupController.selectDate(context),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
                 'Date de naissance\nتاريخ الميلاد',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: textSize),
+                style: TextStyle(fontSize: textSize, color: Colors.white),
               ),
             ),
           ),
@@ -413,7 +421,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 value: signupController.isChecked.value,
                 onChanged: (value) => signupController.onChanged(value!),
                 checkColor: Colors.white,
-                fillColor: WidgetStateProperty.all(Colors.black),
+                fillColor: WidgetStateProperty.all(seedColor),
               ),
             ),
           ),
