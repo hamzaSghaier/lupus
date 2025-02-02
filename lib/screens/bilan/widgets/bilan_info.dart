@@ -42,7 +42,9 @@ class _BilanInfoState extends State<BilanInfo> {
         controller = CameraController(
           _cameras!.first,
           ResolutionPreset.max,
+          enableAudio: false,
         );
+        controller?.setFlashMode(FlashMode.off);
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -178,6 +180,7 @@ class _BilanInfoState extends State<BilanInfo> {
             future: controller?.initialize(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                controller?.setFlashMode(FlashMode.off);
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -227,6 +230,7 @@ class _BilanInfoState extends State<BilanInfo> {
                             ),
                             onPressed: () async {
                               await controller?.initialize();
+                              await controller?.setFlashMode(FlashMode.off);
                               await controller?.resumePreview();
                             },
                             child: const Text(
@@ -405,7 +409,7 @@ class _BilanInfoState extends State<BilanInfo> {
                                         showCloseIcon: true,
                                         title: ' ',
                                         desc:
-                                            "Saisie de bilan terminée avec succès\nتم إدخال الفحص بنجاح'",
+                                            "Saisie de bilan terminée avec succès\nتم إدخال الفحص بنجاح",
                                         btnOkOnPress: () {
                                           widget.reload();
                                         },
