@@ -720,63 +720,67 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                   ),
                 ],
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: ExpansionTile(
+                collapsedIconColor: seedColor,
+                title: const Text(
+                  "Voir les détails du rappel\nعرض تفاصيل التذكير",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: seedColor,
+                  ),
+                ),
                 children: [
-                  const Center(
-                    child: Text(
-                      "Détails de rappel\nتفاصيل التذكير",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: seedColor,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Divider(),
+                      const SizedBox(height: 5),
+                      if (selectedDays.isNotEmpty)
+                        Text(
+                          "Jours - الأيام:\n${selectedDays.join(", ")}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      if (selectedDays.isEmpty &&
+                          widget.savedSelectedDays != null)
+                        Text(
+                          "Jours - الأيام:\n${widget.savedSelectedDays}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      const Divider(
+                        indent: 80,
+                        endIndent: 80,
                       ),
-                    ),
+                      if (selectedTimes.isNotEmpty)
+                        Text(
+                          "Heures - التوقيت:\n${selectedTimes.join(" ")}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      if (selectedTimes.isEmpty &&
+                          widget.savedSelectedTimes != null)
+                        Text(
+                          "Heures - التوقيت:\n${widget.savedSelectedTimes}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
+                        ),
+                    ],
                   ),
-                  const Divider(),
-                  const SizedBox(height: 5),
-                  if (selectedDays.isNotEmpty)
-                    Text(
-                      "Jours - الأيام:\n${selectedDays.join(", ")}",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  if (selectedDays.isEmpty && widget.savedSelectedDays != null)
-                    Text(
-                      "Jours - الأيام:\n${widget.savedSelectedDays}",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  const Divider(
-                    indent: 80,
-                    endIndent: 80,
-                  ),
-                  if (selectedTimes.isNotEmpty)
-                    Text(
-                      "Heures - التوقيت:\n${selectedTimes.join(" ")}",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  if (selectedTimes.isEmpty &&
-                      widget.savedSelectedTimes != null)
-                    Text(
-                      "Heures - التوقيت:\n${widget.savedSelectedTimes}",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold),
-                    ),
                 ],
               ),
             ),
