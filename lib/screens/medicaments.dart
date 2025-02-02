@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
       Get.put(MedicamentsController());
 
   Profile? profile;
+  List<dynamic>? meds;
   var horaires = ["Matin | الصباح", "Midi | الزوال", "Soir | المساء"];
   var jrs = [
     'Quotidien | يوميا',
@@ -47,18 +50,107 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
     return profileFile;
   }
 
+  Future<List<dynamic>> getMed() async {
+    List<dynamic> medFile = await FileService.getMed();
+    print("medFile: $medFile");
+
+    setState(() {
+      meds = medFile;
+    });
+    mapMedToReminder();
+
+    return medFile;
+  }
+
+  void mapMedToReminder() {
+    // Implement the logic to map medications to reminders
+    // This function should iterate over the meds list and set up reminders for each medication
+    if (meds != null) {
+      for (var med in meds!) {
+        // Extract necessary information from the medication object
+        String savedMedName = med['medicament'];
+        int savedNbrPrises = med['nbrPrises'];
+        List<dynamic> savedSelectedDays = med['selectedDays'];
+        List<dynamic> savedSelectedTimes = med['selectedTimes'];
+
+        switch (savedMedName) {
+          case "Corticoïdes":
+            setState(() {
+              SavedTimesCort = savedSelectedTimes.join(",");
+              SavedPrisesCort = savedNbrPrises;
+              SavedjrsCort = savedSelectedDays.join(", ");
+            });
+            break;
+          case "Plaquenil":
+            setState(() {
+              SavedTimesPlaqenil = savedSelectedTimes.join(",");
+              SavedPrisesPlaqenil = savedNbrPrises;
+              SavedjrsPlaqenil = savedSelectedDays.join(", ");
+            });
+            break;
+          case "Azathioprine":
+            setState(() {
+              SavedTimesAzath = savedSelectedTimes.join(",");
+              SavedPrisesAzath = savedNbrPrises;
+              SavedjrsAzath = savedSelectedDays.join(", ");
+            });
+            break;
+
+          case "Methotrexate":
+            setState(() {
+              SavedTimesMetho = savedSelectedTimes.join(",");
+              SavedPrisesMetho = savedNbrPrises;
+              SavedjrsMetho = savedSelectedDays.join(", ");
+            });
+            break;
+
+          case "Foldine":
+            setState(() {
+              SavedTimesFoldine = savedSelectedTimes.join(",");
+              SavedPrisesFoldine = savedNbrPrises;
+              SavedjrsFoldine = savedSelectedDays.join(", ");
+            });
+            break;
+
+          case "MMF":
+            setState(() {
+              SavedTimesMMF = savedSelectedTimes.join(",");
+              SavedPrisesMMF = savedNbrPrises;
+              SavedjrsMMF = savedSelectedDays.join(", ");
+            });
+            break;
+        }
+      }
+    }
+  }
+
   @override
   void initState() {
     getProfile();
+    getMed();
+
     super.initState();
   }
 
+  String? SavedTimesCort;
+  String? SavedTimesPlaqenil;
+  String? SavedTimesAzath;
+  String? SavedTimesMetho;
+  String? SavedTimesFoldine;
+  String? SavedTimesMMF;
+
   int priseCort = 0;
+  int? SavedPrisesCort;
   int prisePlaqenil = 0;
+  int? SavedPrisesPlaqenil;
   int priseAzath = 0;
+  int? SavedPrisesAzath;
   int priseMetho = 0;
+  int? SavedPrisesMetho;
   int priseFoldine = 0;
+  int? SavedPrisesFoldine;
   int priseMMF = 0;
+  int? SavedPrisesMMF;
 
   int nbrCort = 0;
   int nbrPlaqenil = 0;
@@ -68,11 +160,17 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
   int nbrMMF = 0;
 
   int jrsCort = 0;
+  String? SavedjrsCort;
   int jrsPlaqenil = 0;
+  String? SavedjrsPlaqenil;
   int jrsAzath = 0;
+  String? SavedjrsAzath;
   int jrsMetho = 0;
+  String? SavedjrsMetho;
   int jrsFoldine = 0;
+  String? SavedjrsFoldine;
   int jrsMMF = 0;
+  String? SavedjrsMMF;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +214,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Corticoïdes",
                         imgPath: "assets/corticoides.png",
-                        nbrPrises: nbrCort,
+                        nbrPrises: SavedPrisesCort ?? nbrCort,
                         prisesChange: (value) {
                           setState(() {
                             nbrCort = value ?? 0;
@@ -128,11 +226,15 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                           });
                         },
                         jrsPrises: jrsCort,
+                        savedSelectedDays: SavedjrsCort,
+                        savedSelectedTimes: SavedTimesCort,
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       MedicamentSection(
+                        savedSelectedDays: SavedjrsPlaqenil,
+                        savedSelectedTimes: SavedTimesPlaqenil,
                         prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: prisePlaqenil,
                         maxPrises: 2,
@@ -144,7 +246,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Plaquenil",
                         imgPath: "assets/plaquenil.png",
-                        nbrPrises: nbrPlaqenil,
+                        nbrPrises: SavedPrisesPlaqenil ?? nbrPlaqenil,
                         prisesChange: (value) {
                           setState(() {
                             nbrPlaqenil = value ?? 0;
@@ -161,6 +263,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
+                        savedSelectedDays: SavedjrsAzath,
+                        savedSelectedTimes: SavedTimesAzath,
                         prisesParJour:
                             "Trois prises par jour\nثلاث جرعات يوميا",
                         horairePrise: priseAzath,
@@ -173,7 +277,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Azathioprine",
                         imgPath: "assets/azathioprine.png",
-                        nbrPrises: nbrAzath,
+                        nbrPrises: SavedPrisesAzath ?? nbrAzath,
                         prisesChange: (value) {
                           setState(() {
                             nbrAzath = value ?? 0;
@@ -190,6 +294,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
+                        savedSelectedDays: SavedjrsMetho,
+                        savedSelectedTimes: SavedTimesMetho,
                         prisesParJour:
                             "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseMetho,
@@ -205,7 +311,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         medicamentName: "Methotrexate",
                         imgPath: "assets/methotrexate.png",
                         isOneTime: true,
-                        nbrPrises: nbrMetho,
+                        nbrPrises: SavedPrisesMetho ?? nbrMetho,
                         prisesChange: (value) {
                           setState(() {
                             nbrMetho = value ?? 0;
@@ -222,6 +328,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
+                        savedSelectedDays: SavedjrsFoldine,
+                        savedSelectedTimes: SavedTimesFoldine,
                         prisesParJour:
                             "Une prise par semaine\nجرعة واحدة في الأسبوع",
                         horairePrise: priseFoldine,
@@ -235,7 +343,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Foldine",
                         imgPath: "assets/foldine.png",
-                        nbrPrises: nbrFoldine,
+                        nbrPrises: SavedPrisesFoldine ?? nbrFoldine,
                         prisesChange: (value) {
                           setState(() {
                             nbrFoldine = value ?? 0;
@@ -252,6 +360,8 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         height: 10,
                       ),
                       MedicamentSection(
+                        savedSelectedDays: SavedjrsMMF,
+                        savedSelectedTimes: SavedTimesMMF,
                         prisesParJour: "Deux prises par jour\nجرعتين يوميا",
                         horairePrise: priseMMF,
                         maxPrises: 6,
@@ -263,7 +373,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "MMF",
                         imgPath: "assets/mmf.png",
-                        nbrPrises: nbrMMF,
+                        nbrPrises: SavedPrisesMMF ?? nbrMMF,
                         prisesChange: (value) {
                           setState(() {
                             nbrMMF = value ?? 0;
@@ -341,6 +451,8 @@ class MedicamentSection extends StatefulWidget {
   final Function prisesChange, horaireChange, jrsChange;
   final bool isOneDay, isOneTime, canbeMultipleTimes;
 
+  final String? savedSelectedDays, savedSelectedTimes;
+
   const MedicamentSection({
     super.key,
     required this.prisesParJour,
@@ -358,6 +470,8 @@ class MedicamentSection extends StatefulWidget {
     this.daysCount = 7,
     this.isOneDay = false,
     required this.jrsPrises,
+    this.savedSelectedDays,
+    this.savedSelectedTimes,
   });
 
   @override
@@ -430,6 +544,15 @@ class _MedicamentSectionState extends State<MedicamentSection> {
       },
       btnOkIcon: Icons.check_circle,
     ).show();
+
+    FileService.writeFile(
+        "rappel_med.txt",
+        jsonEncode({
+          "medicament": widget.medicamentName,
+          "nbrPrises": widget.nbrPrises,
+          "selectedDays": selectedDays,
+          "selectedTimes": selectedTimes,
+        }));
   }
 
   DateTime _getNextScheduleDate(String day, int hour, DateTime now) {
@@ -578,7 +701,10 @@ class _MedicamentSectionState extends State<MedicamentSection> {
           ),
 
           // New Stylish Details Container
-          if (selectedDays.isNotEmpty || selectedTimes.isNotEmpty)
+          if (selectedDays.isNotEmpty ||
+              selectedTimes.isNotEmpty ||
+              widget.savedSelectedDays != null ||
+              widget.savedSelectedTimes != null)
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(10),
@@ -619,6 +745,15 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                           color: Colors.black54,
                           fontWeight: FontWeight.bold),
                     ),
+                  if (selectedDays.isEmpty && widget.savedSelectedDays != null)
+                    Text(
+                      "Jours - الأيام:\n${widget.savedSelectedDays}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold),
+                    ),
                   const Divider(
                     indent: 80,
                     endIndent: 80,
@@ -626,6 +761,16 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                   if (selectedTimes.isNotEmpty)
                     Text(
                       "Heures - التوقيت:\n${selectedTimes.join(" ")}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  if (selectedTimes.isEmpty &&
+                      widget.savedSelectedTimes != null)
+                    Text(
+                      "Heures - التوقيت:\n${widget.savedSelectedTimes}",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 14,
@@ -659,7 +804,14 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (!_isScheduled)
+                  if ((!_isScheduled &&
+                          selectedDays.isNotEmpty &&
+                          selectedTimes.isNotEmpty) ||
+                      (!_isScheduled &&
+                          selectedDays.isEmpty &&
+                          selectedTimes.isEmpty &&
+                          widget.savedSelectedDays == null &&
+                          widget.savedSelectedTimes == null))
                     const Text(
                       "Programmer le rappel\nجدولة التذكير",
                       textAlign: TextAlign.center,
@@ -669,7 +821,11 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                         color: Colors.black,
                       ),
                     ),
-                  if (_isScheduled)
+                  if (_isScheduled ||
+                      (widget.savedSelectedDays != null &&
+                          widget.savedSelectedTimes != null &&
+                          selectedDays.isEmpty &&
+                          selectedTimes.isEmpty))
                     const Text(
                       'Rappel enregistré !\nتم تسجيل التذكير',
                       textAlign: TextAlign.center,
@@ -679,7 +835,11 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                         color: Colors.black,
                       ),
                     ),
-                  if (_isScheduled) // <--- ADDED
+                  if (_isScheduled ||
+                      (widget.savedSelectedDays != null &&
+                          widget.savedSelectedTimes != null &&
+                          selectedDays.isEmpty &&
+                          selectedTimes.isEmpty)) // <--- ADDED
                     const Padding(
                       padding: EdgeInsets.only(left: 12.0),
                       child: Icon(Icons.check_circle,

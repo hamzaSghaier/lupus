@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tunlup/entity/symptome.dart';
 import 'package:tunlup/screens/bilan/models/bilan_model.dart';
 import 'package:tunlup/screens/statistics/rdv_model.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../entity/profile.dart';
 
@@ -384,6 +384,24 @@ class FileService {
       final Profile profile = Profile.fromJson(profileMap);
 
       return profile;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  static Future<List<dynamic>> getMed() async {
+    try {
+      final file = await _localFile("rappel_med.txt");
+      String contents = await file.readAsString();
+      List<dynamic> listMed = [];
+      contents.split(";").forEach((element) {
+        if (element.isNotEmpty && element.isBlank == false) {
+          print(jsonDecode(element));
+          listMed.add(jsonDecode(element));
+        }
+      });
+
+      return listMed;
     } catch (e) {
       throw Exception(e);
     }
