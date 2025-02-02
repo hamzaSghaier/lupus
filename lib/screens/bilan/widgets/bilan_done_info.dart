@@ -108,7 +108,7 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
               child: Container(
                 decoration: const BoxDecoration(
-                  color: grey,
+                  color: Colors.transparent,
                   border: Border(bottom: BorderSide(color: Colors.grey)),
                 ),
                 child: Row(

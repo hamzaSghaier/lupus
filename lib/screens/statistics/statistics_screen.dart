@@ -100,39 +100,42 @@ class _StatisticsState extends State<Statistics> {
   Widget buildChartButtons() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          ChartButton(
-            title: 'La fatigue',
-            titleAr: 'درجة التعب',
-            isSelected: selectedChart == 'fatigue',
-            onTap: () => toggleChart('fatigue'),
-          ),
-          ChartButton(
-            title: 'Les arthralgies',
-            titleAr: 'ألم مفصلي',
-            isSelected: selectedChart == 'arthralgies',
-            onTap: () => toggleChart('arthralgies'),
-          ),
-          ChartButton(
-            title: 'Humeur',
-            titleAr: 'المزاج',
-            isSelected: selectedChart == 'humeur',
-            onTap: () => toggleChart('humeur'),
-          ),
-          ChartButton(
-            title: 'L\'autonomie',
-            titleAr: 'نشاط يومي',
-            isSelected: selectedChart == 'autonomie',
-            onTap: () => toggleChart('autonomie'),
-          ),
-          ChartButton(
-            title: 'Sommeil',
-            titleAr: 'جودة نومك',
-            isSelected: selectedChart == 'sommeil',
-            onTap: () => toggleChart('sommeil'),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Row(
+          children: [
+            ChartButton(
+              title: 'La fatigue',
+              titleAr: 'درجة التعب',
+              isSelected: selectedChart == 'fatigue',
+              onTap: () => toggleChart('fatigue'),
+            ),
+            ChartButton(
+              title: 'Les arthralgies',
+              titleAr: 'ألم مفصلي',
+              isSelected: selectedChart == 'arthralgies',
+              onTap: () => toggleChart('arthralgies'),
+            ),
+            ChartButton(
+              title: 'Humeur',
+              titleAr: 'المزاج',
+              isSelected: selectedChart == 'humeur',
+              onTap: () => toggleChart('humeur'),
+            ),
+            ChartButton(
+              title: 'L\'autonomie',
+              titleAr: 'نشاط يومي',
+              isSelected: selectedChart == 'autonomie',
+              onTap: () => toggleChart('autonomie'),
+            ),
+            ChartButton(
+              title: 'Sommeil',
+              titleAr: 'جودة نومك',
+              isSelected: selectedChart == 'sommeil',
+              onTap: () => toggleChart('sommeil'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -359,15 +362,16 @@ class ChartButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? pink : Colors.grey[200],
+          backgroundColor: isSelected ? seedColor : Colors.grey[300],
           foregroundColor: isSelected ? Colors.white : Colors.black87,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         ),
         child: Text(
-          "$title \n $titleAr",
+          "$title\n$titleAr",
+          textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 12),
         ),
       ),
