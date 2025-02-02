@@ -460,7 +460,7 @@ class _RdvWidgetState extends State<RdvWidget> {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: notificationId,
-        channelKey: "lupus_notif_channel_key",
+        channelKey: "tulup_notif_channel_key",
         title: rdv.title,
         body:
             "Rappel: Vous avez un rendez-vous ${rdv.type} demain à ${rdv.dateProchaineConsultation}",

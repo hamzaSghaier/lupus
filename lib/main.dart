@@ -18,7 +18,7 @@ void main() async {
       null,
       [
         NotificationChannel(
-            channelKey: "lupus_notif_channel_key",
+            channelKey: "tulup_notif_channel_key",
             playSound: true,
             defaultPrivacy: NotificationPrivacy.Public,
             defaultRingtoneType: DefaultRingtoneType.Alarm,
@@ -26,8 +26,8 @@ void main() async {
             enableLights: true,
             importance: NotificationImportance.Max,
             enableVibration: true,
-            channelName: "Notification Lupus channel",
-            channelDescription: "Notification Lupus",
+            channelName: "Notification Tulup channel",
+            channelDescription: "Notification Tulup",
             defaultColor: Colors.pink[200],
             ledColor: Colors.pink[200]),
       ],
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Lupus',
+      title: 'Tulup',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         inputDecorationTheme: const InputDecorationTheme(

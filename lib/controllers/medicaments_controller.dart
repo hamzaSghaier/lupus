@@ -44,7 +44,7 @@ class MedicamentsController extends GetxController {
         .createNotification(
       content: NotificationContent(
         id: id,
-        channelKey: "lupus_notif_channel_key",
+        channelKey: "tulup_notif_channel_key",
         title: title,
         body: body,
       ),

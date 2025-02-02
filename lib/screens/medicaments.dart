@@ -898,7 +898,7 @@ void _scheduleNotification(
           displayOnForeground: true,
           wakeUpScreen: true,
           id: id,
-          channelKey: "lupus_notif_channel_key",
+          channelKey: "tulup_notif_channel_key",
           title: title,
           body: body,
         ),
