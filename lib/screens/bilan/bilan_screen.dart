@@ -124,8 +124,8 @@ class _BilanScreenState extends State<BilanScreen> {
               SizedBox(height: mediaQuery.size.height * 0.02),
               Container(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: grey,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: SizedBox(
@@ -135,13 +135,18 @@ class _BilanScreenState extends State<BilanScreen> {
                     child: Column(
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(right: 10.0),
-                              child: SvgPicture.asset(bilanIcon),
+                              child: SvgPicture.asset(
+                                bilanIcon,
+                                width: 24,
+                              ),
                             ),
                             const Text(
                               "J'ajoute mon RDV de bilan\nأضيف موعد فحصي الطبي",
+                              textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 14),
                             ),
                           ],

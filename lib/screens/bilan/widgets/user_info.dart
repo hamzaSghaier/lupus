@@ -27,7 +27,7 @@ class _UserInfoState extends State<UserInfo> {
       margin: const EdgeInsets.all(10),
       height: widget.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
-          color: grey,
+          color: Colors.grey.withOpacity(0.1),
           border: Border.all(color: greyContour),
           borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

@@ -111,11 +111,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   gender: "",
                   age: _calculateBirthYear(),
                 ),
-                RdvWidget(
-                  mediaQuery: size,
-                  rdvs: rdvList,
-                  hasRdv: rdvList.isNotEmpty,
-                  update: loadRdvs,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: RdvWidget(
+                    mediaQuery: size,
+                    rdvs: rdvList,
+                    hasRdv: rdvList.isNotEmpty,
+                    update: loadRdvs,
+                  ),
                 ),
                 SizedBox(height: spacing),
                 _buildMenuGrid(buttonSize, spacing),

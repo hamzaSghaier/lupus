@@ -30,105 +30,118 @@ class RdvWidget extends StatefulWidget {
 class _RdvWidgetState extends State<RdvWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Title
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 1),
-          child: Text(
-            'RDV de consultation\nموعد العيادة',
-            style: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.bold, color: seedColor),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        // Main Consultation Appointments
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-          //
-          decoration: BoxDecoration(
-            color: grey,
-            border: Border.all(color: greyContour),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Column(
-            children: [
-              // List of consultation appointments
-              ...widget.rdvs
-                  .where((rdv) => rdv.type == "Consultation")
-                  .map((rdv) => _buildRdvItem(rdv)),
-              // Add button if no consultation appointments
-              if (!widget.hasRdv)
-                InkWell(
-                  onTap: () => _showInputDialog(context, "Consultation"),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Column(
+          children: [
+            // Title
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 1),
+              child: Text(
+                'RDV de consultation\nموعد العيادة',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            // Main Consultation Appointments
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+              //
+              decoration: BoxDecoration(
+                color: grey,
+                border: Border.all(color: greyContour),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                children: [
+                  // List of consultation appointments
+                  ...widget.rdvs
+                      .where((rdv) => rdv.type == "Consultation")
+                      .map((rdv) => _buildRdvItem(rdv)),
+                  // Add button if no consultation appointments
+                  if (!widget.hasRdv)
+                    InkWell(
+                      onTap: () => _showInputDialog(context, "Consultation"),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            "Ajouter un RDV",
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 12,
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Ajouter un RDV",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                "أضف موعدًا",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "أضف موعدًا",
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 12,
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.0),
+                            child: Image(
+                              image: AssetImage(rdvPlusIcon),
+                              height: 40,
                             ),
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 10.0),
-                        child: Image(
-                          image: AssetImage(rdvPlusIcon),
-                          height: 40,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-        // Other Appointments Button
+                    ),
+                ],
+              ),
+            ),
+            // Other Appointments Button
 
-        // Other Appointments List
-        if (widget.rdvs.any((rdv) => rdv.type != "Consultation"))
-          Container(
-            padding: const EdgeInsets.all(1),
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.rdvs
-                  .where((rdv) => rdv.type != "Consultation")
-                  .map((rdv) => _buildRdvItem(rdv))
-                  .toList(),
-            ),
-          ),
-        if (widget.hasRdv)
-          ElevatedButton.icon(
-            onPressed: () => _showInputDialog(context, "Autre"),
-            icon: const Icon(Icons.add),
-            label: const Text("Autres RDVs\nمواعيد أخرى",
-                textAlign: TextAlign.center),
-            style: ElevatedButton.styleFrom(
-              // backgroundColor: ,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            ),
-          ),
-      ],
+            // Other Appointments List
+            if (widget.rdvs.any((rdv) => rdv.type != "Consultation"))
+              Container(
+                padding: const EdgeInsets.all(1),
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.rdvs
+                      .where((rdv) => rdv.type != "Consultation")
+                      .map((rdv) => _buildRdvItem(rdv))
+                      .toList(),
+                ),
+              ),
+            if (widget.hasRdv)
+              ElevatedButton.icon(
+                onPressed: () => _showInputDialog(context, "Autre"),
+                icon: const Icon(
+                  Icons.add_circle_outline,
+                  size: 24,
+                  color: Colors.white,
+                ),
+                label: const Text("Autres RDVs\nمواعيد أخرى",
+                    textAlign: TextAlign.center),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.teal,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -348,6 +361,16 @@ class _RdvWidgetState extends State<RdvWidget> {
         actions: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+            onPressed: () async {
+              Navigator.pop(context);
+            },
+            child: const Text('Annuler | إلغاء',
+                style: TextStyle(color: Colors.white)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
             ),
             onPressed: () async {
@@ -375,16 +398,6 @@ class _RdvWidgetState extends State<RdvWidget> {
             child: const Text('Ajouter | إضافة',
                 style: TextStyle(color: Colors.white)),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
-            onPressed: () async {
-              Navigator.pop(context);
-            },
-            child: const Text('Annuler | إلغاء',
-                style: TextStyle(color: Colors.white)),
-          )
         ],
       ),
     );

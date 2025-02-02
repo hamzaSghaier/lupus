@@ -559,7 +559,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
               style: ElevatedButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-                backgroundColor: seedColor.withOpacity(0.7),
+                backgroundColor: seedColor.withOpacity(0.6),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
@@ -641,15 +641,15 @@ class _MedicamentSectionState extends State<MedicamentSection> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: selectedDays.isNotEmpty && selectedTimes.isNotEmpty
+              onPressed: selectedDays.isNotEmpty &&
+                      selectedTimes.isNotEmpty &&
+                      !_isScheduled
                   ? _scheduleMedication
                   : null,
               style: ElevatedButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-                backgroundColor: _isScheduled
-                    ? seedColor.withOpacity(0.7)
-                    : Colors.black.withOpacity(0.7),
+                backgroundColor: confirmColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
@@ -659,19 +659,31 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Programmer le rappel\nجدولة التذكير",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                  if (!_isScheduled)
+                    const Text(
+                      "Programmer le rappel\nجدولة التذكير",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
+                  if (_isScheduled)
+                    const Text(
+                      'Rappel enregistré !\nتم تسجيل التذكير',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
                   if (_isScheduled) // <--- ADDED
                     const Padding(
                       padding: EdgeInsets.only(left: 12.0),
-                      child: Icon(Icons.check_circle, color: Colors.green),
+                      child: Icon(Icons.check_circle,
+                          color: Colors.lightGreenAccent),
                     ),
                 ],
               ),

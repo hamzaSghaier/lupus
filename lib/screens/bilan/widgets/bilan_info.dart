@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:tunlup/screens/bilan/models/bilan_model.dart';
-import 'package:tunlup/shared/file_service.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:tunlup/screens/bilan/models/bilan_model.dart';
+import 'package:tunlup/shared/file_service.dart';
 
 class BilanInfo extends StatefulWidget {
   const BilanInfo({
@@ -235,6 +235,7 @@ class _BilanInfoState extends State<BilanInfo> {
 
     return Card(
       elevation: 2,
+      surfaceTintColor: Colors.grey,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
         padding: const EdgeInsets.all(16),
