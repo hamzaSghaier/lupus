@@ -169,7 +169,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
 
                         //===== HUMEUR =====
                         const TitleOfSlider(
-                          titleFr: 'Humeur',
+                          titleFr: "L'Humeur",
                           titleAr: 'المزاج',
                         ),
                         const SizedBox(height: 10),
@@ -216,10 +216,11 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                           },
                           borderRadius:
                               const BorderRadius.all(Radius.circular(8)),
-                          selectedBorderColor: Colors.red,
+                          selectedBorderColor:
+                              getStatusColor(_selectedAutonomieValue),
                           selectedColor: Colors.white,
-                          fillColor: Colors.redAccent,
-                          color: Colors.red,
+                          fillColor: getStatusColor(_selectedAutonomieValue),
+                          color: Colors.black,
                           textStyle: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -262,10 +263,11 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                           },
                           borderRadius:
                               const BorderRadius.all(Radius.circular(8)),
-                          selectedBorderColor: Colors.red,
+                          selectedBorderColor:
+                              getStatusColor(_selectedSomeilValue),
                           selectedColor: Colors.white,
-                          fillColor: Colors.redAccent,
-                          color: Colors.red,
+                          fillColor: getStatusColor(_selectedSomeilValue),
+                          color: Colors.black,
                           constraints: const BoxConstraints(
                             minHeight: 60.0,
                             minWidth: 80.0,
@@ -565,6 +567,15 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
         ),
       ),
     );
+  }
+
+  Color getStatusColor(int index) {
+    if (index == 0) {
+      return Colors.red;
+    } else if (index == 1) {
+      return Colors.orange;
+    } else
+      return Colors.green;
   }
 }
 
