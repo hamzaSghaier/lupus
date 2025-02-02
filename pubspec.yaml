@@ -1,0 +1,53 @@
+name: tunlup
+description: Application dédiée aux patients lupiques pour les aider à organiser la prise de leurs médicaments et à suivre leurs symptômes.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  http: ^1.0.0
+  convex_bottom_bar: ^3.2.0
+  get: ^4.6.5
+  intl: ^0.19.0
+  image: ^4.0.17
+  path_provider: ^2.0.15
+  awesome_notifications: ^0.10.0
+  reviews_slider: ^2.0.0
+  awesome_dialog: ^3.0.2
+  flutter_svg:
+  syncfusion_flutter_charts: ^28.2.3
+  #webview_flutter_plus: ^0.3.0+2
+  webview_flutter: ^4.10.0
+  json_annotation: ^4.8.1
+  permission_handler: ^11.3.1
+  disable_battery_optimization: ^1.1.1
+  table_calendar: ^3.1.1
+  url_launcher: ^6.0.20
+  camera: ^0.11.1
+  photo_view: ^0.15.0
+  flutter_image_converter: ^0.4.1
+  widget_zoom: ^0.0.4
+  syncfusion_flutter_pdfviewer: ^28.2.3
+  flutter_local_notifications: ^18.0.1
+
+dependency_overrides:
+  intl: ^0.18.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/icons/
