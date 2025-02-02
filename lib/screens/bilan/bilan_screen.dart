@@ -221,6 +221,9 @@ class _BilanScreenState extends State<BilanScreen> {
                     mediaQuery: mediaQuery,
                     index: index,
                     bilan: listBilans[index],
+                    reload: () async {
+                      await loadBilans();
+                    },
                   ),
                 ),
             ],

@@ -28,6 +28,7 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
+            color: Colors.grey.withAlpha(30),
             border: Border.all(
                 color: Colors.grey.withAlpha(30),
                 style: BorderStyle.solid,
@@ -48,8 +49,8 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               height: widget.mediaQuery.size.height * 0.07,
-              decoration: const BoxDecoration(
-                  color: lightPink,
+              decoration: BoxDecoration(
+                  color: Colors.grey.withAlpha(100),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,6 +77,8 @@ class _BilanDoneInfoState extends State<BilanDoneInfo> {
                               builder: (context) => BilanImagesGallery(
                                 imagePaths: widget.bilan.images ?? [],
                                 initialIndex: 0,
+                                date: widget.bilan.date ?? "",
+                                title: widget.bilan.type ?? "",
                               ),
                             ),
                           );

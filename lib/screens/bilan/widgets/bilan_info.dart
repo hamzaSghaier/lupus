@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:tunlup/constants/colors.dart';
 import 'package:tunlup/screens/bilan/models/bilan_model.dart';
 import 'package:tunlup/shared/file_service.dart';
 
@@ -14,11 +16,13 @@ class BilanInfo extends StatefulWidget {
     required this.mediaQuery,
     required this.index,
     required this.bilan,
+    required this.reload,
   });
 
   final MediaQueryData mediaQuery;
   final int index;
   final BilanModel bilan;
+  final Function reload;
 
   @override
   State<BilanInfo> createState() => _BilanInfoState();
@@ -143,7 +147,7 @@ class _BilanInfoState extends State<BilanInfo> {
       );
       return;
     }
-
+    XFile? image;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -155,12 +159,19 @@ class _BilanInfoState extends State<BilanInfo> {
             style: TextStyle(fontSize: 18),
           ),
           actions: [
-            TextButton(
-              child: const Text(
-                'Annuler | إلغاء',
-                style: TextStyle(color: Colors.red),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
               ),
               onPressed: () => Navigator.pop(context),
+              child: const Text(
+                "Annuler | إلغاء",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
           content: FutureBuilder<void>(
@@ -172,48 +183,98 @@ class _BilanInfoState extends State<BilanInfo> {
                   children: [
                     SizedBox(
                       height: widget.mediaQuery.size.height * 0.5,
-                      child: CameraPreview(controller!),
+                      child: CameraPreview(
+                        controller!,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: seedColor,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: IconButton(
+                                    onPressed: () async {
+                                      image = await controller?.takePicture();
+                                      controller?.pausePreview();
+                                    },
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      size: 36,
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.check_circle_outline,
-                              size: 40, color: Colors.green),
-                          onPressed: () async {
-                            try {
-                              final image = await controller?.takePicture();
-                              if (image == null) return;
-
-                              BilanModel newBilan = widget.bilan;
-                              newBilan.images ??= [];
-                              newBilan.images!.add(image.path);
-                              await FileService.updateBilan(newBilan);
-
-                              Navigator.pop(context);
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Photo prise avec succés \n تم تقديم الصورة بنجاح'),
-                                ),
-                              );
-                              setState(() {}); // Refresh the UI
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Erreur: $e')),
-                              );
-                            }
-                          },
+                        Flexible(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueGrey,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
+                            ),
+                            onPressed: () async {
+                              await controller?.initialize();
+                              await controller?.resumePreview();
+                            },
+                            child: const Text(
+                              "Réessayer | أعد",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.refresh,
-                              size: 40, color: Colors.blue),
-                          onPressed: () {
-                            controller?.dispose();
-                            initCamera();
-                          },
+                        const SizedBox(width: 10),
+                        Flexible(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: confirmColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
+                            ),
+                            onPressed: () async {
+                              try {
+                                //image = await controller?.takePicture();
+                                if (image == null)
+                                  return;
+                                else {
+                                  BilanModel newBilan = widget.bilan;
+                                  newBilan.images ??= [];
+                                  newBilan.images!.add(image!.path);
+                                  await FileService.updateBilan(newBilan);
+
+                                  Navigator.pop(context);
+
+                                  setState(() {});
+                                }
+
+                                // Refresh the UI
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Erreur: $e')),
+                                );
+                              }
+                            },
+                            child: const Text(
+                              "Confirmer | تأكيد",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -250,6 +311,7 @@ class _BilanInfoState extends State<BilanInfo> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             widget.bilan.type ?? '',
@@ -263,41 +325,104 @@ class _BilanInfoState extends State<BilanInfo> {
                             widget.bilan.date ?? '',
                             style: const TextStyle(
                               fontSize: 16,
+                              fontWeight: FontWeight.bold,
                               color: Colors.grey,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Row(
+                      Wrap(
+                        alignment: WrapAlignment.spaceEvenly,
+                        direction: Axis.horizontal,
                         children: [
-                          IconButton(
-                            icon: Icon(
-                              hasReminder
-                                  ? Icons.notifications_active
-                                  : Icons.notifications_none,
-                              color: hasReminder ? Colors.green : Colors.grey,
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: confirmColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
                             ),
-                            onPressed: () async {
-                              setState(() {
-                                hasReminder = !hasReminder;
-                              });
+                            onPressed: hasReminder
+                                ? null
+                                : () async {
+                                    setState(() {
+                                      hasReminder = !hasReminder;
+                                    });
 
-                              BilanModel newBilan = widget.bilan;
-                              newBilan.hasReminder = hasReminder;
-                              await FileService.updateBilan(newBilan);
+                                    BilanModel newBilan = widget.bilan;
+                                    newBilan.hasReminder = hasReminder;
+                                    await FileService.updateBilan(newBilan);
 
-                              if (hasReminder) {
-                                await scheduleReminder();
-                              }
-                            },
+                                    if (hasReminder) {
+                                      await scheduleReminder();
+                                    }
+                                  },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  hasReminder
+                                      ? Icons.notifications_active
+                                      : Icons.notifications_none,
+                                  color:
+                                      hasReminder ? Colors.green : Colors.white,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  "Rappel | تذكير",
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              ],
+                            ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.camera_alt),
-                            onPressed: () => takePicture(context),
-                          ),
-                          Text(
-                              '${imagesList.length}/4 photos'), // Updated to show 4
+                          // IconButton(
+                          //   icon: const Icon(Icons.camera_alt),
+                          //   onPressed: () => takePicture(context),
+                          // ),
+                          // Text(
+                          //     '${imagesList.length}/4 photos'), // Updated to show 4
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: seedColor,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                              ),
+                              onPressed: imagesList.isEmpty
+                                  ? null
+                                  : () async {
+                                      BilanModel newBilan = widget.bilan;
+                                      newBilan.done = true;
+                                      await FileService.updateBilan(newBilan);
+                                      AwesomeDialog(
+                                        context: context,
+                                        animType: AnimType.leftSlide,
+                                        headerAnimationLoop: false,
+                                        dialogType: DialogType.success,
+                                        showCloseIcon: true,
+                                        title: ' ',
+                                        desc:
+                                            'Bilan cloturé avec succés \n تم إغلاق الفحص بنجاح',
+                                        btnOkOnPress: () {
+                                          widget.reload();
+                                        },
+                                        btnOkIcon: Icons.check_circle,
+                                      ).show();
+                                    },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.done, color: Colors.white),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Cloturer | إغلاق",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ))
                         ],
                       ),
                     ],
@@ -320,6 +445,8 @@ class _BilanInfoState extends State<BilanInfo> {
                           builder: (context) => BilanImagesGallery(
                             imagePaths: imagesList,
                             initialIndex: index,
+                            title: widget.bilan.type ?? '',
+                            date: widget.bilan.date ?? '',
                           ),
                         ),
                       );
@@ -330,7 +457,7 @@ class _BilanInfoState extends State<BilanInfo> {
                 ...List.generate(4 - imagesList.length, (index) {
                   // Changed from 2 to 4
                   return GestureDetector(
-                    onTap: () => takePicture(context),
+                    onTap: index != 0 ? null : () => takePicture(context),
                     child: _buildImagePlaceholder(),
                   );
                 }),
@@ -434,10 +561,14 @@ class BilanImageView extends StatelessWidget {
 class BilanImagesGallery extends StatelessWidget {
   final List<String> imagePaths;
   final int initialIndex;
+  final String title;
+  final String date;
 
   const BilanImagesGallery({
     super.key,
     required this.imagePaths,
+    required this.title,
+    required this.date,
     this.initialIndex = 0,
   });
 
@@ -446,6 +577,7 @@ class BilanImagesGallery extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: Text("$title - $date"),
         backgroundColor: Colors.white,
       ),
       body: imagePaths.isEmpty

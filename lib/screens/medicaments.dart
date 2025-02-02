@@ -843,11 +843,14 @@ class _MedicamentSectionState extends State<MedicamentSection> {
                       (widget.savedSelectedDays != null &&
                           widget.savedSelectedTimes != null &&
                           selectedDays.isEmpty &&
-                          selectedTimes.isEmpty)) // <--- ADDED
+                          selectedTimes.isEmpty))
                     const Padding(
                       padding: EdgeInsets.only(left: 12.0),
-                      child: Icon(Icons.check_circle,
-                          color: Colors.lightGreenAccent),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: Colors.lightGreenAccent,
+                        size: 24,
+                      ),
                     ),
                 ],
               ),
