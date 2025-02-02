@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tunlup/custom_widgets/custom_app_bar.dart';
+import 'package:tulup/custom_widgets/custom_app_bar.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
 class ImagePreview extends StatefulWidget {

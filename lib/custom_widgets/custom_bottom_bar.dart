@@ -1,10 +1,10 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/screens/dashboard.dart';
-import 'package:tunlup/screens/info_lupus.dart';
-import 'package:tunlup/screens/statistics/suivi_screen.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/screens/dashboard.dart';
+import 'package:tulup/screens/info_lupus.dart';
+import 'package:tulup/screens/statistics/suivi_screen.dart';
 
 import '../controllers/bottom_navigation_bar_controller.dart';
 

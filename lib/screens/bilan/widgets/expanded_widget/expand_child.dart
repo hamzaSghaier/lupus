@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tunlup/screens/bilan/widgets/expanded_widget/expand_indicator.dart';
-import 'package:tunlup/screens/bilan/widgets/expanded_widget/indicator_builder.dart';
+import 'package:tulup/screens/bilan/widgets/expanded_widget/expand_indicator.dart';
+import 'package:tulup/screens/bilan/widgets/expanded_widget/indicator_builder.dart';
 
 /// Default expand animation duration.
 const _kExpandDuration = Duration(milliseconds: 300);

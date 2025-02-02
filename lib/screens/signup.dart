@@ -3,11 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/custom_widgets/custom_app_bar.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
-import 'package:tunlup/entity/profile.dart';
-import 'package:tunlup/screens/login.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/custom_widgets/custom_app_bar.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/entity/profile.dart';
+import 'package:tulup/screens/login.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../controllers/signup_controller.dart';

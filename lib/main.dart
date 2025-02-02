@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/screens/dashboard.dart';
-import 'package:tunlup/screens/login.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/screens/dashboard.dart';
+import 'package:tulup/screens/login.dart';
+import 'package:tulup/shared/file_service.dart';
 
 import 'entity/profile.dart';
 

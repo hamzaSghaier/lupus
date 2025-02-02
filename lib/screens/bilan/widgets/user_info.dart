@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tunlup/constants/colors.dart';
+import 'package:tulup/constants/colors.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({

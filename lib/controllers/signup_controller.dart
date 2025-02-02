@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tunlup/entity/profile.dart';
+import 'package:tulup/entity/profile.dart';
 
 import '../shared/file_service.dart';
 

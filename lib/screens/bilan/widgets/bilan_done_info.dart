@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/constants/icons.dart';
-import 'package:tunlup/screens/bilan/models/bilan_model.dart';
-import 'package:tunlup/screens/bilan/widgets/bilan_info.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/constants/icons.dart';
+import 'package:tulup/screens/bilan/models/bilan_model.dart';
+import 'package:tulup/screens/bilan/widgets/bilan_info.dart';
 
 class BilanDoneInfo extends StatefulWidget {
   const BilanDoneInfo({

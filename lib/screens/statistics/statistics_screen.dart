@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
-import 'package:tunlup/entity/symptome.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/entity/symptome.dart';
+import 'package:tulup/shared/file_service.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key});

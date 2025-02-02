@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tunlup/custom_widgets/custom_app_bar.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
-import 'package:tunlup/entity/symptome.dart';
-import 'package:tunlup/screens/bilan/widgets/expanded_widget/humeur_icons_slider.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/custom_widgets/custom_app_bar.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/entity/symptome.dart';
+import 'package:tulup/screens/bilan/widgets/expanded_widget/humeur_icons_slider.dart';
+import 'package:tulup/shared/file_service.dart';
 
 class SymptomsController extends GetxController {
   var fatigue = 0.0.obs;

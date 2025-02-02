@@ -1,10 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tunlup/entity/profile.dart';
-import 'package:tunlup/screens/dashboard.dart';
-import 'package:tunlup/screens/signup.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/entity/profile.dart';
+import 'package:tulup/screens/dashboard.dart';
+import 'package:tulup/screens/signup.dart';
+import 'package:tulup/shared/file_service.dart';
 
 import '../custom_widgets/custom_text_field.dart';
 

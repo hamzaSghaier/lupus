@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:tunlup/custom_widgets/custom_app_bar.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/custom_widgets/custom_app_bar.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
 
 class InfoLupusScreen extends StatelessWidget {
   const InfoLupusScreen({super.key});

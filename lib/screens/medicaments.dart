@@ -5,10 +5,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/custom_widgets/custom_app_bar.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
-import 'package:tunlup/screens/bilan/widgets/user_info.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/custom_widgets/custom_app_bar.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/screens/bilan/widgets/user_info.dart';
 
 import '../controllers/medicaments_controller.dart';
 import '../entity/profile.dart';

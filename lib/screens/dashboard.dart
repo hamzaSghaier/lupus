@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/custom_widgets/custom_app_bar.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
-import 'package:tunlup/screens/bilan/bilan_screen.dart';
-import 'package:tunlup/screens/bilan/widgets/rdv_widget.dart';
-import 'package:tunlup/screens/bilan/widgets/user_info.dart';
-import 'package:tunlup/screens/medicaments.dart';
-import 'package:tunlup/screens/signup.dart';
-import 'package:tunlup/screens/statistics/rdv_model.dart';
-import 'package:tunlup/screens/symptoms.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/custom_widgets/custom_app_bar.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/screens/bilan/bilan_screen.dart';
+import 'package:tulup/screens/bilan/widgets/rdv_widget.dart';
+import 'package:tulup/screens/bilan/widgets/user_info.dart';
+import 'package:tulup/screens/medicaments.dart';
+import 'package:tulup/screens/signup.dart';
+import 'package:tulup/screens/statistics/rdv_model.dart';
+import 'package:tulup/screens/symptoms.dart';
 
 import '../entity/profile.dart';
 import '../shared/file_service.dart';
@@ -112,7 +112,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   age: _calculateBirthYear(),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: rdvList.isNotEmpty
+                      ? MediaQuery.of(context).size.height * 0.3
+                      : MediaQuery.of(context).size.height * 0.2,
                   child: RdvWidget(
                     mediaQuery: size,
                     rdvs: rdvList,

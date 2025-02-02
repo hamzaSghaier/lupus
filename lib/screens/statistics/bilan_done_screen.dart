@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
-import 'package:tunlup/screens/bilan/models/bilan_model.dart';
-import 'package:tunlup/screens/bilan/widgets/bilan_done_info.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/screens/bilan/models/bilan_model.dart';
+import 'package:tulup/screens/bilan/widgets/bilan_done_info.dart';
+import 'package:tulup/shared/file_service.dart';
 
 class BilanDoneScreen extends StatefulWidget {
   const BilanDoneScreen({super.key});

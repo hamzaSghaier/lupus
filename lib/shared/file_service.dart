@@ -8,9 +8,9 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tunlup/entity/symptome.dart';
-import 'package:tunlup/screens/bilan/models/bilan_model.dart';
-import 'package:tunlup/screens/statistics/rdv_model.dart';
+import 'package:tulup/entity/symptome.dart';
+import 'package:tulup/screens/bilan/models/bilan_model.dart';
+import 'package:tulup/screens/statistics/rdv_model.dart';
 
 import '../entity/profile.dart';
 

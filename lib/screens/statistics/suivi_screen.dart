@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tunlup/screens/statistics/bilan_done_screen.dart';
-import 'package:tunlup/screens/statistics/statistics_screen.dart';
+import 'package:tulup/screens/statistics/bilan_done_screen.dart';
+import 'package:tulup/screens/statistics/statistics_screen.dart';
 
 class SuiviScreen extends StatefulWidget {
   const SuiviScreen({super.key});

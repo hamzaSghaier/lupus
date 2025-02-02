@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/screens/bilan/models/bilan_model.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/screens/bilan/models/bilan_model.dart';
+import 'package:tulup/shared/file_service.dart';
 
 class BilanInfo extends StatefulWidget {
   const BilanInfo({
@@ -405,7 +405,7 @@ class _BilanInfoState extends State<BilanInfo> {
                                         showCloseIcon: true,
                                         title: ' ',
                                         desc:
-                                            'Bilan cloturé avec succés \n تم إغلاق الفحص بنجاح',
+                                            "Saisie de bilan terminée avec succès\nتم إدخال الفحص بنجاح'",
                                         btnOkOnPress: () {
                                           widget.reload();
                                         },
@@ -418,7 +418,7 @@ class _BilanInfoState extends State<BilanInfo> {
                                   Icon(Icons.done, color: Colors.white),
                                   SizedBox(width: 10),
                                   Text(
-                                    "Cloturer | إغلاق",
+                                    "Terminer | إنهاء",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ],

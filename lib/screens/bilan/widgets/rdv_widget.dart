@@ -4,10 +4,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/constants/icons.dart';
-import 'package:tunlup/screens/statistics/rdv_model.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/constants/icons.dart';
+import 'package:tulup/screens/statistics/rdv_model.dart';
+import 'package:tulup/shared/file_service.dart';
 
 class RdvWidget extends StatefulWidget {
   const RdvWidget({

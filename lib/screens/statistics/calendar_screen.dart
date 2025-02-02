@@ -8,10 +8,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:tunlup/constants/colors.dart';
-import 'package:tunlup/custom_widgets/custom_bottom_bar.dart';
-import 'package:tunlup/screens/statistics/rdv_model.dart';
-import 'package:tunlup/shared/file_service.dart';
+import 'package:tulup/constants/colors.dart';
+import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
+import 'package:tulup/screens/statistics/rdv_model.dart';
+import 'package:tulup/shared/file_service.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});

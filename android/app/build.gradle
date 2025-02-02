@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.innorizon.tunlup"
+    namespace = "com.innorizon.tulup"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.innorizon.tunlup"
+        applicationId = "com.innorizon.tulup"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 25
@@ -30,11 +30,20 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
+    signingConfigs {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            storeFile file("../upload-keystore.jks")
+            storePassword System.getenv("MYAPP_KEYSTORE_PASSWORD") ?: "lupus2024!=="
+            keyAlias System.getenv("MYAPP_KEY_ALIAS") ?: "upload"
+            keyPassword System.getenv("MYAPP_KEY_PASSWORD") ?: "lupus2024!=="
+        }
+    }
+
+   buildTypes {
+        release {
+            minifyEnabled true // Set to false if you don’t want code shrinking
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
