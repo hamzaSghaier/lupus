@@ -6,6 +6,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -164,6 +165,19 @@ class _BilanInfoState extends State<BilanInfo> {
       schedule: schedule,
     )
         .then((value) {
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.leftSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.success,
+        showCloseIcon: true,
+        title: ' ',
+        desc: 'Rappel enregistré ! \n !تم تسجيل التذكير',
+        btnOkOnPress: () {
+          if (Navigator.canPop(context)) navigator?.pop();
+        },
+        btnOkIcon: Icons.check_circle,
+      ).show();
       // print("Notification scheduled: $value");
     }).catchError((e) {
       print("Error creating notification: $e");

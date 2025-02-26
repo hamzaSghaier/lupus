@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -147,6 +148,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             try {
               await FileService.updateProfileIsLogged(false);
               if (!context.mounted) return;
+              //clear all notifications
+              await AwesomeNotifications().cancelAllSchedules();
+              await AwesomeNotifications().cancelAll();
+
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -178,6 +183,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           'Êtes-vous sûr de vouloir supprimer votre compte ?\nهل أنت متأكد أنك تريد حذف حسابك؟',
           () async {
             try {
+              //clear all notifications
+              await AwesomeNotifications().cancelAllSchedules();
+              await AwesomeNotifications().cancelAll();
+
               await FileService.deleteAllFilesInDirectory();
               if (!context.mounted) return;
               Navigator.pushAndRemoveUntil(

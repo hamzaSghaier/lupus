@@ -14,25 +14,54 @@ import 'entity/profile.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.notification.request();
-  await AwesomeNotifications().initialize(
-      null,
-      [
-        NotificationChannel(
-            channelKey: "tulup_notif_channel_key",
-            playSound: true,
-            defaultPrivacy: NotificationPrivacy.Public,
-            defaultRingtoneType: DefaultRingtoneType.Alarm,
-            //icon: "assets/lupus-icon.png",
-            enableLights: true,
-            importance: NotificationImportance.Max,
-            enableVibration: true,
-            channelName: "Notification Tulup channel",
-            channelDescription: "Notification Tulup",
-            defaultColor: Colors.pink[200],
-            ledColor: Colors.pink[200]),
-      ],
-      debug: false);
+  await initializeNotifications();
+
   initializeDateFormatting().then((_) => runApp(const MyApp()));
+}
+
+Future<void> initializeNotifications() async {
+  List<String> medicaments = [
+    "CORTICOÏDES",
+    "PLAQUENIL",
+    "AZATHIOPRINE",
+    "METHOTREXATE",
+    "FOLDINE",
+    "MMF",
+  ];
+  List<NotificationChannel> channels = medicaments.map((medicament) {
+    return NotificationChannel(
+      channelKey: "${medicament.toLowerCase().replaceAll(" ", "_")}_channel",
+      channelName: "$medicament Notifications",
+      channelDescription: "Notifications for $medicament",
+      playSound: true,
+      defaultPrivacy: NotificationPrivacy.Public,
+      defaultRingtoneType: DefaultRingtoneType.Alarm,
+      enableLights: true,
+      importance: NotificationImportance.Max,
+      enableVibration: true,
+      defaultColor: Colors.pink[200],
+      ledColor: Colors.pink[200],
+    );
+  }).toList();
+
+  //Default channel
+  channels.add(
+    NotificationChannel(
+        channelKey: "tulup_notif_channel_key",
+        playSound: true,
+        defaultPrivacy: NotificationPrivacy.Public,
+        defaultRingtoneType: DefaultRingtoneType.Alarm,
+        //icon: "assets/lupus-icon.png",
+        enableLights: true,
+        importance: NotificationImportance.Max,
+        enableVibration: true,
+        channelName: "Notification Tulup channel",
+        channelDescription: "Notification Tulup",
+        defaultColor: Colors.pink[200],
+        ledColor: Colors.pink[200]),
+  );
+
+  await AwesomeNotifications().initialize(null, channels, debug: false);
 }
 
 class MyApp extends StatelessWidget {

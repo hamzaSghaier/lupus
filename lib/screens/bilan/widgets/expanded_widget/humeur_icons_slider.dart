@@ -5,7 +5,7 @@ typedef OnChange = void Function(int index);
 
 class ReviewSlider extends StatefulWidget {
   const ReviewSlider({
-    Key? key,
+    super.key,
     required this.onChange,
     this.initialValue = 2,
     this.options = const ['Terrible', 'Bad', 'Okay', 'Good', 'Great'],
@@ -19,8 +19,7 @@ class ReviewSlider extends StatefulWidget {
         assert(
           options.length == 5,
           'Reviews options should be 5',
-        ),
-        super(key: key);
+        );
 
   /// The onChange callback calls every time when a pointer have changed
   /// the value of the slider and is no longer in contact with the screen.
@@ -46,7 +45,8 @@ class ReviewSlider extends StatefulWidget {
   _ReviewSliderState createState() => _ReviewSliderState();
 }
 
-class _ReviewSliderState extends State<ReviewSlider> with SingleTickerProviderStateMixin {
+class _ReviewSliderState extends State<ReviewSlider>
+    with SingleTickerProviderStateMixin {
   late Animation<double> _animation;
   late double _animationValue;
   late double _xOffset;
@@ -121,13 +121,16 @@ class _ReviewSliderState extends State<ReviewSlider> with SingleTickerProviderSt
   }
 
   void _onDragStart(x, width) {
-    var oneStepWidth = (width - widget.circleDiameter) / (widget.options.length - 1);
+    var oneStepWidth =
+        (width - widget.circleDiameter) / (widget.options.length - 1);
     _xOffset = x - (oneStepWidth * _animationValue);
   }
 
   _calcAnimatedValueFormDragX(x, innerWidth) {
     x = x - _xOffset;
-    return x / (innerWidth - widget.circleDiameter) * (widget.options.length - 1);
+    return x /
+        (innerWidth - widget.circleDiameter) *
+        (widget.options.length - 1);
   }
 
   @override
@@ -144,19 +147,31 @@ class _ReviewSliderState extends State<ReviewSlider> with SingleTickerProviderSt
                 handleTap: handleTap,
                 animationValue: _animationValue,
 //                width: size.maxWidth,
-                width: widget.width != null && widget.width! < size.maxWidth ? widget.width! : size.maxWidth,
+                width: widget.width != null && widget.width! < size.maxWidth
+                    ? widget.width!
+                    : size.maxWidth,
                 optionStyle: widget.optionStyle,
                 circleDiameter: widget.circleDiameter,
               ),
               MyIndicator(
                 circleDiameter: widget.circleDiameter,
                 animationValue: _animationValue,
-                width: widget.width != null && widget.width! < size.maxWidth ? widget.width : size.maxWidth,
+                width: widget.width != null && widget.width! < size.maxWidth
+                    ? widget.width
+                    : size.maxWidth,
                 onDragStart: (details) {
-                  _onDragStart(details.globalPosition.dx, widget.width != null && widget.width! < size.maxWidth ? widget.width : size.maxWidth);
+                  _onDragStart(
+                      details.globalPosition.dx,
+                      widget.width != null && widget.width! < size.maxWidth
+                          ? widget.width
+                          : size.maxWidth);
                 },
                 onDrag: (details) {
-                  _onDrag(details.globalPosition.dx, widget.width != null && widget.width! < size.maxWidth ? widget.width : size.maxWidth);
+                  _onDrag(
+                      details.globalPosition.dx,
+                      widget.width != null && widget.width! < size.maxWidth
+                          ? widget.width
+                          : size.maxWidth);
                 },
                 onDragEnd: _onDragEnd,
               ),
@@ -334,7 +349,8 @@ class MyPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(MyPainter oldDelegate) {
-    return unitAnimatingValue != oldDelegate.unitAnimatingValue || activeIndex != oldDelegate.activeIndex;
+    return unitAnimatingValue != oldDelegate.unitAnimatingValue ||
+        activeIndex != oldDelegate.activeIndex;
   }
 
   _drawEye(canvas, size) {
@@ -508,7 +524,10 @@ class MyIndicator extends StatelessWidget {
   }
 
   Color _getIndicatorYellowColor(double position) {
-    return position > 0.5 ? Colors.transparent : Color.lerp(Colors.yellow, Colors.transparent, position * 2) ?? Colors.transparent;
+    return position > 0.5
+        ? Colors.transparent
+        : Color.lerp(Colors.yellow, Colors.transparent, position * 2) ??
+            Colors.transparent;
   }
 
   late Color indicatorHeadColor;
@@ -533,7 +552,7 @@ class MyIndicator extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Head(
-              color: indicatorHeadColor.withOpacity( 0.9 ),
+              color: indicatorHeadColor.withOpacity(0.9),
               hasShadow: true,
               circleDiameter: circleDiameter,
             ),

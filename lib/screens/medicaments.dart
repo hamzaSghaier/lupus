@@ -75,6 +75,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
             setState(() {
               SavedTimesCort = savedSelectedTimes.join(",");
               SavedPrisesCort = savedNbrPrises;
+              nbrCort = savedNbrPrises;
               SavedjrsCort = savedSelectedDays.join(", ");
             });
             break;
@@ -82,6 +83,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
             setState(() {
               SavedTimesPlaqenil = savedSelectedTimes.join(",");
               SavedPrisesPlaqenil = savedNbrPrises;
+              nbrPlaqenil = savedNbrPrises;
               SavedjrsPlaqenil = savedSelectedDays.join(", ");
             });
             break;
@@ -89,6 +91,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
             setState(() {
               SavedTimesAzath = savedSelectedTimes.join(",");
               SavedPrisesAzath = savedNbrPrises;
+              nbrAzath = savedNbrPrises;
               SavedjrsAzath = savedSelectedDays.join(", ");
             });
             break;
@@ -97,6 +100,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
             setState(() {
               SavedTimesMetho = savedSelectedTimes.join(",");
               SavedPrisesMetho = savedNbrPrises;
+              nbrMetho = savedNbrPrises;
               SavedjrsMetho = savedSelectedDays.join(", ");
             });
             break;
@@ -105,6 +109,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
             setState(() {
               SavedTimesFoldine = savedSelectedTimes.join(",");
               SavedPrisesFoldine = savedNbrPrises;
+              nbrFoldine = savedNbrPrises;
               SavedjrsFoldine = savedSelectedDays.join(", ");
             });
             break;
@@ -113,6 +118,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
             setState(() {
               SavedTimesMMF = savedSelectedTimes.join(",");
               SavedPrisesMMF = savedNbrPrises;
+              nbrMMF = savedNbrPrises;
               SavedjrsMMF = savedSelectedDays.join(", ");
             });
             break;
@@ -211,7 +217,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Corticoïdes",
                         imgPath: "assets/corticoides.png",
-                        nbrPrises: SavedPrisesCort ?? nbrCort,
+                        nbrPrises: nbrCort,
                         prisesChange: (value) {
                           setState(() {
                             nbrCort = value ?? 0;
@@ -243,7 +249,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Plaquenil",
                         imgPath: "assets/plaquenil.png",
-                        nbrPrises: SavedPrisesPlaqenil ?? nbrPlaqenil,
+                        nbrPrises: nbrPlaqenil,
                         prisesChange: (value) {
                           setState(() {
                             nbrPlaqenil = value ?? 0;
@@ -274,7 +280,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Azathioprine",
                         imgPath: "assets/azathioprine.png",
-                        nbrPrises: SavedPrisesAzath ?? nbrAzath,
+                        nbrPrises: nbrAzath,
                         prisesChange: (value) {
                           setState(() {
                             nbrAzath = value ?? 0;
@@ -308,7 +314,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         medicamentName: "Methotrexate",
                         imgPath: "assets/methotrexate.png",
                         isOneTime: true,
-                        nbrPrises: SavedPrisesMetho ?? nbrMetho,
+                        nbrPrises: nbrMetho,
                         prisesChange: (value) {
                           setState(() {
                             nbrMetho = value ?? 0;
@@ -340,7 +346,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "Foldine",
                         imgPath: "assets/foldine.png",
-                        nbrPrises: SavedPrisesFoldine ?? nbrFoldine,
+                        nbrPrises: nbrFoldine,
                         prisesChange: (value) {
                           setState(() {
                             nbrFoldine = value ?? 0;
@@ -370,7 +376,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
                         },
                         medicamentName: "MMF",
                         imgPath: "assets/mmf.png",
-                        nbrPrises: SavedPrisesMMF ?? nbrMMF,
+                        nbrPrises: nbrMMF,
                         prisesChange: (value) {
                           setState(() {
                             nbrMMF = value ?? 0;
@@ -502,7 +508,7 @@ class _MedicamentSectionState extends State<MedicamentSection> {
     }
   }
 
-  void _scheduleMedication() {
+  void _scheduleMedication() async {
     Map<String, int> timeMapping = {
       'Matin - الصباح': 9,
       'Midi - الظهر': 12,
@@ -511,6 +517,11 @@ class _MedicamentSectionState extends State<MedicamentSection> {
       "12:00 Midi - الظهر": 12,
       "19:00 Soir - المساء": 19,
     };
+    var channelKey =
+        "${widget.medicamentName.toLowerCase().replaceAll(" ", "_")}_channel";
+    //clear old notifications
+    await AwesomeNotifications().cancelSchedulesByChannelKey(channelKey);
+    await AwesomeNotifications().cancelNotificationsByChannelKey(channelKey);
 
     for (var day in selectedDays) {
       for (var time in selectedTimes) {
@@ -521,13 +532,17 @@ class _MedicamentSectionState extends State<MedicamentSection> {
 
         //loop for a year from scheduleDate
         do {
-          //print("scheduleDate: $scheduleDate");
+          print("scheduleDate: $scheduleDate");
+          var notificationId =
+              widget.medicamentName.hashCode ^ scheduleDate.hashCode;
+
           _scheduleNotification(
             widget.medicamentName,
             "Il est temps de prendre vos ${widget.nbrPrises} comprimé(s) de ${widget.medicamentName}.\n"
             "حان الوقت لتناول ${widget.medicamentName} ${widget.nbrPrises} أقراص",
-            widget.medicamentName.hashCode ^ scheduleDate.hashCode,
+            notificationId,
             scheduleDate,
+            channelKey,
           );
           //add a week
           scheduleDate = scheduleDate.add(Duration(days: 7));
@@ -881,6 +896,7 @@ void _scheduleNotification(
   String body,
   int id,
   DateTime date,
+  String channelKey,
 ) {
   // Validate the date
   if (date.isBefore(DateTime.now())) {
@@ -905,7 +921,7 @@ void _scheduleNotification(
           displayOnForeground: true,
           wakeUpScreen: true,
           id: id,
-          channelKey: "tulup_notif_channel_key",
+          channelKey: channelKey,
           title: title,
           body: body,
         ),
