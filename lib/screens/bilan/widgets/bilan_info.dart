@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:tulup/constants/colors.dart';
@@ -123,6 +126,49 @@ class _BilanInfoState extends State<BilanInfo> {
       'N\'oubliez pas votre ${widget.bilan.type}',
       platformChannelSpecifics,
     );
+  }
+
+  void _scheduleNotification(
+    String title,
+    String body,
+    int id,
+    DateTime date,
+  ) {
+    // Validate the date
+    if (date.isBefore(DateTime.now())) {
+      print("Error: The notification date is in the past.");
+      // Optionally notify the user through the UI
+      return;
+    }
+    //print("Scheduling notification for $date");
+    // Define the notification schedule
+    NotificationSchedule schedule = NotificationCalendar.fromDate(
+      repeats: true, // Set this based on user preference for daily or weekly
+      preciseAlarm: true,
+      allowWhileIdle: true,
+      date: date,
+    );
+
+    AwesomeNotifications()
+        .createNotification(
+      content: NotificationContent(
+        category: NotificationCategory.Reminder,
+        displayOnBackground: true,
+        displayOnForeground: true,
+        wakeUpScreen: true,
+        id: id,
+        channelKey: "tulup_notif_channel_key",
+        title: title,
+        body: body,
+      ),
+      schedule: schedule,
+    )
+        .then((value) {
+      // print("Notification scheduled: $value");
+    }).catchError((e) {
+      print("Error creating notification: $e");
+      // Optionally show an error message in the UI
+    });
   }
 
   @override
@@ -360,7 +406,24 @@ class _BilanInfoState extends State<BilanInfo> {
                                     await FileService.updateBilan(newBilan);
 
                                     if (hasReminder) {
-                                      await scheduleReminder();
+                                      //await scheduleReminder();
+                                      DateTime dateTime =
+                                          DateFormat("dd-MM-yyyy")
+                                              .parse(newBilan.date ?? "")
+                                              .add(Duration(hours: 9));
+                                      _scheduleNotification(
+                                          "Rappel de Bilan ${newBilan.type}",
+                                          "Vous avez un Bilan ${newBilan.type} Demain",
+                                          newBilan.id.hashCode ^
+                                              Random().nextInt(999),
+                                          dateTime.subtract(Duration(days: 1)));
+
+                                      _scheduleNotification(
+                                          "Rappel de Bilan ${newBilan.type}",
+                                          "Vous avez un Bilan ${newBilan.type} Aujourd'hui",
+                                          newBilan.id.hashCode ^
+                                              Random().nextInt(999),
+                                          dateTime);
                                     }
                                   },
                             child: Row(
@@ -434,7 +497,7 @@ class _BilanInfoState extends State<BilanInfo> {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Wrap(
               // Using Wrap instead of SingleChildScrollView for better layout
               spacing: 8,

@@ -18,7 +18,7 @@ class FileService {
   //  Get local folder
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
-    print(directory.path);
+    ////print(directory.path);
     //Directory appDocDir = await getApplicationDocumentsDirectory();
     return directory.path;
   }
@@ -87,7 +87,7 @@ class FileService {
     c.removeLast();
     c.add(content);
     String r = c.join(";");
-    print("updating $fileName");
+    //print("updating $fileName");
     // Write the file.
     return file.writeAsString('$r;', mode: FileMode.write);
   }
@@ -134,7 +134,7 @@ class FileService {
       // Write back to file
       return file.writeAsString(result, mode: FileMode.write);
     } catch (e) {
-      print('Error updating bilan: $e');
+      //print('Error updating bilan: $e');
       rethrow;
     }
   }
@@ -168,11 +168,11 @@ class FileService {
         await for (var file in files) {
           if (file is File) {
             await file.delete();
-            print('File ${file.path} deleted successfully');
+            //print('File ${file.path} deleted successfully');
           }
         }
       } else {
-        print('Directory $path does not exist');
+        //print('Directory $path does not exist');
       }
     } catch (e) {
       throw Exception('Failed to delete files in directory $e');
@@ -203,10 +203,10 @@ class FileService {
       // Read the file
       String contents = await file.readAsString();
       List<SymptomeData> listBilans = [];
-      print(fileName);
+      //print(fileName);
       contents.split(";").forEach((element) {
         if (element.isNotEmpty && element.isBlank == false) {
-          print(jsonDecode(element));
+          //print(jsonDecode(element));
           listBilans.add(SymptomeData.fromJson(jsonDecode(element)));
         }
       });
@@ -225,10 +225,10 @@ class FileService {
       // Read the file
       String contents = await file.readAsString();
       List<BilanModel> listBilans = [];
-      print("bilans.txt");
+      //print("bilans.txt");
       contents.split(";").forEach((element) {
         if (element.isNotEmpty && element.isBlank == false) {
-          print(jsonDecode(element));
+          //print(jsonDecode(element));
           listBilans.add(BilanModel.fromJson(jsonDecode(element)));
         }
       });
@@ -248,10 +248,10 @@ class FileService {
       // Read the file
       String contents = await file.readAsString();
       List<BilanModel> listBilans = [];
-      print("done_bilans.txt");
+      //print("done_bilans.txt");
       contents.split(";").forEach((element) {
         if (element.isNotEmpty && element.isBlank == false) {
-          print(jsonDecode(element));
+          //print(jsonDecode(element));
           listBilans.add(BilanModel.fromJson(jsonDecode(element)));
         }
       });
@@ -362,7 +362,7 @@ class FileService {
       List<Remarque> listRemarques = [];
       contents.split(";").forEach((element) {
         if (element.isNotEmpty && element.isBlank == false) {
-          print(jsonDecode(element));
+          //print(jsonDecode(element));
           listRemarques.add(Remarque.fromJson(jsonDecode(element)));
         }
       });
@@ -396,7 +396,7 @@ class FileService {
       List<dynamic> listMed = [];
       contents.split(";").forEach((element) {
         if (element.isNotEmpty && element.isBlank == false) {
-          print(jsonDecode(element));
+          //print(jsonDecode(element));
           listMed.add(jsonDecode(element));
         }
       });
@@ -414,7 +414,7 @@ class FileService {
 
       // Decode the JSON string and create a Profile object
       final Map<String, dynamic> profileMap = jsonDecode(contents);
-      print(profileMap);
+      //print(profileMap);
       Profile profile = Profile.fromJson(profileMap);
       if (profile.numTel == tel && profile.password == password) {
         profile = await updateProfileIsLogged(true) ?? profile;
@@ -473,7 +473,7 @@ class FileService {
       List<String> c = contents.split(";");
       c.removeWhere((element) => element.isEmpty);
       Symptome lastSymp = Symptome.fromJson(jsonDecode(c.removeLast()));
-      print(lastSymp.toJson());
+      //print(lastSymp.toJson());
       writeFile("symptomes_log.txt", jsonEncode(newSymp.toJson()));
       return newSymp;
     } catch (e) {

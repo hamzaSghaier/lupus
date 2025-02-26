@@ -35,7 +35,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
 
   int _selectedValueHumeur = 0;
   int _selectedAutonomieValue = 0;
-  int _selectedSomeilValue = 1;
+  int _selectedSomeilValue = 0;
   double _selectedFatigueValue = 0;
   double _selectedArthralgieValue = 0;
 
@@ -142,7 +142,7 @@ class _SymptomsScreenState extends State<SymptomsScreen> {
                         //===== ARTHRALGIES =====
                         const TitleOfSlider(
                           titleFr: 'Les arthralgies',
-                          titleAr: 'ألم مفصلي',
+                          titleAr: 'الألم المفصلي',
                         ),
                         Text(
                           _selectedArthralgieValue.round().toString(),

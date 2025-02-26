@@ -4,13 +4,11 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tulup/constants/colors.dart';
 import 'package:tulup/custom_widgets/custom_app_bar.dart';
 import 'package:tulup/custom_widgets/custom_bottom_bar.dart';
 import 'package:tulup/screens/bilan/widgets/user_info.dart';
 
-import '../controllers/medicaments_controller.dart';
 import '../entity/profile.dart';
 import '../shared/file_service.dart';
 
@@ -22,8 +20,7 @@ class MedicamentsScreen extends StatefulWidget {
 }
 
 class _MedicamentsScreenState extends State<MedicamentsScreen> {
-  final MedicamentsController medicamentsController =
-      Get.put(MedicamentsController());
+  //final MedicamentsController medicamentsController =  Get.put(MedicamentsController());
 
   Profile? profile;
   List<dynamic>? meds;
@@ -52,7 +49,7 @@ class _MedicamentsScreenState extends State<MedicamentsScreen> {
 
   Future<List<dynamic>> getMed() async {
     List<dynamic> medFile = await FileService.getMed();
-    print("medFile: $medFile");
+    //print("medFile: $medFile");
 
     setState(() {
       meds = medFile;
@@ -507,9 +504,12 @@ class _MedicamentSectionState extends State<MedicamentSection> {
 
   void _scheduleMedication() {
     Map<String, int> timeMapping = {
-      'Matin - صباح': 9,
+      'Matin - الصباح': 9,
       'Midi - الظهر': 12,
-      'Soir - مساء': 19
+      'Soir - المساء': 19,
+      "09:00 Matin - الصباح": 9,
+      "12:00 Midi - الظهر": 12,
+      "19:00 Soir - المساء": 19,
     };
 
     for (var day in selectedDays) {
@@ -518,13 +518,20 @@ class _MedicamentSectionState extends State<MedicamentSection> {
         if (hour == null) continue; // Skip if no valid hour mapping
         DateTime now = DateTime.now();
         DateTime scheduleDate = _getNextScheduleDate(day, hour, now);
-        _scheduleNotification(
-          widget.medicamentName,
-          "Il est temps de prendre vos ${widget.nbrPrises} comprimé(s) de ${widget.medicamentName}.\n"
-          "حان الوقت لتناول ${widget.medicamentName} ${widget.nbrPrises} أقراص",
-          widget.medicamentName.hashCode ^ scheduleDate.hashCode,
-          scheduleDate,
-        );
+
+        //loop for a year from scheduleDate
+        do {
+          //print("scheduleDate: $scheduleDate");
+          _scheduleNotification(
+            widget.medicamentName,
+            "Il est temps de prendre vos ${widget.nbrPrises} comprimé(s) de ${widget.medicamentName}.\n"
+            "حان الوقت لتناول ${widget.medicamentName} ${widget.nbrPrises} أقراص",
+            widget.medicamentName.hashCode ^ scheduleDate.hashCode,
+            scheduleDate,
+          );
+          //add a week
+          scheduleDate = scheduleDate.add(Duration(days: 7));
+        } while (scheduleDate.isBefore(now.add(Duration(days: 90))));
       }
     }
 
@@ -904,7 +911,9 @@ void _scheduleNotification(
         ),
         schedule: schedule,
       )
-      .then((value) => print("Notification scheduled: $value"))
+      .then((value) => {
+            //print("Notification scheduled: $value")
+          })
       .catchError((e) {
     print("Error creating notification: $e");
     // Optionally show an error message in the UI
@@ -1179,12 +1188,12 @@ class _PillReminderDialogState extends State<PillReminderDialog> {
                       }
                     }
                     List<String> selectedTimesText = [];
-                    if (morningChecked)
-                      selectedTimesText.add(" 09:00 Matin - صباح \n ");
+                    if (morningChecked) if (morningChecked)
+                      selectedTimesText.add("09:00 Matin - الصباح");
                     if (noonChecked)
-                      selectedTimesText.add(" 12:00 Midi - الظهر \n ");
+                      selectedTimesText.add("12:00 Midi - الظهر");
                     if (eveningChecked)
-                      selectedTimesText.add(" 19:00 Soir - مساء \n ");
+                      selectedTimesText.add("19:00 Soir - المساء");
 
                     // Show a success message after saving
                     // ScaffoldMessenger.of(context).showSnackBar(
