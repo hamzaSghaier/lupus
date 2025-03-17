@@ -7,13 +7,14 @@ class CustomTextField extends StatefulWidget {
     required this.controller,
     this.keyboardType,
     this.isPassword = false,
+    this.isDisabled = false,
   });
 
   final String labelText;
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final bool isPassword;
-  
+  final bool isDisabled;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -44,6 +45,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           }
           return null;
         },
+        enabled: !widget.isDisabled,
         controller: widget.controller,
         obscureText: _obscureText,
         style: Theme.of(context).textTheme.bodySmall,

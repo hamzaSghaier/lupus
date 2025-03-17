@@ -505,42 +505,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _buildSubmitButton(Size size, double textSize) {
     final isNewUser = profile == null;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          minimumSize: Size(size.width * 0.8, 50),
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          backgroundColor: isNewUser ? Colors.green : Colors.green,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+
+    return Obx(() => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(size.width * 0.8, 50),
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              backgroundColor: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: signupController.isChecked.value || !isNewUser
+                ? () => _handleSubmit(context)
+                : null, // disables the button if false
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  isNewUser ? 'Enregistrer' : 'Modifier',
+                  style: TextStyle(
+                    fontSize: textSize,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Text(
+                  isNewUser ? 'تسجيل' : 'تعديل',
+                  style: TextStyle(
+                    fontSize: textSize,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        onPressed: () => _handleSubmit(context),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              isNewUser ? 'Enregistrer' : 'Modifier',
-              style: TextStyle(
-                fontSize: textSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 20),
-            Text(
-              isNewUser ? 'تسجيل' : 'تعديل',
-              style: TextStyle(
-                fontSize: textSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildLogoutButton(Size size, double textSize) {

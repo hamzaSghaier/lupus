@@ -1,7 +1,7 @@
 name: tulup
 description: Application dédiée aux patients lupiques pour les aider à organiser la prise de leurs médicaments et à suivre leurs symptômes.
 publish_to: "none"
-version: 1.0.2+3
+version: 1.0.3+4
 
 environment:
   sdk: ^3.6.0
@@ -35,7 +35,6 @@ dependencies:
   widget_zoom: ^0.0.4
   syncfusion_flutter_pdfviewer: ^28.2.3
   flutter_local_notifications: ^18.0.1
-
 dependency_overrides:
   intl: ^0.18.0
 
@@ -45,9 +44,16 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   build_runner: ^2.4.6
   json_serializable: ^6.7.1
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
     - assets/icons/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/tulup-icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21

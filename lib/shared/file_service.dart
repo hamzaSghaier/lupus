@@ -426,6 +426,25 @@ class FileService {
     }
   }
 
+  static Future<Profile?> getProfileForPasswordRecovery(tel, numDossier) async {
+    try {
+      final file = await _localFile("profile.txt");
+      String contents = await file.readAsString();
+
+      // Decode the JSON string and create a Profile object
+      final Map<String, dynamic> profileMap = jsonDecode(contents);
+      //print(profileMap);
+      Profile profile = Profile.fromJson(profileMap);
+      if (profile.numTel == tel && profile.numDossier == numDossier) {
+        return profile;
+      }
+      return null;
+    } catch (e) {
+      e.printError();
+      return null;
+    }
+  }
+
   static Future<Profile?> updateProfileIsLogged(isLoggedIn) async {
     try {
       final file = await _localFile("profile.txt");
@@ -442,6 +461,17 @@ class FileService {
       return profile;
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  static Future<bool> updateProfile(Profile? newProfile) async {
+    try {
+      var newProfileJson = jsonEncode(newProfile?.toJson());
+      await FileService.writeProfileFile("profile.txt", newProfileJson);
+      return true;
+    } catch (e) {
+      e.printError();
+      return false;
     }
   }
 

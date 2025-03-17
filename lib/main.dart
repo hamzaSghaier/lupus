@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,7 +16,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.notification.request();
   await initializeNotifications();
-
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.white, // Set status bar color
+    statusBarIconBrightness: Brightness.dark, // For Android
+    statusBarBrightness: Brightness.dark, // For iOS
+  ));
   initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
 
@@ -51,7 +56,7 @@ Future<void> initializeNotifications() async {
         playSound: true,
         defaultPrivacy: NotificationPrivacy.Public,
         defaultRingtoneType: DefaultRingtoneType.Alarm,
-        //icon: "assets/lupus-icon.png",
+        //icon: "assets/tulup-icon.png",
         enableLights: true,
         importance: NotificationImportance.Max,
         enableVibration: true,

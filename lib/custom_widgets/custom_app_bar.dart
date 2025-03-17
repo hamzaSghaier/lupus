@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: SizedBox.fromSize(
                 size: const Size.fromRadius(38), // Image radius
                 child: Image.asset(
-                  "assets/lupus-icon.png",
+                  "assets/tulup-icon.png",
                   width: 64,
                   height: 48,
                   fit: BoxFit.cover,
