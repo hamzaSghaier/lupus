@@ -1,13 +1,16 @@
 name: tulup
 description: Application dédiée aux patients lupiques pour les aider à organiser la prise de leurs médicaments et à suivre leurs symptômes.
 publish_to: "none"
-version: 1.0.3+4
+version: 1.0.4+5
 
 environment:
   sdk: ^3.6.0
 
 dependencies:
   flutter:
+    sdk: flutter
+
+  flutter_localizations:
     sdk: flutter
 
   cupertino_icons: ^1.0.2

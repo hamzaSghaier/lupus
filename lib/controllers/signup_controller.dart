@@ -26,6 +26,8 @@ class SignupController extends GetxController {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate.value,
+      locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+      helpText: "Date de naissance | تاريخ الميلاد",
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {

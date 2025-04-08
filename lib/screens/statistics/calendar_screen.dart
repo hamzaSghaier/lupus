@@ -122,6 +122,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
+        locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+        helpText: "Date | تاريخ",
         firstDate: DateTime.now(),
         lastDate: DateTime(lastDateYear),
         builder: (BuildContext context, Widget? child) {

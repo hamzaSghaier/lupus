@@ -378,6 +378,8 @@ class _BilanScreenState extends State<BilanScreen> {
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(firstDateYear),
+          locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+          helpText: "Date de bilan | تاريخ الفحص الطبي",
           lastDate: DateTime(lastDateYear),
           builder: (context, child) => Theme(
             data: ThemeData(),
@@ -407,6 +409,8 @@ class _BilanScreenState extends State<BilanScreen> {
               initialDate: DateTime.now(),
               firstDate: DateTime(firstDateYear),
               lastDate: DateTime(lastDateYear),
+              locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+              helpText: "Date de bilan | تاريخ الفحص الطبي",
               builder: (context, child) => Theme(
                 data: ThemeData(),
                 child: child!,

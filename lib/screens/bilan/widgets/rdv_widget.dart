@@ -271,6 +271,9 @@ class _RdvWidgetState extends State<RdvWidget> {
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
+                    locale: Locale(
+                        "ar", "DZ"), // Set the locale to Arabic (Algeria)
+                    helpText: "date de rendez-vous | تاريخ الموعد",
                     initialDate: rdv.date,
                     firstDate: DateTime(firstDateYear),
                     lastDate: DateTime(lastDateYear),
@@ -424,6 +427,8 @@ class _RdvWidgetState extends State<RdvWidget> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
+      locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+      helpText: "Date de rendez-vous | تاريخ الموعد",
       firstDate: DateTime(firstDateYear),
       lastDate: DateTime(lastDateYear),
       builder: (BuildContext context, Widget? child) {

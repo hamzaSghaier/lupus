@@ -60,6 +60,8 @@ class MedicamentsController extends GetxController {
       context: context,
       initialDate: corticioidesDate.value,
       firstDate: DateTime.now(),
+      locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+      helpText: "Date de prise | تاريخ تناول الدواء",
       lastDate: DateTime(lastDateYear),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -198,6 +200,8 @@ class MedicamentsController extends GetxController {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: methotrexateDate.value,
+      locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+      helpText: "Date de prise | تاريخ تناول الدواء",
       firstDate: DateTime.now(),
       lastDate: DateTime(lastDateYear),
       builder: (BuildContext context, Widget? child) {
@@ -232,7 +236,8 @@ class MedicamentsController extends GetxController {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: foldineDate.value,
-      firstDate: DateTime.now(),
+      locale: Locale("ar", "DZ"), // Set the locale to Arabic (Algeria)
+      helpText: "Date de prise | تاريخ تناول الدواء", firstDate: DateTime.now(),
       lastDate: DateTime(lastDateYear),
       builder: (BuildContext context, Widget? child) {
         return Theme(

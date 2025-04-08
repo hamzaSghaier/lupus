@@ -646,7 +646,7 @@ class ConditionsPage extends StatelessWidget {
           child: WebViewWidget(
             controller: WebViewController.fromPlatformCreationParams(
                 PlatformWebViewControllerCreationParams())
-              ..loadFile('assets/cgu.html'),
+              ..loadFlutterAsset('assets/cgu.html'),
           ),
         ),
       ),

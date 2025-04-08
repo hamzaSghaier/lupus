@@ -2,6 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -77,6 +78,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Tulup',
       debugShowCheckedModeBanner: false,
+      locale: Locale('fr', 'FR'), // or dynamically set
+      supportedLocales: const [
+        Locale('fr', 'FR'),
+        Locale('ar', 'TN'),
+      ],
+      localizationsDelegates: [GlobalMaterialLocalizations.delegate],
       theme: ThemeData(
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: TextStyle(fontSize: 16.0),
