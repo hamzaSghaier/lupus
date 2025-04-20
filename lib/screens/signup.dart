@@ -291,10 +291,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _buildFormFields(baseTextSize),
-                        if (profile != null) _buildConditionsText(baseTextSize),
+                        if (profile != null) ...[
+                          _buildConditionsText(baseTextSize),
+                          _buildPrivacyText(baseTextSize),
+                        ],
                         if (profile == null) ...[
                           _buildPasswordField(baseTextSize),
                           _buildTermsCheckbox(baseTextSize),
+                          _buildPrivacyText(baseTextSize),
                         ],
                         const SizedBox(height: 20),
                         // Action buttons with updated styling
@@ -462,6 +466,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   MaterialPageRoute(
                     builder: (context) =>
                         const ConditionsPage(isloggedIn: false),
+                  ),
+                );
+              },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPrivacyText(double textSize) {
+    return RichText(
+      text: TextSpan(
+        text: '',
+        style: TextStyle(color: Colors.black, fontSize: textSize),
+        children: [
+          TextSpan(
+            text:
+                'Afficher la Politique de confidentialité | عرض سياسة الخصوصية',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: textSize,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PrivcyPage(isloggedIn: false),
                   ),
                 );
               },
@@ -646,7 +679,37 @@ class ConditionsPage extends StatelessWidget {
           child: WebViewWidget(
             controller: WebViewController.fromPlatformCreationParams(
                 PlatformWebViewControllerCreationParams())
-              ..loadFlutterAsset('assets/cgu.html'),
+              //..loadFlutterAsset('assets/cgu.html'),
+              ..loadRequest(Uri.parse("https://innorizon.tn/tulup/cgu")),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PrivcyPage extends StatelessWidget {
+  const PrivcyPage({super.key, required this.isloggedIn});
+  final bool isloggedIn;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Politique de confidentialité\nسياسة الخصوصية',
+      ),
+      bottomNavigationBar: isloggedIn ? CustomBottomBar() : null,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height * 0.03,
+          ),
+          child: WebViewWidget(
+            controller: WebViewController.fromPlatformCreationParams(
+                PlatformWebViewControllerCreationParams())
+              //..loadFlutterAsset('assets/cgu.html'),
+              ..loadRequest(
+                  Uri.parse("https://innorizon.tn/tulup/privacy-policy")),
           ),
         ),
       ),
